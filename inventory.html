@@ -46,31 +46,46 @@
           </div>
         </nav>
 
-        <h2>Inventory Currently in Stock:</h2>
-        <table border= 1pt>
-            <thead> 
-                <th>PLU</th>
-                <th>NAME</th>
-                <th>DESCRIPTION</th>
-                <th>UNIT COST</th>
-                <th>QUANTITY</th>
-                <th></th>
-                <th></th>
-            </thead> 
-            <tbody>
-                <!--{% for items in inventory %}-->
-                <tr> 
-                    <td><!--{{inventory.PLU}}--></td> 
-                    <td><!--{{inventory.Name}}--></td> 
-                    <td><!--{{inventory.Description}}--></td> 
-                    <td><!--{{inventory.UnitCost}}--></td>
-                    <td><!--{{inventory.Quantity}}--></td>
-                    <td><button onclick="deleteItem({{inventory.PLU}})">Delete</button></td>
-                    <td><a href="/updateInventory/{{inventory.PLU}}">Update</a></td>
-                </tr>
-                <!--{% endfor %}-->
-            </tbody> 
-        </table> 
+        <div class="container">
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <h2>Inventory Currently in Stock:</h2>
+                </div>
+                <div class="col-2"></div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class ="col-2"></div>
+                <div class="col-8">
+                    <table border= 1pt>
+                        <thead> 
+                            <th>PLU</th>
+                            <th>NAME</th>
+                            <th>DESCRIPTION</th>
+                            <th>UNIT COST</th>
+                            <th>QUANTITY</th>
+                            <th></th>
+                            <th></th>
+                        </thead> 
+                        <tbody>
+                            <!--{% for items in inventory %}-->
+                            <tr> 
+                                <td><!--{{inventory.PLU}}--></td> 
+                                <td><!--{{inventory.Name}}--></td> 
+                                <td><!--{{inventory.Description}}--></td> 
+                                <td><!--{{inventory.UnitCost}}--></td>
+                                <td><!--{{inventory.Quantity}}--></td>
+                                <td><button onclick="deleteItem({{inventory.PLU}})">Delete</button></td>
+                                <td><a href="/updateInventory/{{inventory.PLU}}">Update</a></td>
+                            </tr>
+                            <!--{% endfor %}-->
+                        </tbody> 
+                    </table> 
+                </div>
+                <div class ="col-2"></div>
+            </div>
+        </div>
 
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
