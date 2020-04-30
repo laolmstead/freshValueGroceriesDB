@@ -8,19 +8,22 @@
 
         <!-- Bootstrap -->
         <link href="bootstrap.css" rel="stylesheet">
+        <link href="customers-style.css" rel="stylesheet">
 
         <title> Manage Customers </title>
     </head>
 
     <body>
         <div class="col-md-8 mx-auto">
-            <h1> Manage Customers </h1>
-            <div class="btn-group btn-group-lg" role="group" aria-label="...">
-                <button type="button" class="btn btn-default"> View Customer Orders </button>
-                <button type="button" class="btn btn-default"> Contact a Customer </button>
-                <button type="button" class="btn btn-default"> Search for a Customer </button>
+            <div class="manage-buttons">
+                <h1> Manage Customers </h1>
+                <div class="btn-group btn-group-lg" role="group" aria-label="...">
+                    <button type="button" class="btn btn-primary"> View Customer Orders </button>
+                    <button type="button" class="btn btn-info"> Contact a Customer </button>
+                    <button type="button" class="btn btn-success"> Search for a Customer </button>
+                </div>
             </div>
-
+            
             <div>
                 <h2> View All Customer Information </h2>
                 <table class="table">
@@ -30,16 +33,29 @@
                         <th> Rewards Points </th>
                         <th> Number of Orders Placed </th>
                     </tr>
+
+                    <!-- These entries will be replaced with database entries later-->
                     <tr>
-                        <td> Sample Name </td>
-                        <td> Sample Phone Number </td>
-                        <td> Rewards Points </td>
-                        <td> Number of Orders Placed </td>
+                        <td> Toph </td>
+                        <td> 123-456-7890 </td>
+                        <td> 100 </td>
+                        <td> 2 </td>
+                    </tr>
+                    <tr>
+                        <td> Katara </td>
+                        <td> 987-654-3210 </td>
+                        <td> 300 </td>
+                        <td> 1 </td>
+                    </tr>
+                    <tr>
+                        <td> Zuko </td>
+                        <td> 999-888-7777 </td>
+                        <td> 250 </td>
+                        <td> 3 </td>
                     </tr>
                     
                 </table>
             </div>
-            
         </div>
         
     </body>
