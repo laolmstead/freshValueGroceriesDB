@@ -6,9 +6,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-        <!-- Bootstrap -->
-        <link href="bootstrap.css" rel="stylesheet">
+        <!-- Bootstrap compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+        <!-- Custom css -->
         <link href="customers-style.css" rel="stylesheet">
+
+        <!-- Bootstrap compiled and minified JavaScript -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
         <title> Manage Customers </title>
     </head>
@@ -18,9 +24,15 @@
             <div class="manage-buttons">
                 <h1> Manage Customers </h1>
                 <div class="btn-group btn-group-lg" role="group" aria-label="...">
-                    <button type="button" class="btn btn-primary"> View Customer Orders </button>
-                    <button type="button" class="btn btn-info"> Contact a Customer </button>
-                    <button type="button" class="btn btn-success"> Search for a Customer </button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ViewModal"> 
+                        View Customer Orders 
+                    </button>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#ContactModal"> 
+                        Contact a Customer 
+                    </button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#SearchModal"> 
+                        Search for a Customer 
+                    </button>
                 </div>
             </div>
             
@@ -55,6 +67,69 @@
                     </tr>
                     
                 </table>
+            </div>
+        </div>
+
+        <!-- View Customer Orders Modal -->
+        <div id="ViewModal" class="modal" role="dialog">
+            <div class="modal-dialog">
+        
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> View Customer Orders </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> This button will link to a page to view the orders customers have placed. </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+
+        <!-- Contact Customers Modal -->
+        <div id="ContactModal" class="modal" role="dialog">
+            <div class="modal-dialog">
+        
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> Contact a Customer </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> This button will let you search for a customer to access their phone number. </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+
+        <!-- Search for Customers Modal -->
+        <div id="SearchModal" class="modal" role="dialog">
+            <div class="modal-dialog">
+        
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> Search for Customers </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> This button will allow you to search for customers that meet specific criteria. </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+        
             </div>
         </div>
         
