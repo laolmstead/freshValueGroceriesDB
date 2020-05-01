@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+        <!-- Bootstrap compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+        <!-- Custom css -->
+        <link href="shifts-style.css" rel="stylesheet">
+
+        <!-- Bootstrap compiled and minified JavaScript -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+        <title> Manage Shifts </title>
+    </head>
+
+    <body>
+        <div class="col-md-8 mx-auto">
+            <div class="manage-buttons">
+                <h1> Manage Shifts </h1>
+                <div class="btn-group" aria-label="...">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal"> 
+                        Add a New Shift
+                    </button>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#RemoveModal"> 
+                        Remove a Shift 
+                    </button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#AssignModal"> 
+                        Assign a Shift
+                    </button>
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#UpdateModal"> 
+                        Update a Shift
+                    </button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ViewModal"> 
+                        View Employees on a Shift
+                    </button>
+                </div>
+            </div>
+            
+            <div>
+                <h2> View All Shifts </h2>
+                <table class="table">
+                    <tr>
+                        <th> ShiftID </th>
+                        <th> Day </th>
+                        <th> Start Time </th>
+                        <th> End Time </th>
+                    </tr>
+
+                    <!-- These entries will be replaced with database entries later-->
+                    <tr>
+                        <td> 1 </td>
+                        <td> Monday </td>
+                        <td> 08:00:00 </td>
+                        <td> 12:00:00 </td>
+                    </tr>
+                    <tr>
+                        <td> 2 </td>
+                        <td> Tuesday </td>
+                        <td> 10:00:00 </td>
+                        <td> 14:00:00 </td>
+                    </tr>
+                    <tr>
+                        <td> 3 </td>
+                        <td> Wednesday </td>
+                        <td> 14:00:00 </td>
+                        <td> 18:00:00 </td>
+                    </tr>
+                    
+                </table>
+            </div>
+        </div>
+
+        <!-- Add Shift Modal -->
+        <div id="AddModal" class="modal" role="dialog">
+            <div class="modal-dialog">
+        
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> Add a Shift </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> This button will let you create a new shift. </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+
+        <!-- Remove Shift Modal -->
+        <div id="RemoveModal" class="modal" role="dialog">
+            <div class="modal-dialog">
+        
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> Remove a Shift </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> This button will let you remove a shift from the database system. </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+
+        <!-- Assign Shift Modal -->
+        <div id="AssignModal" class="modal" role="dialog">
+            <div class="modal-dialog">
+        
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> Assign a Shift </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> This button will allow you to assign a shift to an employee. </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+
+        <!-- Update Shift Modal -->
+        <div id="UpdateModal" class="modal" role="dialog">
+            <div class="modal-dialog">
+        
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> Update Shift Information </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> This button will allow you to update a shift. </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+
+        <!-- View Employees on Shift Modal -->
+        <div id="ViewModal" class="modal" role="dialog">
+            <div class="modal-dialog">
+        
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"> View Employees on Shift </h4>
+                    </div>
+                    <div class="modal-body">
+                        <p> This button will allow you to view the Employees assigned to a given shift. </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+        
+            </div>
+        </div>
+        
+    </body>
+</html>
