@@ -62,29 +62,51 @@
           <h2>Place an Order</h2>
 
           <!--New Customer Form-->
-          <button type="button" class="btn btn-primary mx-1 mt-3" data-toggle="modal" data-target="#AssignModal" id="newButton"> 
+          <button type="button" class="btn btn-primary mx-1 mt-3" data-toggle="modal" data-target="#addNewCustomer" id="newButton"> 
               New Customer
           </button>
-          <div id="newCustomer" style="display: none">
-            <form>
-              <div class="form-row mt-5">
-                <div class="col mx-1">
-                  <label for="fname">First Name</label>
-                  <input type="text" class="form-control" id="fname">
-                </div>
-                <div class="col mx-1 mb-3">
-                  <label for="lname">Last Name</label>
-                  <input type="text" class="form-control" id="lname">
-                </div>
-                <div class="col mx-1">
-                  <label for="phone">Phone Number</label>
-                  <input type="number" class="form-control" id="phone" min=0>
-                </div>
+
+          <!-- New Customer Modal -->
+          <div id="addNewCustomer" class="modal" tabindex="-1" role="dialog">
+              <div class="modal-dialog" role="document">
+                  <div class="modal-content mx-3">
+                      <div class="modal-header">
+                        <h5 class="modal-title">New Customer</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                  <div class="add-customer mx-3 my-3">
+                    <p> Enter New Customer Information </p>
+                        <form>
+                          <div class="form-row">
+                            <div class="col mx-1 mb-1">
+                              <label for="fname"></label>
+                              <input type="text" class="form-control" id="fname" placeholder="First Name">
+                            </div>
+                            <div class="col mx-1 mb-1">
+                              <label for="lname"></label>
+                              <input type="text" class="form-control" id="lname" placeholder="Last Name">
+                            </div>
+                          </div>
+                          <div class="form-row mb-3">
+                            <div class="col mx-1 mb-2">
+                              <label for="phone"></label>
+                              <input type="number" class="form-control" id="phone" min=0 placeholder="Phone Number">
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-primary px-1" data-dismiss="modal" data-target="#">
+                              Register
+                            </button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" data-target="#">
+                              Cancel
+                            </button>
+                          </div>
+                        </form>
+                  </div>
+                  </div>
               </div>
-              <button type="button" class="btn btn-primary mx-1" data-toggle="modal" data-target="#AssignModal">
-                Register
-              </button>
-            </form>
           </div>
 
 
@@ -135,11 +157,6 @@
           </form>
 
 
-
-
-
-
-
             <!--Edit Order Buttons-->
 
             <div class="form-inline mt-3 mb-5">
@@ -176,12 +193,12 @@
                 <td>1</td>
                 <td>$2.47</td>
                 <td>
-                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#"> 
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
                     Update
                   </button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#">
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
                     Delete
                   </button>
                 </td>
@@ -194,12 +211,12 @@
                 <td>1</td>
                 <td>$5.86</td>
                 <td>
-                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#"> 
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
                     Update
                   </button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#"> 
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#"> 
                     Delete
                   </button>
                 </td>
@@ -212,12 +229,12 @@
                 <td>4</td>
                 <td>$3.16</td>
                 <td>
-                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#"> 
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
                     Update
                   </button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#"> 
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#"> 
                     Delete
                   </button>
                 </td>
