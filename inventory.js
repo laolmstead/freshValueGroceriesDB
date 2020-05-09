@@ -1,5 +1,5 @@
 // Display or hide form if button is clicked.
-function displayForm(){
+/*function displayForm(){
 	var show = document.getElementById('addInventoryForm');
 	if (show.style.display === 'block') {
 		show.style.display = 'none';
@@ -9,7 +9,6 @@ function displayForm(){
 	}
  }
 
-//document.getElementById('add').addEventListener("click", displayAdd);
-document.getElementById('addItem').addEventListener("click", displayForm);
+document.getElementById('addItem').addEventListener("click", displayForm);*/
 document.getElementById('orderInventory').addEventListener("click", event => {
 	location.href = "inventoryOrder"});
