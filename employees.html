@@ -15,42 +15,46 @@
     </head>
 
     <body>
-        <!--Navbar Reference: https://getbootstrap.com/docs/4.3/components/navbar/-->
         <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffffff;">
             <a class="navbar-brand" href="index">
                 <!--Logo Source: https://www.freelogodesign.org-->
                 <img src="logo.png" width="100" height="100" alt="">
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+              <ul class="navbar-nav mr-auto">
                 <li class="nav-item mx-2">
-                    <a class="nav-link" href="index">Home</a>
+                  <a class="nav-link active" href="index">Home<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item mx-2">
-                    <a class="nav-link" href="customers">Customer Information</a>
-                </li>
-                <li class="nav-item mx-2">
-                    <a class="nav-link" href="customerOrder">Place an Order</a>
-                </li>
-                <li class="nav-item mx-2">
-                    <a class="nav-link active" href="employees">Employees<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item mx-2">
-                    <a class="nav-link" href="shifts">Shifts</a>
+                  <a class="nav-link" href="customers">Customer Information</a>
                 </li>
                 <li class="nav-item dropdown mx-2">
-                    <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Inventory</a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item mx-2" href="inventory">Manage Inventory</a>
-                        <a class="dropdown-item mx-2" href="inventoryOrder">Order Inventory</a>
-                    </div>
+                  <a class="nav-link dropdown-toggle" href="orders" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Orders
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item mx-2" href="orders">Manage Orders</a>
+                      <a class="dropdown-item mx-2" href="customerOrder">Place an Order</a>
+                  </div>
                 </li>
-            </ul>
+                <li class="nav-item mx-2">
+                  <a class="nav-link" href="employees">Employees</a>
+                </li>
+                <li class="nav-item mx-2">
+                  <a class="nav-link" href="shifts">Shifts</a>
+                </li>
+                <li class="nav-item dropdown mx-2">
+                  <a class="nav-link dropdown-toggle" href="inventory" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Inventory</a>
+                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                      <a class="dropdown-item mx-2" href="inventory">Manage Inventory</a>
+                      <a class="dropdown-item mx-2" href="inventoryOrder">Order Inventory</a>
+                  </div>
+                </li>
+              </ul>
             </div>
-        </nav>
+          </nav>
         <div class="col-md-8 mx-auto">
             <h1> Manage Employee Information </h1>
             <div class="manage-buttons">
