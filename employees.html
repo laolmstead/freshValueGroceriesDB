@@ -32,14 +32,9 @@
                 <li class="nav-item mx-2">
                     <a class="nav-link" href="customers">Customer Information</a>
                 </li>
-              <li class="nav-item dropdown mx-2">
-                <a class="nav-link dropdown-toggle" href="orders" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Orders
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item mx-2" href="orders">Manage Orders</a>
-                    <a class="dropdown-item mx-2" href="customerOrder">Place an Order</a>
-                </div>
-              </li>
+                <li class="nav-item mx-2">
+                    <a class="nav-link" href="customerOrder">Place an Order</a>
+                </li>
                 <li class="nav-item mx-2">
                     <a class="nav-link active" href="employees">Employees<span class="sr-only">(current)</span></a>
                 </li>
@@ -63,9 +58,34 @@
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal"> 
                         Add an Employee 
                     </button>
-                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#SearchModal"> 
+                    <button type="button" class="btn btn-success" id="search"> 
                         Search for an Employee
                     </button>
+                </div>
+            </div>
+
+            <!-- Search by ID, Name, Wage, Responsibilities, or Sick Days -->
+            <div id="searchForm" style="display: none">
+                <h2> Search Employees </h2>
+                <div class="form-group col-md-8">
+                    <select class="form-control mb-3" id="searchOptions" placeholder="Search By">
+                        <option>Search By</option>
+                        <option id="num-option">Employee ID</option>
+                        <option id="text-option">Name</option>
+                        <option id="text-option">Work Responsibilities</option>
+                        <option id="num-option">Hourly Wage</option>
+                        <option id="num-option">Number of Sick Days</option>
+                    </select>
+                    <div class="form-row add-form-row" id="text-form">
+                        <div class="col-10 mb-7">
+                            <input type="text" class="form-control" placeholder="Search">
+                        </div>
+                        <div class="col btn-group mb-3" aria-label="...">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#" id="showOrders">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -88,10 +108,10 @@
                         <td> 15 </td>
                         <td> Restock shelves </td>
                         <td> 4 </td>
-                        <td><button type="button" class="btn btn-primary"> View Shifts </button></td>
+                        <td><button type="button" class="btn btn-outline-warning"> View Shifts </button></td>
                         <td> 
-                            <button type="button" class="btn btn-success"> Update </button> 
-                            <button type="button" class="btn btn-danger"> Remove </button>
+                            <button type="button" class="btn btn-outline-primary"> Update </button> 
+                            <button type="button" class="btn btn-outline-danger"> Remove </button> 
                         </td>
                     </tr>
                     <tr>
@@ -100,10 +120,10 @@
                         <td> 15 </td>
                         <td> Cashier </td>
                         <td> 6 </td>
-                        <td><button type="button" class="btn btn-primary"> View Shifts </button></td>
+                        <td><button type="button" class="btn btn-outline-warning"> View Shifts </button></td>
                         <td> 
-                            <button type="button" class="btn btn-success"> Update </button> 
-                            <button type="button" class="btn btn-danger"> Remove </button>
+                            <button type="button" class="btn btn-outline-primary"> Update </button> 
+                            <button type="button" class="btn btn-outline-danger"> Remove </button> 
                         </td>
                     </tr>
                     <tr>
@@ -112,10 +132,10 @@
                         <td> 15 </td>
                         <td> Customer service </td>
                         <td> 5</td>
-                        <td><button type="button" class="btn btn-primary"> View Shifts </button></td>
+                        <td><button type="button" class="btn btn-outline-warning"> View Shifts </button></td>
                         <td> 
-                            <button type="button" class="btn btn-success"> Update </button> 
-                            <button type="button" class="btn btn-danger"> Remove </button> 
+                            <button type="button" class="btn btn-outline-primary"> Update </button> 
+                            <button type="button" class="btn btn-outline-danger"> Remove </button> 
                         </td>
                     </tr>
                 </table>
@@ -166,83 +186,10 @@
             </div>
         </div>
 
-        <!-- Search for Employee Modal -->
-        <div id="SearchModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"> Search for Employees </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p> Enter Search Criteria </p>
-                        <!-- Search by ID, Name, Wage, Responsibilities, or Sick Days -->
-
-                        <form class="search-employee">
-                            <div class="form-row add-form-row">
-                                <div class="col">
-                                    <input class="form-control mr-sm-2" type="text" placeholder="First or Last Name">
-                                </div>
-                                <div class="col">
-                                    <button class="btn btn-success" type="submit"> Search by Name </button>
-                                </div>
-                            </div>
-
-                            <div class="form-row add-form-row">
-                                <div class="col">
-                                    <input class="form-control mr-sm-2" type="number" placeholder="Employee ID Number">
-                                </div>
-                                <div class="col">
-                                    <button class="btn btn-success" type="submit"> Search by ID </button>
-                                </div>
-                            </div>
-
-                            <div class="form-row add-form-row">
-                                <div class="col">
-                                    <input class="form-control mr-sm-2" type="text" placeholder="Job Description">
-                                </div>
-                                <div class="col">
-                                    <button class="btn btn-success" type="submit"> Search by Job Description </button>
-                                </div>
-                            </div>
-
-                            <div class="form-row add-form-row">
-                                <div class="col">
-                                    <input class="form-control mr-sm-2" type="number" placeholder="Lower">
-                                </div>
-                                <div class="col">
-                                    <input class="form-control mr-sm-2" type="number" placeholder="Upper">
-                                </div>
-                                <div class="col-7">
-                                    <button class="btn btn-success" type="submit"> Search by Hourly Wage </button>
-                                </div>
-                            </div>
-
-                            <div class="form-row add-form-row">
-                                <div class="col">
-                                    <input class="form-control mr-sm-2" type="number" placeholder="Lower">
-                                </div>
-                                <div class="col">
-                                    <input class="form-control mr-sm-2" type="number" placeholder="Upper">
-                                </div>
-                                <div class="col-7">
-                                    <button class="btn btn-success" type="submit"> Search by Sick Days </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!--Bootstrap Scripts-->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="employees.js"></script>
     </body>
 </html>
