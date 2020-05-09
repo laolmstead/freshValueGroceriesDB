@@ -172,7 +172,61 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p> This button will allow you to search for employees that meet specific criteria. </p>
+                        <p> Enter Search Criteria </p>
+                        <!-- Search by ID, Name, Wage, Responsibilities, or Sick Days -->
+
+                        <form class="search-employee">
+                            <div class="form-row add-form-row">
+                                <div class="col">
+                                    <input class="form-control mr-sm-2" type="text" placeholder="First or Last Name">
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-success" type="submit"> Search by Name </button>
+                                </div>
+                            </div>
+
+                            <div class="form-row add-form-row">
+                                <div class="col">
+                                    <input class="form-control mr-sm-2" type="number" placeholder="Employee ID Number">
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-success" type="submit"> Search by ID </button>
+                                </div>
+                            </div>
+
+                            <div class="form-row add-form-row">
+                                <div class="col">
+                                    <input class="form-control mr-sm-2" type="text" placeholder="Job Description">
+                                </div>
+                                <div class="col">
+                                    <button class="btn btn-success" type="submit"> Search by Job Description </button>
+                                </div>
+                            </div>
+
+                            <div class="form-row add-form-row">
+                                <div class="col">
+                                    <input class="form-control mr-sm-2" type="number" placeholder="Lower">
+                                </div>
+                                <div class="col">
+                                    <input class="form-control mr-sm-2" type="number" placeholder="Upper">
+                                </div>
+                                <div class="col-7">
+                                    <button class="btn btn-success" type="submit"> Search by Hourly Wage </button>
+                                </div>
+                            </div>
+
+                            <div class="form-row add-form-row">
+                                <div class="col">
+                                    <input class="form-control mr-sm-2" type="number" placeholder="Lower">
+                                </div>
+                                <div class="col">
+                                    <input class="form-control mr-sm-2" type="number" placeholder="Upper">
+                                </div>
+                                <div class="col-7">
+                                    <button class="btn btn-success" type="submit"> Search by Sick Days </button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
