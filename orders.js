@@ -1,4 +1,4 @@
-// Display either add or search form based on which button is clicked.
+// Display or hide form if button is clicked.
 function displaySearch(){
 	var show = document.getElementById('searchForm');
 	if (show.style.display === 'block') {
