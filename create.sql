@@ -16,9 +16,9 @@ CREATE TABLE `Inventory` (
 
 LOCK TABLES `Inventory` WRITE;
 
-INSERT INTO `Inventory` VALUES (1, 'Organic Carrots', 'Price per Bundle of 4', 2.47, 9), 
-								(2, 'Red Potatoes', 'Price per 5lb bag', 5.86, 25),
-								(3, 'Fresh Peaches', 'Price per peach', 0.79, 54);
+INSERT INTO `Inventory` VALUES (0, 'Organic Carrots', 'Price per Bundle of 4', 2.47, 9), 
+								(0, 'Red Potatoes', 'Price per 5lb bag', 5.86, 25),
+								(0, 'Fresh Peaches', 'Price per peach', 0.79, 54);
 UNLOCK TABLES;
 
 
@@ -29,13 +29,15 @@ DROP TABLE IF EXISTS `Orders`;
 
 CREATE TABLE `Orders` (
 	`OrderID` int(11) NOT NULL AUTO_INCREMENT,
-	/*`CustomerID` int(11) NOT NULL,
-	`EmployeeID` int(11) NOT NULL,*/
+	/*`CustomerID` int(11),
+	`EmployeeID` int(11),*/
 	PRIMARY KEY (`OrderID`)/*,
 	CONSTRAINT `fk_cid`
-	FOREIGN KEY (`CustomerID`) REFERENCES Customers(`CustomerID`),
+	FOREIGN KEY (`CustomerID`) REFERENCES Customers(`CustomerID`)
+	ON DELETE SET NULL,
 	CONSTRAINT `fk_eid`
-	FOREIGN KEY (`EmployeeID`) REFERENCES Employees(`EmployeeID`)*/
+	FOREIGN KEY (`EmployeeID`) REFERENCES Employees(`EmployeeID`)
+	ON DELETE SET NULL*/
 );
 
 
@@ -44,7 +46,7 @@ CREATE TABLE `Orders` (
 
 LOCK TABLES `Orders` WRITE;
 
-INSERT INTO `Orders` VALUES (1/*, 1, 1*/), (2/*, 1, 3*/), (3/*, 2, 1*/);
+INSERT INTO `Orders` VALUES (0/*, 1, 1*/), (0/*, 1, 3*/), (0/*, 2, 1*/);
 
 UNLOCK TABLES;
 
@@ -57,12 +59,14 @@ CREATE TABLE `OrderItems` (
 	`OrderItemID` int(11) NOT NULL AUTO_INCREMENT,
 	`Quantity` int(11) NOT NULL,
 	`OrderID` int(11) NOT NULL,
-	`PLU` int(11) NOT NULL,
+	`PLU` int(11),
 	PRIMARY KEY (`OrderItemID`),
 	CONSTRAINT `fk_oid`
-	FOREIGN KEY(`OrderID`) REFERENCES Orders(`OrderID`),
+	FOREIGN KEY(`OrderID`) REFERENCES Orders(`OrderID`)
+	ON DELETE CASCADE,
 	CONSTRAINT `fk_plu`
 	FOREIGN KEY(`PLU`) REFERENCES Inventory(`PLU`)
+	ON DELETE SET NULL
 );
 
 
@@ -70,6 +74,6 @@ CREATE TABLE `OrderItems` (
 
 LOCK TABLES `OrderItems` WRITE;
 
-INSERT INTO `OrderItems` VALUES (1, 4, 1, 2), (2, 6, 3, 3), (3, 1, 2, 1);
+INSERT INTO `OrderItems` VALUES (0, 4, 1, 2), (0, 6, 3, 3), (0, 1, 2, 1);
 
 UNLOCK TABLES;
