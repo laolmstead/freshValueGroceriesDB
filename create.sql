@@ -11,9 +11,10 @@ CREATE TABLE `Inventory` (
 
 /* Insert values into the Inventory table*/
 LOCK TABLES `Inventory` WRITE;
-INSERT INTO `Inventory` VALUES  (0, 'Organic Carrots', 'Price per Bundle of 4', 2.47, 9), 
-								(1, 'Red Potatoes', 'Price per 5lb bag', 5.86, 25),
-								(2, 'Fresh Peaches', 'Price per peach', 0.79, 54);
+INSERT INTO `Inventory` (`PLU`, `Name`, `Description`, `UnitCost`, `Quantity`) 
+VALUES  (0, 'Organic Carrots', 'Price per Bundle of 4', 2.47, 9),
+		(0, 'Red Potatoes', 'Price per 5lb bag', 5.86, 25),
+		(0, 'Fresh Peaches', 'Price per peach', 0.79, 54);
 UNLOCK TABLES;
 
 
@@ -70,7 +71,8 @@ CREATE TABLE `Orders` (
 
 /* Insert values into the Orders table*/
 LOCK TABLES `Orders` WRITE;
-INSERT INTO `Orders` VALUES (0, 0, 1), (1, 1, 2), (2, 2, 3);
+INSERT INTO `Orders` (`OrderID`, `CustomerID`, `EmployeeID`)
+VALUES (0, 0, 1), (0, 1, 2), (0, 2, 3);
 UNLOCK TABLES;
 
 
@@ -92,7 +94,8 @@ CREATE TABLE `OrderItems` (
 
 /* Insert values into the Orders table*/
 LOCK TABLES `OrderItems` WRITE;
-INSERT INTO `OrderItems` VALUES (0, 4, 1, 2), (1, 6, 0, 0), (2, 1, 2, 1);
+INSERT INTO `OrderItems` (`OrderItemID`, `Quantity`, `OrderID`, `PLU`)
+VALUES (0, 4, 1, 2), (0, 6, 0, 0), (0, 1, 2, 1);
 UNLOCK TABLES;
 
 
