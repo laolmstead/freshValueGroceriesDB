@@ -1,5 +1,5 @@
 -----------------------------
--- IVENTORY
+-- INVENTORY
 -----------------------------
 
 /* Display Inventory table on Manage Inventory Page*/
@@ -9,7 +9,7 @@ SELECT `PLU`, `Name`, `Description`, `UnitCost` AS `Unit Cost` FROM Inventory;
 --Variables PLU, Name, Description, UnitCost, and Quantity
 --to be passed to the database from Python/Flask app
 LOCK TABLES `Inventory` WRITE;
-INSERT INTO `Inventory` VALUES (:PLU, :Name, :Description, :UnitCost, :Quantity);
+INSERT INTO `Inventory` (PLU, Name, Description, UnitCost, Quantity) VALUES (0, :Name, :Description, :UnitCost, :Quantity);
 UNLOCK TABLES;
 
 /* Update a row in the Inventory table*/
@@ -43,7 +43,7 @@ SELECT `OrderID` AS 'Order ID', `CustomerID` AS 'Rewards ID', `EmployeeID` AS 'E
 --Variables OrderID, EmployeeID, and CustomerID
 --to be passed to the database from Python/Flask app
 LOCK TABLES `Orders` WRITE;
-INSERT INTO `Orders` VALUES (0, :CustomerID, :EmployeeID);
+INSERT INTO `Orders` (OrderID, CustomerID, EmployeeID) VALUES (0, :CustomerID, :EmployeeID);
 UNLOCK TABLES;
 
 /* Update a row in the Orders table*/
@@ -102,11 +102,11 @@ WHERE `PLU` = :PLU;
 /* Create a new row in Orders and new rows in OrderItems when customer submits the Customer Order Form.*/
 --CustomerID, OrderID, EmployeeID, PLU, Item Name, Description and 
 LOCK TABLES `Orders` WRITE;
-INSERT INTO `Orders` VALUES (0, :CustomerID, :EmployeeID);
+INSERT INTO `Orders` (OrderID, CustomerID, EmployeeID) VALUES (0, :CustomerID, :EmployeeID);
 UNLOCK TABLES;
 
 LOCK TABLES `OrderItems` WRITE;
-INSERT INTO `OrderItems` VALUES (0, :Quantity, :OrderID, :PLU);
+INSERT INTO `OrderItems` (OrderItemID, Quantity, OrderID, PLU) VALUES (0, :Quantity, :OrderID, :PLU);
 UNLOCK TABLES;
 
 
