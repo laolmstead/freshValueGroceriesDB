@@ -91,7 +91,7 @@ CREATE TABLE `Orders` (
 /* Insert values into the Orders table*/
 LOCK TABLES `Orders` WRITE;
 INSERT INTO `Orders` (`CustomerID`, `EmployeeID`)
-VALUES (0, 1), (1, 2), (2, 3);
+VALUES (1, 1), (2, 2), (3, 3);
 UNLOCK TABLES;
 
 
@@ -118,7 +118,7 @@ CREATE TABLE `OrderItems` (
 /* Insert values into the OrderItems table*/
 LOCK TABLES `OrderItems` WRITE;
 INSERT INTO `OrderItems` (`Quantity`, `OrderID`, `PLU`)
-VALUES (4, 1, 2), (6, 0, 0), (1, 2, 1);
+VALUES (4, 2, 2), (6, 1, 1), (1, 3, 2);
 UNLOCK TABLES;
 
 
