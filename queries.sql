@@ -1,12 +1,6 @@
-<<<<<<< HEAD
------------------------------
--- INVENTORY
------------------------------
-=======
 /**************************************/
 -- INVENTORY
 /**************************************/
->>>>>>> 2a954d55b295c77f535b6f720523faa4e5db5aa6
 
 /* Display Inventory table on Manage Inventory Page*/
 SELECT `PLU`, `Name`, `Description`, `UnitCost` AS `Unit Cost` FROM Inventory;
