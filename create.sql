@@ -1,3 +1,7 @@
+/**************************************/
+-- INVENTORY
+/**************************************/
+
 /* Create an inventory table if one doesn't already exist.*/
 DROP TABLE IF EXISTS `Inventory`;
 CREATE TABLE `Inventory` (
@@ -18,6 +22,10 @@ VALUES  (0, 'Organic Carrots', 'Price per Bundle of 4', 2.47, 9),
 UNLOCK TABLES;
 
 
+/**************************************/
+-- CUSTOMERS
+/**************************************/
+
 /* Create an Customers table if one doesn't already exist.*/
 DROP TABLE IF EXISTS `Customers`;
 CREATE TABLE `Customers` (
@@ -30,10 +38,16 @@ CREATE TABLE `Customers` (
 
 /* Insert values into the Customers table */
 LOCK TABLES `Customers` WRITE;
-INSERT INTO `Customers` VALUES  (0, 'Toph', '123-456-7890', 100), 
-								(1, 'Katara', '987-654-3210', 300), 
-								(2, 'Zuko', '999-888-7777', 250);
+INSERT INTO `Customers` (`Name`, `PhoneNumber`, `RewardsPts`) 
+VALUES  ('Toph', '123-456-7890', 100),
+		('Katara', '987-654-3210', 300), 
+		('Zuko', '999-888-7777', 250);
 UNLOCK TABLES;
+
+
+/**************************************/
+-- EMPLOYEES
+/**************************************/
 
 /* Create an Employees table if one doesn't already exist.*/
 DROP TABLE IF EXISTS `Employees`;
@@ -48,11 +62,16 @@ CREATE TABLE `Employees` (
 
 /* Insert values into the Employees table */
 LOCK TABLES `Employees` WRITE;
-INSERT INTO `Employees` VALUES  (1, 'Will', 15, 'Restock shelves', 4), 
-								(2, 'Tessa', 15, 'Cashier', 6), 
-								(3, 'Jem', 15, 'Customer service', 5);
+INSERT INTO `Employees` (`Name`, `HourlyWage`, `Responsibilities`, `SickDays`) 
+VALUES  ('Will', 15, 'Restock shelves', 4), 
+		('Tessa', 15, 'Cashier', 6), 
+		('Jem', 15, 'Customer service', 5);
 UNLOCK TABLES;
 
+
+/**************************************/
+-- ORDERS
+/**************************************/
 
 /* Create an Orders table if one doesn't already exist.*/
 DROP TABLE IF EXISTS `Orders`;
@@ -76,6 +95,10 @@ VALUES (0, 0, 1), (0, 1, 2), (0, 2, 3);
 UNLOCK TABLES;
 
 
+/**************************************/
+-- OrderItems
+/**************************************/
+
 /* Create an OrderItems table if one doesn't already exist.*/
 DROP TABLE IF EXISTS `OrderItems`;
 CREATE TABLE `OrderItems` (
@@ -92,12 +115,16 @@ CREATE TABLE `OrderItems` (
 	ON DELETE SET NULL
 );
 
-/* Insert values into the Orders table*/
+/* Insert values into the OrderItems table*/
 LOCK TABLES `OrderItems` WRITE;
 INSERT INTO `OrderItems` (`OrderItemID`, `Quantity`, `OrderID`, `PLU`)
 VALUES (0, 4, 1, 2), (0, 6, 0, 0), (0, 1, 2, 1);
 UNLOCK TABLES;
 
+
+/**************************************/
+-- SHIFTS
+/**************************************/
 
 /* Create an Shifts table if one doesn't already exist.*/
 DROP TABLE IF EXISTS `Shifts`;
@@ -111,11 +138,16 @@ CREATE TABLE `Shifts` (
 
 /* Insert values into the Shifts table */
 LOCK TABLES `Shifts` WRITE;
-INSERT INTO `Shifts` VALUES (1, 'Monday', '08:00:00', '12:00:00'), 
-							(2, 'Tuesday', '10:00:00', '14:00:00'), 
-							(3, 'Wednesday', '14:00:00', '18:00:00');
+INSERT INTO `Shifts` (`Day`, `StartTime`, `EndTime`) 
+VALUES  ('Monday', '08:00:00', '12:00:00'), 
+		('Tuesday', '10:00:00', '14:00:00'), 
+		('Wednesday', '14:00:00', '18:00:00');
 UNLOCK TABLES;
 
+
+/**************************************/
+-- EmployeeShifts
+/**************************************/
 
 /* Create an EmployeeShifts table if one doesn't already exist.*/
 DROP TABLE IF EXISTS `EmployeeShifts`;
@@ -134,5 +166,6 @@ CREATE TABLE `EmployeeShifts` (
 
 /* Insert values into the EmployeeShifts table */
 LOCK TABLES `EmployeeShifts` WRITE;
-INSERT INTO `EmployeeShifts` VALUES (0, 1, 1), (1, 2, 2), (2, 3, 3);
+INSERT INTO `EmployeeShifts` (`EmployeeID`, `ShiftID`) 
+VALUES (1, 1), (2, 2), (3, 3);
 UNLOCK TABLES;

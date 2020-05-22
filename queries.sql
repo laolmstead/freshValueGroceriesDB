@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 -----------------------------
 -- INVENTORY
 -----------------------------
+=======
+/**************************************/
+-- INVENTORY
+/**************************************/
+>>>>>>> 2a954d55b295c77f535b6f720523faa4e5db5aa6
 
 /* Display Inventory table on Manage Inventory Page*/
 SELECT `PLU`, `Name`, `Description`, `UnitCost` AS `Unit Cost` FROM Inventory;
@@ -32,9 +38,9 @@ UNLOCK TABLES;
 DELETE FROM `Inventory` WHERE `PLU` = :PLU;
 
 
------------------------------
+/**************************************/
 -- ORDERS
------------------------------
+/**************************************/
 
 /* Display Orders table on Manage Orders Page*/
 SELECT `OrderID` AS 'Order ID', `CustomerID` AS 'Rewards ID', `EmployeeID` AS 'Employee ID' FROM Orders;
@@ -62,6 +68,11 @@ UNLOCK TABLES;
 --Variables OrderID, EmployeeID, and CustomerID
 --to be passed to the database from Python/Flask app
 DELETE FROM `Orders` WHERE `OrderID` = :OrderID;
+
+
+/**************************************/
+-- Orders / OrderItems
+/**************************************/
 
 /* Display Order Details table on Manage Orders Page when user searches by OrderID.*/
 --Variable OrderID to be passed to the database from Python/Flask app.
@@ -110,9 +121,9 @@ INSERT INTO `OrderItems` (OrderItemID, Quantity, OrderID, PLU) VALUES (0, :Quant
 UNLOCK TABLES;
 
 
------------------------------
+/**************************************/
 -- CUSTOMERS
------------------------------
+/**************************************/
 /* Display the Customers table on the View and Manage Customer Information page */
 SELECT `CustomerID`, `Name`, `PhoneNumber`, `RewardsPts` FROM Customers;
 
@@ -149,9 +160,9 @@ UNLOCK TABLES;
 DELETE FROM `Customers` WHERE `CustomerID` = :CustomerID;
 
 
------------------------------
+/**************************************/
 -- EMPLOYEES
------------------------------
+/**************************************/
 
 /* Display the Employees table on the Manage Employees page */
 SELECT `EmployeeID`, `Name`, `HourlyWage`, `Responsibilities`, `SickDays` FROM `Employees`;
@@ -208,9 +219,9 @@ VALUES (:Name, :HourlyWage, :Responsibilities, :SickDays);
 UNLOCK TABLES;
 
 
------------------------------
+/**************************************/
 -- SHIFTS
------------------------------
+/**************************************/
 
 /* Display the Shifts table on the Manage Shifts page */
 SELECT `ShiftID`, `Day`, `StartTime`, `EndTime` FROM `Shifts`;
