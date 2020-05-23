@@ -1,129 +1,71 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <!--Bootstrap stylesheet-->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!-- Inherits the navbar from base.html. Embeds this template inside base.html-->
+{% extends "base.html" %}
 
-        <!-- Custom css -->
-        <link href="customers-style.css" rel="stylesheet">
+<!-- The block statements define where this template can insert itself-->
+<!-- This block is named 'content'-->
+{% block content %}
 
-        <title> Manage Customers </title>
-    </head>
+<div class="col-md-8 mx-auto">
+    <h1> View and Manage Customer Information </h1>
 
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffffff;">
-            <a class="navbar-brand" href="index">
-                <!--Logo Source: https://www.freelogodesign.org-->
-                <img src="logo.png" width="100" height="100" alt="">
-            </a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto">
-                <li class="nav-item mx-2">
-                  <a class="nav-link active" href="index">Home<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item mx-2">
-                  <a class="nav-link" href="customers">Customer Information</a>
-                </li>
-                <li class="nav-item dropdown mx-2">
-                  <a class="nav-link dropdown-toggle" href="orders" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Orders
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item mx-2" href="orders">Manage Orders</a>
-                      <a class="dropdown-item mx-2" href="customerOrder">Place an Order</a>
-                  </div>
-                </li>
-                <li class="nav-item mx-2">
-                  <a class="nav-link" href="employees">Employees</a>
-                </li>
-                <li class="nav-item mx-2">
-                  <a class="nav-link" href="shifts">Shifts</a>
-                </li>
-                <li class="nav-item dropdown mx-2">
-                  <a class="nav-link dropdown-toggle" href="inventory" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Inventory</a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item mx-2" href="inventory">Manage Inventory</a>
-                      <a class="dropdown-item mx-2" href="inventoryOrder">Order Inventory</a>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </nav>
+    <div class="col-md-8 mx-auto search-bar">
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+            <button class="btn btn-primary" type="submit"> Search for a Customer </button>
+        </form>
+    </div>
 
-        <div class="col-md-8 mx-auto">
+    <div class="col-md-8 mx-auto search-bar">
+        <form class="form-inline">
+            <input class="form-control mr-sm-2" type="number" placeholder="Lower Bound">
+            <input class="form-control mr-sm-2" type="number" placeholder="Upper Bound">
+            <button class="btn btn-primary" type="submit"> Search by Rewards Points </button>
+        </form>
+    </div>
+    
+    <div class="customers-table">
+        <table class="table">
+            <tr>
+                <th> CustomerID </th>
+                <th> Name </th>
+                <th> Phone Number </th>
+                <th> Rewards Points </th>
+                <th> Options </th>
+            </tr>
+
+            <!-- These entries will be replaced with database entries later-->
+            <tr>
+                <td> 0 </td>
+                <td> Toph </td>
+                <td> 123-456-7890 </td>
+                <td> 100 </td>
+                <td> 
+                    <button type="button" class="btn btn-success"> Update </button> 
+                    <button type="button" class="btn btn-danger"> Delete </button> 
+                </td>
+            </tr>
+            <tr>
+                <td> 1 </td>
+                <td> Katara </td>
+                <td> 987-654-3210 </td>
+                <td> 300 </td>
+                <td> 
+                    <button type="button" class="btn btn-success"> Update </button> 
+                    <button type="button" class="btn btn-danger"> Delete </button> 
+                </td>
+            </tr>
+            <tr>
+                <td> 2 </td>
+                <td> Zuko </td>
+                <td> 999-888-7777 </td>
+                <td> 250 </td>
+                <td> 
+                    <button type="button" class="btn btn-success"> Update </button> 
+                    <button type="button" class="btn btn-danger"> Delete </button> 
+                </td>
+            </tr>
             
-            <h1> View and Manage Customer Information </h1>
-
-            <div class="col-md-8 mx-auto search-bar">
-                <form class="form-inline">
-                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
-                    <button class="btn btn-primary" type="submit"> Search for a Customer </button>
-                </form>
-            </div>
-
-            <div class="col-md-8 mx-auto search-bar">
-                <form class="form-inline">
-                    <input class="form-control mr-sm-2" type="number" placeholder="Lower Bound">
-                    <input class="form-control mr-sm-2" type="number" placeholder="Upper Bound">
-                    <button class="btn btn-primary" type="submit"> Search by Rewards Points </button>
-                </form>
-            </div>
-            
-            <div class="customers-table">
-                <table class="table">
-                    <tr>
-                        <th> CustomerID </th>
-                        <th> Name </th>
-                        <th> Phone Number </th>
-                        <th> Rewards Points </th>
-                        <th> Options </th>
-                    </tr>
-
-                    <!-- These entries will be replaced with database entries later-->
-                    <tr>
-                        <td> 0 </td>
-                        <td> Toph </td>
-                        <td> 123-456-7890 </td>
-                        <td> 100 </td>
-                        <td> 
-                            <button type="button" class="btn btn-success"> Update </button> 
-                            <button type="button" class="btn btn-danger"> Delete </button> 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td> 1 </td>
-                        <td> Katara </td>
-                        <td> 987-654-3210 </td>
-                        <td> 300 </td>
-                        <td> 
-                            <button type="button" class="btn btn-success"> Update </button> 
-                            <button type="button" class="btn btn-danger"> Delete </button> 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td> 2 </td>
-                        <td> Zuko </td>
-                        <td> 999-888-7777 </td>
-                        <td> 250 </td>
-                        <td> 
-                            <button type="button" class="btn btn-success"> Update </button> 
-                            <button type="button" class="btn btn-danger"> Delete </button> 
-                        </td>
-                    </tr>
-                    
-                </table>
-            </div>
-        </div>
-
-        <!--Bootstrap Scripts-->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    </body>
-</html>
+        </table>
+    </div>
+</div>
+{% endblock %}

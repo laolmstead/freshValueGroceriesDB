@@ -1,200 +1,144 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <!--Bootstrap stylesheet-->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<!-- Inherits the navbar from base.html. Embeds this template inside base.html-->
+{% extends "base.html" %}
 
-        <!-- Custom css -->
-        <link href="shifts-style.css" rel="stylesheet">
+<!-- The block statements define where this template can insert itself-->
+<!-- This block is named 'content'-->
+{% block content %}
 
-        <title> Manage Shifts </title>
-    </head>
+<div class="col-md-8 mx-auto">
+    <h1> Manage Shifts </h1>
+    <div class="manage-buttons">
+        <div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal"> 
+                Add a New Shift
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AssignModal"> 
+                Assign a Shift
+            </button>
+        </div>
+    </div>
+    
+    <div>
+        <h2> View All Shifts </h2>
+        <table class="table">
+            <tr>
+                <th> ShiftID </th>
+                <th> Day </th>
+                <th> Start Time </th>
+                <th> End Time </th>
+                <th> Employees on Shift </th>
+                <th> Options </th>
+            </tr>
 
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffffff;">
-            <a class="navbar-brand" href="index">
-                <!--Logo Source: https://www.freelogodesign.org-->
-                <img src="logo.png" width="100" height="100" alt="">
-            </a>
-              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav mr-auto">
-                <li class="nav-item mx-2">
-                  <a class="nav-link active" href="index">Home<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item mx-2">
-                  <a class="nav-link" href="customers">Customer Information</a>
-                </li>
-                <li class="nav-item dropdown mx-2">
-                  <a class="nav-link dropdown-toggle" href="orders" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Orders
-                  </a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item mx-2" href="orders">Manage Orders</a>
-                      <a class="dropdown-item mx-2" href="customerOrder">Place an Order</a>
-                  </div>
-                </li>
-                <li class="nav-item mx-2">
-                  <a class="nav-link" href="employees">Employees</a>
-                </li>
-                <li class="nav-item mx-2">
-                  <a class="nav-link" href="shifts">Shifts</a>
-                </li>
-                <li class="nav-item dropdown mx-2">
-                  <a class="nav-link dropdown-toggle" href="inventory" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Inventory</a>
-                  <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item mx-2" href="inventory">Manage Inventory</a>
-                      <a class="dropdown-item mx-2" href="inventoryOrder">Order Inventory</a>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </nav>
-        <div class="col-md-8 mx-auto">
-            <h1> Manage Shifts </h1>
-            <div class="manage-buttons">
-                <div>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal"> 
-                        Add a New Shift
-                    </button>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AssignModal"> 
-                        Assign a Shift
-                    </button>
-                </div>
-            </div>
+            <!-- These entries will be replaced with database entries later-->
+            <tr>
+                <td> 1 </td>
+                <td> Monday </td>
+                <td> 08:00:00 </td>
+                <td> 12:00:00 </td>
+                <td><button type="button" class="btn btn-primary"> View Employees </button></td>
+                <td> 
+                    <button type="button" class="btn btn-success"> Update </button> 
+                    <button type="button" class="btn btn-danger"> Delete </button>
+                </td>
+            </tr>
+            <tr>
+                <td> 2 </td>
+                <td> Tuesday </td>
+                <td> 10:00:00 </td>
+                <td> 14:00:00 </td>
+                <td><button type="button" class="btn btn-primary"> View Employees </button></td>
+                <td> 
+                    <button type="button" class="btn btn-success"> Update </button> 
+                    <button type="button" class="btn btn-danger"> Delete </button>
+                </td>
+            </tr>
+            <tr>
+                <td> 3 </td>
+                <td> Wednesday </td>
+                <td> 14:00:00 </td>
+                <td> 18:00:00 </td>
+                <td><button type="button" class="btn btn-primary"> View Employees </button></td>
+                <td> 
+                    <button type="button" class="btn btn-success"> Update </button> 
+                    <button type="button" class="btn btn-danger"> Delete </button>
+                </td>
+            </tr>
             
-            <div>
-                <h2> View All Shifts </h2>
-                <table class="table">
-                    <tr>
-                        <th> ShiftID </th>
-                        <th> Day </th>
-                        <th> Start Time </th>
-                        <th> End Time </th>
-                        <th> Employees on Shift </th>
-                        <th> Options </th>
-                    </tr>
+        </table>
+    </div>
+</div>
 
-                    <!-- These entries will be replaced with database entries later-->
-                    <tr>
-                        <td> 1 </td>
-                        <td> Monday </td>
-                        <td> 08:00:00 </td>
-                        <td> 12:00:00 </td>
-                        <td><button type="button" class="btn btn-primary"> View Employees </button></td>
-                        <td> 
-                            <button type="button" class="btn btn-success"> Update </button> 
-                            <button type="button" class="btn btn-danger"> Delete </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td> 2 </td>
-                        <td> Tuesday </td>
-                        <td> 10:00:00 </td>
-                        <td> 14:00:00 </td>
-                        <td><button type="button" class="btn btn-primary"> View Employees </button></td>
-                        <td> 
-                            <button type="button" class="btn btn-success"> Update </button> 
-                            <button type="button" class="btn btn-danger"> Delete </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td> 3 </td>
-                        <td> Wednesday </td>
-                        <td> 14:00:00 </td>
-                        <td> 18:00:00 </td>
-                        <td><button type="button" class="btn btn-primary"> View Employees </button></td>
-                        <td> 
-                            <button type="button" class="btn btn-success"> Update </button> 
-                            <button type="button" class="btn btn-danger"> Delete </button>
-                        </td>
-                    </tr>
-                    
-                </table>
+<!-- Add Shift Modal -->
+<div id="AddModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Add a Shift </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </div>
-
-        <!-- Add Shift Modal -->
-        <div id="AddModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"> Add a Shift </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <p> Enter Shift Information </p>
-                        <form>
-                            <div class="form-row add-form-row">
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Day of Week
-                                    </button>
-                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <a class="dropdown-item" href="#"> Sunday </a>
-                                        <a class="dropdown-item" href="#"> Monday </a>
-                                        <a class="dropdown-item" href="#"> Tuesday </a>
-                                        <a class="dropdown-item" href="#"> Wednesday </a>
-                                        <a class="dropdown-item" href="#"> Thursday </a>
-                                        <a class="dropdown-item" href="#"> Friday </a>
-                                        <a class="dropdown-item" href="#"> Saturday </a>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="Start Time">
-                                </div>
-                                <div class="col">
-                                    <input type="text" class="form-control" placeholder="End Time">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal"> Save </button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"> Cancel </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Assign Shift Modal -->
-        <div id="AssignModal" class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title"> Assign a Shift to an Employee </h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-row add-form-row">
-                            <div class="col">
-                                <input type="text" class="form-control" placeholder="Shift ID">
-                            </div>
-                            <div class="col">
-                                <input type="text" class="form-control" placeholder="Employee ID">
+            <div class="modal-body">
+                <p> Enter Shift Information </p>
+                <form>
+                    <div class="form-row add-form-row">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Day of Week
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#"> Sunday </a>
+                                <a class="dropdown-item" href="#"> Monday </a>
+                                <a class="dropdown-item" href="#"> Tuesday </a>
+                                <a class="dropdown-item" href="#"> Wednesday </a>
+                                <a class="dropdown-item" href="#"> Thursday </a>
+                                <a class="dropdown-item" href="#"> Friday </a>
+                                <a class="dropdown-item" href="#"> Saturday </a>
                             </div>
                         </div>
+                        <div class="col">
+                            <input type="text" class="form-control" placeholder="Start Time">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" placeholder="End Time">
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal"> Assign </button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal"> Cancel </button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"> Save </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"> Cancel </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Shift Modal -->
+<div id="AssignModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Assign a Shift to an Employee </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row add-form-row">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Shift ID">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Employee ID">
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal"> Assign </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal"> Cancel </button>
+            </div>
         </div>
-
-        <!--Bootstrap Scripts-->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    </body>
-</html>
+    </div>
+</div>
+{% endblock %}
