@@ -1,242 +1,182 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Inherits the navbar from base.html. Embeds this template inside base.html-->
+{% extends "base.html" %}
 
-        <title>Orders</title>
+<!-- The block statements define where this template can insert itself-->
+<!-- This block is named 'content'-->
+{% block content %}
 
-        <!--Bootstrap stylesheet-->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    </head>
+<!--Buttons header-->
+<div class="col-md-8 mx-auto">
+<div class="manage-buttons mb-5">
+    <h1>Orders</h1>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal" id="add">
+          Place an Order
+      </button>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AssignModal" id="search"> 
+          Search
+      </button>
+</div>
 
-    <body>
+<!--Search Form-->
+<div id="searchForm" style="display: none">
+  <h2>Search Orders</h2>
+  <div class="form-group col-md-8">
+    <select class="form-control mb-3" id="searchOptions" placeholder="Search By">
+      <option>Search By</option>
+      <option>Order ID</option>
+      <option>Customer ID</option>
+      <option>Employee ID</option>
+    </select>
+    <div class="form-row">
+      <div class="col-10 mb-3">
+        <input type="text" class="form-control" id="search" placeholder="Enter ID">
+      </div>
+      <div class="col btn-group mb-3" aria-label="...">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#" id="showOrders">
+            Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
-        <!--Navbar Reference: https://getbootstrap.com/docs/4.3/components/navbar/-->
+<!--Order Table-->
 
-        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #ffffff;">
-          <a class="navbar-brand" href="index">
-              <!--Logo Source: https://www.freelogodesign.org-->
-              <img src="logo.png" width="100" height="100" alt="">
-          </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item mx-2">
-                <a class="nav-link" href="index">Home</a>
-              </li>
-              <li class="nav-item mx-2">
-                <a class="nav-link" href="customers">Customer Information</a>
-              </li>
-              <li class="nav-item dropdown mx-2">
-                <a class="nav-link dropdown-toggle active" href="orders" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Orders
-                </a>
-                <div class="dropdown-menu active" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item active mx-2" href="orders">Manage Orders<span class="sr-only">(current)</span></a>
-                    <a class="dropdown-item mx-2" href="customerOrder">Place an Order</a>
-                </div>
-              </li>
-              <li class="nav-item mx-2">
-                <a class="nav-link" href="employees">Employees</a>
-              </li>
-              <li class="nav-item mx-2">
-                <a class="nav-link" href="shifts">Shifts</a>
-              </li>
-              <li class="nav-item dropdown mx-2">
-                <a class="nav-link dropdown-toggle" href="inventory" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Inventory
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item mx-2" href="inventory">Manage Inventory</a>
-                    <a class="dropdown-item mx-2" href="inventoryOrder">Order Inventory</a>
-                </div>
-              </li>
-            </ul>
-          </div>
-        </nav>
-
-        <!--Buttons header-->
-        <div class="col-md-8 mx-auto">
-            <div class="manage-buttons mb-5">
-                <h1>Orders</h1>
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal" id="add">
-                      Place an Order
-                  </button>
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AssignModal" id="search"> 
-                      Search
-                  </button>
-            </div>
-
-          <!--Search Form-->
-          <div id="searchForm" style="display: none">
-            <h2>Search Orders</h2>
-            <div class="form-group col-md-8">
-              <select class="form-control mb-3" id="searchOptions" placeholder="Search By">
-                <option>Search By</option>
-                <option>Order ID</option>
-                <option>Customer ID</option>
-                <option>Employee ID</option>
-              </select>
-              <div class="form-row">
-                <div class="col-10 mb-3">
-                  <input type="text" class="form-control" id="search" placeholder="Enter ID">
-                </div>
-                <div class="col btn-group mb-3" aria-label="...">
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#" id="showOrders">
-                      Submit
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        <!--Order Table-->
-
-              <h2> All Orders </h2>
-              <table class="table">
-                  <thead> 
-                      <th>ORDER ID</th>
-                      <th>REWARDS ID</th>
-                      <th>EMPLOYEE ID</th>
-                      <th></th>
-                      <th></th>
-                  </thead> 
-                  <tbody>
-                      <tr> 
-                          <td>0000</td> 
-                          <td>0099</td> 
-                          <td>0034</td> 
-                          <td>
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                              Update
-                            </button>
-                          </td>
-                          <td>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                              Delete
-                            </button>
-                          </td>
-                      </tr>
-                      <tr> 
-                          <td>0001</td> 
-                          <td>0132</td> 
-                          <td>0009</td> 
-                          <td>
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                              Update
-                            </button>
-                          </td>
-                          <td>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                              Delete
-                            </button>
-                          </td>
-                      </tr>
-                      <tr> 
-                          <td>0002</td> 
-                          <td>0199</td> 
-                          <td>0210</td> 
-                          <td>
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                              Update
-                            </button>
-                          </td>
-                          <td>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                              Delete
-                            </button>
-                          </td>
-                      </tr>
-                  </tbody> 
-              </table>
+<h2> All Orders </h2>
+<table class="table">
+    <thead> 
+        <th>ORDER ID</th>
+        <th>REWARDS ID</th>
+        <th>EMPLOYEE ID</th>
+        <th></th>
+        <th></th>
+    </thead> 
+    <tbody>
+        <tr> 
+            <td>0000</td> 
+            <td>0099</td> 
+            <td>0034</td> 
+            <td>
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
+                Update
+              </button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
+                Delete
+              </button>
+            </td>
+        </tr>
+        <tr> 
+            <td>0001</td> 
+            <td>0132</td> 
+            <td>0009</td> 
+            <td>
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
+                Update
+              </button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
+                Delete
+              </button>
+            </td>
+        </tr>
+        <tr> 
+            <td>0002</td> 
+            <td>0199</td> 
+            <td>0210</td> 
+            <td>
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
+                Update
+              </button>
+            </td>
+            <td>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
+                Delete
+              </button>
+            </td>
+        </tr>
+    </tbody> 
+</table>
 
 
-              <!--Displays Details of Order Based on Search Criteria.-->
-              <div id="orderDetails" style="display: none">
-                <h2> Order Details </h2>
-                <table class="table">
-                    <thead>
-                        <th>ORDER ID</th>
-                        <th>PLU</th>
-                        <th>ITEM</th>
-                        <th>DESCRIPTION</th>
-                        <th>UNIT COST</th>
-                        <th>QUANTITY</th>
-                        <th>COST</th>
-                        <th></th>
-                        <th></th>
-                    </thead> 
-                    <tbody>
-                        <tr> 
-                            <td>0001</td>
-                            <td>0000</td>
-                            <td>Organic Carrots</td>
-                            <td>Bundles of 4. Price per Bundle</td>
-                            <td>$2.47</td>
-                            <td>2</td>
-                            <td>$4.94</td>
-                            <td>
-                              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                                Update
-                              </button>
-                            </td>
-                            <td>
-                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                                Delete
-                              </button>
-                            </td>
-                        </tr>
-                        <tr> 
-                            <td>0001</td>
-                            <td>0001</td>
-                            <td>Red Potatoes</td>
-                            <td>5lb Bag. Price per Bag</td>
-                            <td>$5.86</td>
-                            <td>1</td>
-                            <td>$5.86</td>
-                            <td>
-                              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                                Update
-                              </button>
-                            </td>
-                            <td>
-                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                                Delete
-                              </button>
-                            </td>
-                        </tr>
-                        <tr> 
-                            <td>0001</td>
-                            <td>0002</td>
-                            <td>Fresh Peaches</td>
-                            <td>Individual. Price per Peach.</td>
-                            <td>$0.79</td>
-                            <td>2</td>
-                            <td>$1.58</td>
-                            <td>
-                              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                                Update
-                              </button>
-                            </td>
-                            <td>
-                              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                                Delete
-                              </button>
-                            </td>
-                        </tr>
-                    </tbody> 
-                </table>
-              </div>
-            </div>
+<!--Displays Details of Order Based on Search Criteria.-->
+<div id="orderDetails" style="display: none">
+  <h2> Order Details </h2>
+  <table class="table">
+      <thead>
+          <th>ORDER ID</th>
+          <th>PLU</th>
+          <th>ITEM</th>
+          <th>DESCRIPTION</th>
+          <th>UNIT COST</th>
+          <th>QUANTITY</th>
+          <th>COST</th>
+          <th></th>
+          <th></th>
+      </thead> 
+      <tbody>
+          <tr> 
+              <td>0001</td>
+              <td>0000</td>
+              <td>Organic Carrots</td>
+              <td>Bundles of 4. Price per Bundle</td>
+              <td>$2.47</td>
+              <td>2</td>
+              <td>$4.94</td>
+              <td>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
+                  Update
+                </button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
+                  Delete
+                </button>
+              </td>
+          </tr>
+          <tr> 
+              <td>0001</td>
+              <td>0001</td>
+              <td>Red Potatoes</td>
+              <td>5lb Bag. Price per Bag</td>
+              <td>$5.86</td>
+              <td>1</td>
+              <td>$5.86</td>
+              <td>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
+                  Update
+                </button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
+                  Delete
+                </button>
+              </td>
+          </tr>
+          <tr> 
+              <td>0001</td>
+              <td>0002</td>
+              <td>Fresh Peaches</td>
+              <td>Individual. Price per Peach.</td>
+              <td>$0.79</td>
+              <td>2</td>
+              <td>$1.58</td>
+              <td>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
+                  Update
+                </button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
+                  Delete
+                </button>
+              </td>
+          </tr>
+      </tbody> 
+  </table>
+</div>
+</div>
+    {% endblock %}
 
-
-        <!--Bootstrap Scripts-->
-
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <script src="orders.js"></script>
-    </body>
-</html>
