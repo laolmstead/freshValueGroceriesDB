@@ -25,46 +25,28 @@
     
     <div class="customers-table">
         <table class="table">
-            <tr>
+            <thead>
                 <th> CustomerID </th>
                 <th> Name </th>
                 <th> Phone Number </th>
                 <th> Rewards Points </th>
                 <th> Options </th>
-            </tr>
+            </thead>
 
-            <!-- These entries will be replaced with database entries later-->
-            <tr>
-                <td> 0 </td>
-                <td> Toph </td>
-                <td> 123-456-7890 </td>
-                <td> 100 </td>
-                <td> 
-                    <button type="button" class="btn btn-success"> Update </button> 
-                    <button type="button" class="btn btn-danger"> Delete </button> 
-                </td>
-            </tr>
-            <tr>
-                <td> 1 </td>
-                <td> Katara </td>
-                <td> 987-654-3210 </td>
-                <td> 300 </td>
-                <td> 
-                    <button type="button" class="btn btn-success"> Update </button> 
-                    <button type="button" class="btn btn-danger"> Delete </button> 
-                </td>
-            </tr>
-            <tr>
-                <td> 2 </td>
-                <td> Zuko </td>
-                <td> 999-888-7777 </td>
-                <td> 250 </td>
-                <td> 
-                    <button type="button" class="btn btn-success"> Update </button> 
-                    <button type="button" class="btn btn-danger"> Delete </button> 
-                </td>
-            </tr>
-            
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <td> {{ row[0] }} </td>
+                    <td> {{ row[1] }} </td>
+                    <td> {{ row[2] }} </td>
+                    <td> {{ row[3] }} </td>
+                    <td> 
+                        <button type="button" class="btn btn-success"> Update </button> 
+                        <button type="button" class="btn btn-danger"> Delete </button> 
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 </div>

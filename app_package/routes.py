@@ -1,6 +1,8 @@
 from flask import render_template
 from app_package import app
 
+from app_package.db_connector.db_connector import connect_to_database, execute_query
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -8,7 +10,12 @@ def index():
 
 @app.route('/customers')
 def customers_page():
-    return render_template('customers.html')
+    print('Fetching and rendering Customers page', flush=True)
+    db_connection = connect_to_database()
+    query = "SELECT CustomerID, Name, PhoneNumber, RewardsPts FROM Customers;"
+    result = execute_query(db_connection, query).fetchall()
+    print('Customers table query returns:', result, flush=True)
+    return render_template('customers.html', rows=result)
 
 @app.route('/orders')
 def orders_page():
