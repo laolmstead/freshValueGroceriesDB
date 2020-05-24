@@ -27,11 +27,21 @@ def customerOrder_page():
 
 @app.route('/employees')
 def employees_page():
-    return render_template('employees.html')
+    print('Fetching and rendering Employees page', flush=True)
+    db_connection = connect_to_database()
+    query = "SELECT EmployeeID, Name, HourlyWage, Responsibilities, SickDays FROM Employees;"
+    result = execute_query(db_connection, query).fetchall()
+    print('Employees table query returns:', result, flush=True)
+    return render_template('employees.html', rows=result)
 
 @app.route('/shifts')
 def shifts_page():
-    return render_template('shifts.html')
+    print('Fetching and rendering Shifts page', flush=True)
+    db_connection = connect_to_database()
+    query = "SELECT ShiftID, Day, StartTime, EndTime FROM Shifts;"
+    result = execute_query(db_connection, query).fetchall()
+    print('Shifts table query returns:', result, flush=True)
+    return render_template('shifts.html', rows=result)
 
 @app.route('/inventory')
 def inventory_page():

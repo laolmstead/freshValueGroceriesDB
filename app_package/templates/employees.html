@@ -44,7 +44,7 @@
     
     <div>
         <table class="table">
-            <tr>
+            <thead>
                 <th> EmployeeID </th>
                 <th> Name </th>
                 <th> Hourly Wage </th>
@@ -52,45 +52,23 @@
                 <th> Sick Days Remaining </th>
                 <th> Shifts </th>
                 <th> Options </th>
-            </tr>
-
-            <!-- These entries will be replaced with database entries later-->
-            <tr>
-                <td> 1 </td>
-                <td> Will </td>
-                <td> 15 </td>
-                <td> Restock shelves </td>
-                <td> 4 </td>
-                <td><button type="button" class="btn btn-primary"> View Shifts </button></td>
-                <td> 
-                    <button type="button" class="btn btn-success"> Update </button> 
-                    <button type="button" class="btn btn-danger"> Delete </button> 
-                </td>
-            </tr>
-            <tr>
-                <td> 2 </td>
-                <td> Tessa </td>
-                <td> 15 </td>
-                <td> Cashier </td>
-                <td> 6 </td>
-                <td><button type="button" class="btn btn-primary"> View Shifts </button></td>
-                <td> 
-                    <button type="button" class="btn btn-success"> Update </button> 
-                    <button type="button" class="btn btn-danger"> Delete </button> 
-                </td>
-            </tr>
-            <tr>
-                <td> 3 </td>
-                <td> Jem </td>
-                <td> 15 </td>
-                <td> Customer service </td>
-                <td> 5</td>
-                <td><button type="button" class="btn btn-primary"> View Shifts </button></td>
-                <td> 
-                    <button type="button" class="btn btn-success"> Update </button> 
-                    <button type="button" class="btn btn-danger"> Delete </button> 
-                </td>
-            </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        <td> {{ row[0] }} </td>
+                        <td> {{ row[1] }} </td>
+                        <td> {{ row[2] }} </td>
+                        <td> {{ row[3] }} </td>
+                        <td> {{ row[4] }} </td>
+                        <td><button type="button" class="btn btn-primary"> View Shifts </button></td>
+                        <td> 
+                            <button type="button" class="btn btn-success"> Update </button> 
+                            <button type="button" class="btn btn-danger"> Delete </button> 
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
     </div>
 </div>

@@ -21,17 +21,32 @@
     <div>
         <h2> View All Shifts </h2>
         <table class="table">
-            <tr>
+            <thead>
                 <th> ShiftID </th>
                 <th> Day </th>
                 <th> Start Time </th>
                 <th> End Time </th>
                 <th> Employees on Shift </th>
                 <th> Options </th>
-            </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        <td> {{ row[0] }} </td>
+                        <td> {{ row[1] }} </td>
+                        <td> {{ row[2] }} </td>
+                        <td> {{ row[3] }} </td>
+                        <td><button type="button" class="btn btn-primary"> View Employees </button></td>
+                        <td> 
+                            <button type="button" class="btn btn-success"> Update </button> 
+                            <button type="button" class="btn btn-danger"> Delete </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
 
             <!-- These entries will be replaced with database entries later-->
-            <tr>
+            <!-- <tr>
                 <td> 1 </td>
                 <td> Monday </td>
                 <td> 08:00:00 </td>
@@ -63,7 +78,7 @@
                     <button type="button" class="btn btn-success"> Update </button> 
                     <button type="button" class="btn btn-danger"> Delete </button>
                 </td>
-            </tr>
+            </tr> -->
             
         </table>
     </div>
