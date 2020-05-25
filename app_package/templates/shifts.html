@@ -36,7 +36,11 @@
                         <td> {{ row[1] }} </td>
                         <td> {{ row[2] }} </td>
                         <td> {{ row[3] }} </td>
-                        <td><button type="button" class="btn btn-primary"> View Employees </button></td>
+                        <td>
+                            <button type="button" class="btn btn-primary view-employees"> 
+                                View Employees 
+                            </button>
+                        </td>
                         <td> 
                             <button type="button" class="btn btn-success"> Update </button> 
                             <button type="button" class="btn btn-danger"> Delete </button>
@@ -46,6 +50,8 @@
             </tbody>
         </table>
     </div>
+
+    <div id="employees-table"></div>
 </div>
 
 <!-- Add Shift Modal -->
@@ -103,16 +109,16 @@
             <div class="modal-body">
                 <div class="form-row add-form-row">
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="Shift ID">
+                        <input type="text" class="form-control" placeholder="Shift ID" id="assign-shift">
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" placeholder="Employee ID">
+                        <input type="text" class="form-control" placeholder="Employee ID" id="assign-employee">
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal"> Assign </button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal"> Cancel </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="insert-employee-shift"> Assign </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="clear-assign-inputs"> Cancel </button>
             </div>
         </div>
     </div>

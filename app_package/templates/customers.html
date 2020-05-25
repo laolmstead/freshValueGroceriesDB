@@ -5,22 +5,34 @@
 <!-- This block is named 'content'-->
 {% block content %}
 
-<div class="col-md-8 mx-auto">
+<div class="col-md-8 mx-auto" id="customers-page">
     <h1> View and Manage Customer Information </h1>
 
-    <div class="col-md-8 mx-auto search-bar">
-        <form class="form-inline">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search">
-            <button class="btn btn-primary" type="submit"> Search for a Customer </button>
-        </form>
+    <div class="manage-buttons">
+        <div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal"> 
+                Add a Customer 
+            </button>
+            <button type="button" class="btn btn-primary" id="search"> 
+                Search for a Customer
+            </button>
+        </div>
     </div>
 
-    <div class="col-md-8 mx-auto search-bar">
-        <form class="form-inline">
-            <input class="form-control mr-sm-2" type="number" placeholder="Lower Bound">
-            <input class="form-control mr-sm-2" type="number" placeholder="Upper Bound">
-            <button class="btn btn-primary" type="submit"> Search by Rewards Points </button>
-        </form>
+    <div id="searchForm" style="display: none">
+        <div class="col-md-8 mx-auto search-bar">
+            <form class="form-inline">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                <button class="btn btn-primary" type="submit"> Search for a Customer </button>
+            </form>
+        </div>
+        <div class="col-md-8 mx-auto search-bar">
+            <form class="form-inline">
+                <input class="form-control mr-sm-2" type="number" placeholder="Lower Bound">
+                <input class="form-control mr-sm-2" type="number" placeholder="Upper Bound">
+                <button class="btn btn-primary" type="submit"> Search by Rewards Points </button>
+            </form>
+        </div>
     </div>
     
     <div class="customers-table">
@@ -48,6 +60,37 @@
                 {% endfor %}
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Add Customer Modal -->
+<div id="AddModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Add a Customer </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p> Enter New Customer Information </p>
+                <form class="add-employee">
+                    <div class="form-row add-form-row">
+                        <div class="col">
+                            <input type="number" class="form-control" placeholder="Name" id="add-name">
+                        </div>
+                        <div class="col">
+                            <input type="number" class="form-control" placeholder="Rewards Points" id="add-pts">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="insert-employee"> Save </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="clear-inputs"> Cancel </button>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

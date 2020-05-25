@@ -54,3 +54,11 @@ if (document.getElementById('shifts-page')) {
 else {
     remove('../static/js/shifts.js');
 }
+
+// if customers page, load the customers.js script
+if (document.getElementById('customers-page')) {
+    include('../static/js/customers.js');
+}
+else {
+    remove('../static/js/customers.js');
+}
