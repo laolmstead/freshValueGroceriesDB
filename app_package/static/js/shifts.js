@@ -114,8 +114,44 @@ function viewEmployeesButtonClicked() {
     });
 }
 
+function clearAssignInputs() {
+    document.getElementById('assign-shift').value = '';
+    document.getElementById('assign-employee').value = '';
+}
+
+function assignShift() {
+    shift_id = document.getElementById('assign-shift').value;
+    employee_id = document.getElementById('assign-employee').value;
+    if (!shift_id || !employee_id) {
+        alert('Please provide valid shift and employee IDs');
+    }
+
+    info = {
+        "shift_id": shift_id,
+        "employee_id": employee_id
+    }
+    console.log("Shift assignment info:", info);
+
+    // send assignment info to flask
+    fetch('/assign-shift', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(info)
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('Server response:', text);
+        // window.location.reload();
+    });
+}
+
 document.getElementById('insert-shift').addEventListener("click", insertNewShift);
 document.getElementById('clear-inputs').addEventListener("click", clearInputs);
+
+document.getElementById('insert-employee-shift').addEventListener("click", assignShift);
+document.getElementById('clear-assign-inputs').addEventListener("click", clearAssignInputs);
 
 // add event listeners to all 'view employees' buttons
 var num_buttons = document.getElementsByClassName('view-employees').length;

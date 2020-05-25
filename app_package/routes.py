@@ -102,9 +102,9 @@ def insert_new_shift():
     print('Inserting new shift into the database', flush=True)
     db_connection = connect_to_database()
     info = request.get_json(force=True)
-    query =  """INSERT INTO `Shifts` 
-                    (`Day`, `StartTime`, `EndTime`)  
-                    VALUES (%s, %s, %s);"""
+    query = """INSERT INTO `Shifts` 
+            (`Day`, `StartTime`, `EndTime`)  
+            VALUES (%s, %s, %s);"""
     data = (info["day"], info["start_time"], info["end_time"])
     execute_query(db_connection, query, data)
     return make_response('Shift added!', 200)
@@ -128,6 +128,22 @@ def get_employees_for_shift():
     print('Get employees query returns:', result, flush=True)
 
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/assign-shift', methods=['POST'])
+def assign_shift():
+    print('Inserting new entry into EmployeeShifts')
+    db_connection = connect_to_database()
+
+    shift_id = request.get_json(force=True)['shift_id']
+    employee_id = request.get_json(force=True)['employee_id']
+    print('Received shiftID:', shift_id, flush=True)
+    print('Received employeeID:', employee_id, flush=True)
+
+    # Construct the query
+    query = """INSERT INTO `EmployeeShifts` (`EmployeeID`, `ShiftID`) VALUES (%s, %s);"""
+    data = (employee_id, shift_id)
+    execute_query(db_connection, query, data)
+    return make_response('Assigned a shift to an employee!', 200)
 
 ################################################
 # Inventory
