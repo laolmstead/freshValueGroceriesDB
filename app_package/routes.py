@@ -23,6 +23,18 @@ def customers_page():
     print('Customers table query returns:', result, flush=True)
     return render_template('customers.html', rows=result)
 
+@app.route('/new-customer', methods=['POST'])
+def insert_new_customer():
+    print('Inserting new customer into the database', flush=True)
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+    query =  """INSERT INTO `Customers` 
+                    (`Name`, `PhoneNumber`, `RewardsPts`) 
+                    VALUES (%s, %s, %s);"""
+    data = (info["name"], info["phone"], info["points"])
+    execute_query(db_connection, query, data)
+    return make_response('Customer added!', 200)
+
 ################################################
 # Orders
 ################################################
