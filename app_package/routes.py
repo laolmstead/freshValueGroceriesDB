@@ -157,6 +157,18 @@ def inventory_page():
     print('Inventory table query returns: ', result, flush=True)
     return render_template('inventory.html', results=result)
 
+@app.route('/new-inventory', methods=['POST'])
+def insert_new_inventory():
+    print("Inserting new inventory into database", flush=True)
+    db_connection = connect_to_database()
+    insert = request.get_json(force=True)
+    query = """INSERT INTO `Inventory` 
+            (`Name`, Description`, `UnitCost`, `Quantity`)
+            VALUES (%s, %s, %d, %d);"""
+    data = (insert["name"], insert["description"], insert["unit"], insert["quantity"])
+    execute_query(db_connection, query, data)
+    return make_response('Inventory added!', 200)
+
 @app.route('/inventoryOrder')
 def inventoryOrder_page():
     return render_template('inventoryOrder.html')
