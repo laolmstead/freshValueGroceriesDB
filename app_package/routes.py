@@ -30,10 +30,10 @@ def customers_page():
 def orders_page():
     print('Fetching and rendering Orders page', flush=True)
     db_connection = connect_to_database()
-    query = "SELECT `OrderID` AS 'Order ID', `CustomerID` AS 'Rewards ID', `EmployeeID` AS 'Employee ID' FROM Orders;"
+    query = "SELECT OrderID, CustomerID, EmployeeID FROM Orders;"
     result = execute_query(db_connection, query).fetchall()
     print('Orders table query returns:', result, flush=True)
-    return render_template('orders.html')
+    return render_template('orders.html', results=result)
 
 @app.route('/customerOrder')
 def customerOrder_page():
@@ -152,10 +152,22 @@ def assign_shift():
 def inventory_page():
     print('Fetching and rendering Inventory page', flush=True)
     db_connection = connect_to_database()
-    query = "SELECT PLU, Name, Description, UnitCost, FROM Inventory;"
+    query = "SELECT PLU, Name, Description, UnitCost, Quantity FROM Inventory;"
     result = execute_query(db_connection, query).fetchall()
     print('Inventory table query returns: ', result, flush=True)
-    return render_template('inventory.html')
+    return render_template('inventory.html', results=result)
+
+@app.route('/new-inventory', methods=['POST'])
+def insert_new_inventory():
+    print("Inserting new inventory into database", flush=True)
+    db_connection = connect_to_database()
+    insert = request.get_json(force=True)
+    query = """INSERT INTO `Inventory` 
+            (`Name`, Description`, `UnitCost`, `Quantity`)
+            VALUES (%s, %s, %d, %d);"""
+    data = (insert["name"], insert["description"], insert["unit"], insert["quantity"])
+    execute_query(db_connection, query, data)
+    return make_response('Inventory added!', 200)
 
 @app.route('/inventoryOrder')
 def inventoryOrder_page():

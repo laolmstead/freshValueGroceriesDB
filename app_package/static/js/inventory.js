@@ -1,14 +1,37 @@
-// Display or hide form if button is clicked.
-/*function displayForm(){
-	var show = document.getElementById('addInventoryForm');
-	if (show.style.display === 'block') {
-		show.style.display = 'none';
-	}
-	else {
-		show.style.display = 'block';
-	}
- }
+function insertNewInventory() {
+	var name = document.getElementById('item');
+	var description = document.getElementById('description');
+	var unit = document.getElementById('unitCost');
+	var quantity = document.getElementById('quantity');
 
-document.getElementById('addItem').addEventListener("click", displayForm);*/
+	var insert = {
+		"name": name,
+		"description" = description,
+		"unit" = unit,
+		"quantity" = quantity
+	}
+	console.log("Inventory item:", insert);
+
+	fetch('/new-inventory', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(insert)
+	}).then(function(response) {
+		return response.text();
+	}).then(function (text) {
+		console.log('Server response:', text);
+		window.location.reload();
+	});
+}
+
+
+
+    data = (insert["name"], insert["description"], insert["unit"], insert["quantity"])
+
+
+
 document.getElementById('orderInventory').addEventListener("click", event => {
 	location.href = "inventoryOrder"});
+document.getElementById('addInv').addEventListener("click", insertNewInventory);
