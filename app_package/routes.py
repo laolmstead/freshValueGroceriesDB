@@ -97,6 +97,18 @@ def shifts_page():
     print('Shifts table query returns:', result, flush=True)
     return render_template('shifts.html', rows=result)
 
+@app.route('/new-shift', methods=['POST'])
+def insert_new_shift():
+    print('Inserting new shift into the database', flush=True)
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+    query =  """INSERT INTO `Shifts` 
+                    (`Day`, `StartTime`, `EndTime`)  
+                    VALUES (%s, %s, %s);"""
+    data = (info["day"], info["start_time"], info["end_time"])
+    execute_query(db_connection, query, data)
+    return make_response('Shift added!', 200)
+
 ################################################
 # Inventory
 ################################################

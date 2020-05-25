@@ -46,3 +46,11 @@ if (document.getElementById('orders-page')) {
 else {
     remove('../static/js/orders.js');
 }
+
+// if shifts page, load the shifts.js script
+if (document.getElementById('shifts-page')) {
+    include('../static/js/shifts.js');
+}
+else {
+    remove('../static/js/shifts.js');
+}

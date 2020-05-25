@@ -5,7 +5,7 @@
 <!-- This block is named 'content'-->
 {% block content %}
 
-<div class="col-md-8 mx-auto">
+<div class="col-md-8 mx-auto" id="shifts-page">
     <h1> Manage Shifts </h1>
     <div class="manage-buttons">
         <div>
@@ -62,32 +62,29 @@
                 <p> Enter Shift Information </p>
                 <form>
                     <div class="form-row add-form-row">
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Day of Week
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <a class="dropdown-item" href="#"> Sunday </a>
-                                <a class="dropdown-item" href="#"> Monday </a>
-                                <a class="dropdown-item" href="#"> Tuesday </a>
-                                <a class="dropdown-item" href="#"> Wednesday </a>
-                                <a class="dropdown-item" href="#"> Thursday </a>
-                                <a class="dropdown-item" href="#"> Friday </a>
-                                <a class="dropdown-item" href="#"> Saturday </a>
-                            </div>
+                        <div class="col">
+                            <select class="form-control mb-3" id="select-day" placeholder="Day of Week">
+                                <option> Sunday </option>
+                                <option> Monday </option>
+                                <option> Tuesday </option>
+                                <option> Wednesday </option>
+                                <option> Thursday </option>
+                                <option> Friday </option>
+                                <option> Saturday </option>
+                            </select>
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control" placeholder="Start Time">
+                            <input type="text" class="form-control" placeholder="Start Time" id="start-time">
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control" placeholder="End Time">
+                            <input type="text" class="form-control" placeholder="End Time" id="end-time">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-dismiss="modal"> Save </button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal"> Cancel </button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="insert-shift"> Save </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="clear-inputs"> Cancel </button>
             </div>
         </div>
     </div>
