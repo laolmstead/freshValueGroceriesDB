@@ -109,6 +109,26 @@ def insert_new_shift():
     execute_query(db_connection, query, data)
     return make_response('Shift added!', 200)
 
+@app.route('/get-employees', methods=['POST'])
+def get_employees_for_shift():
+    print('Fetching and returning employees assigned to a given shift', flush=True)
+    db_connection = connect_to_database()
+
+    # Get the ID of the employee to view shifts for
+    shift_id = request.get_json(force=True)['shift_id']
+    print('Received this shift ID:', shift_id, flush=True)
+
+    # Construct the query
+    string_query =  """SELECT Shifts.ShiftID, Employees.Name FROM `Shifts`
+                    JOIN `EmployeeShifts` ON Shifts.ShiftID = EmployeeShifts.ShiftID
+                    JOIN `Employees` ON EmployeeShifts.EmployeeID = Employees.EmployeeID
+                    WHERE Shifts.ShiftID = {0};"""
+    query = string_query.format(shift_id)
+    result = execute_query(db_connection, query).fetchall()
+    print('Get employees query returns:', result, flush=True)
+
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
 ################################################
 # Inventory
 ################################################
