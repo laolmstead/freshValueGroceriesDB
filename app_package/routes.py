@@ -73,6 +73,18 @@ def get_shifts_for_employee():
 
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
+@app.route('/new-employee', methods=['POST'])
+def insert_new_employee():
+    print('Inserting new employee into the database', flush=True)
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+    string_query =  """INSERT INTO `Employees` 
+                    (`Name`, `HourlyWage`, `Responsibilities`, `SickDays`) 
+                    VALUES (%s, %s, %s, %s);"""
+    data = (info["name"], info["wage"], info["duties"], info["sick_days"])
+    execute_query(db_connection, string_query, data)
+    return make_response('Employee added!', 200)
+
 ################################################
 # Shifts
 ################################################

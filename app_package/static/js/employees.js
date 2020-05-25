@@ -74,7 +74,7 @@ function viewShiftsButtonClicked(event){
     var employee_id = event.target.parentNode.parentNode.children[0].innerText;
     console.log('A view shifts button was clicked', employee_id);
     
-    // make a get request for that employee's shifts
+    // make a request for that employee's shifts
     fetch('/get-shifts', {
         method: 'POST',
         headers: {
@@ -84,15 +84,58 @@ function viewShiftsButtonClicked(event){
     }).then(function (response) {
         return response.text();
     }).then(function (text) {
-        console.log('GET response:', text);
         shifts = JSON.parse(text);
-        console.log('Parsed from JSON:', shifts);
-        console.log(shifts.length);
-        generateShiftsTable(shifts[0]);
+        if (shifts.length == 0) {
+            alert('This employee has not been assigned any shifts!');
+        }
+        else {
+            generateShiftsTable(shifts[0]);
+        }
     });
 }
 
+function insertNewEmployee() {
+    var first_name = document.getElementById('add-name').value;
+    var hourly_wage = document.getElementById('add-wage').value;
+    var sick_days = document.getElementById('add-sick-days').value;
+    var duties = document.getElementById('add-duties').value;
+
+    var info = {
+        "name": first_name, 
+        "wage": hourly_wage, 
+        "sick_days": sick_days,
+        "duties": duties
+    }
+    console.log("Employee info", info);
+
+    // send employee's info to flask
+    fetch('/new-employee', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(info)
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('Server response:', text);
+        // refresh the page to show updated table
+        window.location.reload();
+    });
+}
+
+// Clears values the user may have entered in the 'add employee' modal
+function clearInputs() {
+    document.getElementById('add-first-name').value = '';
+    document.getElementById('add-last-name').value = '';
+    document.getElementById('add-wage').value = '';
+    document.getElementById('add-sick-days').value = '';
+    document.getElementById('add-duties').value = '';
+}
+
 document.getElementById('search').addEventListener("click", displaySearch);
+document.getElementById('insert-employee').addEventListener("click", insertNewEmployee);
+document.getElementById('clear-inputs').addEventListener("click", clearInputs);
 
 // add event listeners to all 'view shifts' buttons
 var num_buttons = document.getElementsByClassName('view-shifts').length;
