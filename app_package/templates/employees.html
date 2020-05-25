@@ -43,6 +43,7 @@
     </div>
     
     <div>
+        <h3> Employee Information </h3>
         <table class="table">
             <thead>
                 <th> EmployeeID </th>
@@ -61,7 +62,11 @@
                         <td> {{ row[2] }} </td>
                         <td> {{ row[3] }} </td>
                         <td> {{ row[4] }} </td>
-                        <td><button type="button" class="btn btn-primary"> View Shifts </button></td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id="view-shifts"> 
+                                View Shifts 
+                            </button>
+                        </td>
                         <td> 
                             <button type="button" class="btn btn-success"> Update </button> 
                             <button type="button" class="btn btn-danger"> Delete </button> 
@@ -71,6 +76,8 @@
             </tbody>
         </table>
     </div>
+
+    <div id="shifts-table"></div>
 </div>
 
 <!-- Add Employee Modal -->

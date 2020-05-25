@@ -1,13 +1,19 @@
-from flask import render_template
+from flask import json, jsonify, request, render_template, make_response
 from app_package import app
 
 from app_package.db_connector.db_connector import connect_to_database, execute_query
 
+################################################
+# Index
+################################################
 @app.route('/')
 @app.route('/index')
 def index():
     return render_template('index.html')
 
+################################################
+# Customers
+################################################
 @app.route('/customers')
 def customers_page():
     print('Fetching and rendering Customers page', flush=True)
@@ -17,6 +23,9 @@ def customers_page():
     print('Customers table query returns:', result, flush=True)
     return render_template('customers.html', rows=result)
 
+################################################
+# Orders
+################################################
 @app.route('/orders')
 def orders_page():
     return render_template('orders.html')
@@ -25,6 +34,9 @@ def orders_page():
 def customerOrder_page():
     return render_template('customerOrder.html')
 
+################################################
+# Employees
+################################################
 @app.route('/employees')
 def employees_page():
     print('Fetching and rendering Employees page', flush=True)
@@ -34,6 +46,30 @@ def employees_page():
     print('Employees table query returns:', result, flush=True)
     return render_template('employees.html', rows=result)
 
+@app.route('/get-shifts', methods=['POST'])
+def get_shifts_for_employee():
+    print('Fetching and returning shifts that a given employee works', flush=True)
+    db_connection = connect_to_database()
+
+    # Get the ID of the employee to view shifts for
+    employee_id = request.get_json(force=True)['employee_id']
+    print('Received this employee ID:', employee_id, flush=True)
+
+    # Construct the query
+    string_query = """SELECT Employees.Name, Shifts.ShiftID, Shifts.Day, 
+            Shifts.StartTime, Shifts.EndTime FROM `Shifts`
+            JOIN `EmployeeShifts` ON Shifts.ShiftID = EmployeeShifts.ShiftID
+            JOIN `Employees` ON EmployeeShifts.EmployeeID = Employees.EmployeeID
+            WHERE Employees.EmployeeID = {0};"""
+    query = string_query.format(employee_id)
+    result = execute_query(db_connection, query).fetchall()
+    print('Get shifts query returns:', result, flush=True)
+
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+################################################
+# Shifts
+################################################
 @app.route('/shifts')
 def shifts_page():
     print('Fetching and rendering Shifts page', flush=True)
@@ -43,6 +79,9 @@ def shifts_page():
     print('Shifts table query returns:', result, flush=True)
     return render_template('shifts.html', rows=result)
 
+################################################
+# Inventory
+################################################
 @app.route('/inventory')
 def inventory_page():
     return render_template('inventory.html')
