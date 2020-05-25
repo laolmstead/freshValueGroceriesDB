@@ -128,8 +128,37 @@ function searchByName(event) {
     });
 }
 
+function searchByPhone(event) {
+    var input = event.target.parentNode.children[0].value;
+    console.log('You entered:', input);
+
+    // clear the input
+    event.target.parentNode.children[0].value = '';
+
+    // make a request for customers with given phone number
+    fetch('/search-customers-phone', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"input": input})
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        response = JSON.parse(text)[0];
+        console.log(response);
+        if (response.length == 0) {
+            alert('No results found for customers with phone number ' + input);
+        }
+        else {
+            generateSearchResultsTable(input, response);
+        }
+    });
+}
+
 document.getElementById('search').addEventListener("click", displaySearch);
 document.getElementById('search-name').addEventListener("click", searchByName);
+document.getElementById('search-phone').addEventListener("click", searchByPhone);
 
 document.getElementById('insert-employee').addEventListener("click", insertNewCustomer);
 document.getElementById('clear-inputs').addEventListener("click", clearInputs);

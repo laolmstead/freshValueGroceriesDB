@@ -46,6 +46,17 @@ def search_customers_by_name():
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
+@app.route('/search-customers-phone', methods=['POST'])
+def search_customers_by_phone_number():
+    db_connection = connect_to_database()
+    search_term = request.get_json(force=True)["input"]
+    query =  """SELECT CustomerID, Name, PhoneNumber, RewardsPts 
+                    FROM Customers WHERE PhoneNumber = %s;"""
+    data = (search_term,)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
 
 ################################################
 # Orders
