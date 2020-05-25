@@ -30,10 +30,10 @@ def customers_page():
 def orders_page():
     print('Fetching and rendering Orders page', flush=True)
     db_connection = connect_to_database()
-    query = "SELECT `OrderID` AS 'Order ID', `CustomerID` AS 'Rewards ID', `EmployeeID` AS 'Employee ID' FROM Orders;"
+    query = "SELECT OrderID, CustomerID, EmployeeID FROM Orders;"
     result = execute_query(db_connection, query).fetchall()
     print('Orders table query returns:', result, flush=True)
-    return render_template('orders.html')
+    return render_template('orders.html', results=result)
 
 @app.route('/customerOrder')
 def customerOrder_page():
@@ -116,10 +116,10 @@ def insert_new_shift():
 def inventory_page():
     print('Fetching and rendering Inventory page', flush=True)
     db_connection = connect_to_database()
-    query = "SELECT PLU, Name, Description, UnitCost, FROM Inventory;"
+    query = "SELECT PLU, Name, Description, UnitCost, Quantity FROM Inventory;"
     result = execute_query(db_connection, query).fetchall()
     print('Inventory table query returns: ', result, flush=True)
-    return render_template('inventory.html')
+    return render_template('inventory.html', results=result)
 
 @app.route('/inventoryOrder')
 def inventoryOrder_page():
