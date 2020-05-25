@@ -57,6 +57,17 @@ def search_customers_by_phone_number():
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
+@app.route('/search-customers-pts', methods=['POST'])
+def search_customers_by_points():
+    db_connection = connect_to_database()
+    search_terms = request.get_json(force=True)
+    query =  """SELECT `CustomerID`, `Name`, `PhoneNumber`, `RewardsPts` 
+                FROM Customers WHERE `RewardsPts` >= %s AND `RewardsPts` <= %s;"""
+    data = (search_terms["lower"], search_terms["upper"])
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
 
 ################################################
 # Orders

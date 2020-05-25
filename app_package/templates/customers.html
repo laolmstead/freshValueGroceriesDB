@@ -33,10 +33,10 @@
             </form>
         </div>
         <div class="col-md-8 mx-auto search-bar">
-            <form class="form-inline">
-                <input class="form-control mr-sm-2" type="number" placeholder="Lower Bound">
-                <input class="form-control mr-sm-2" type="number" placeholder="Upper Bound">
-                <button class="btn btn-primary"> Search by Rewards Points </button>
+            <form class="form-inline" onsubmit="return false;">
+                <input class="form-control mr-sm-2" type="number" placeholder="Lower Bound" id="search-pts-lower">
+                <input class="form-control mr-sm-2" type="number" placeholder="Upper Bound" id="search-pts-upper">
+                <button class="btn btn-primary" id="search-pts"> Search by Rewards Points </button>
             </form>
         </div>
     </div>

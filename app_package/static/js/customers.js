@@ -42,7 +42,7 @@ function clearInputs() {
     document.getElementById('add-pts').value = '';
 }
 
-function closeSearchResultsTable() {
+function closeSearchResultsTable(event) {
     var parent_div = event.target.parentNode;
     // 3 items: header, table, close button
     for (var i = 0; i < 3; i++) {
@@ -53,7 +53,10 @@ function closeSearchResultsTable() {
 function generateSearchResultsTable(input, customers) {
     console.log('Generating a search results table');
 
-    var parent_div = document.getElementById('search-results');
+    var grandparent_div = document.getElementById('search-results');
+    var parent_div = document.createElement('div');
+    grandparent_div.appendChild(parent_div);
+
     var table = document.createElement('table');
     table.classList.add("table");
 
@@ -74,15 +77,14 @@ function generateSearchResultsTable(input, customers) {
 
     // construct and populate table body
     var table_body = document.createElement('tbody');
-    // data parsed from JSON returns an array
-    // array[0] = customer ID, array[1] = name, 
-    // array[2] = phone number, array[3] = rewards points
-    var num_customers = customers.length / 4;
+    // data parsed from JSON returns an array of arrays
+    // customers[0] = row 1 containing [customerID, name, phone, points]
+    var num_customers = customers.length;
     for (var i = 0; i < num_customers; i++) {
         var row = document.createElement('tr');
         for (var j = 0; j < 4; j++) {
             var data = document.createElement('td');
-            data.innerText = customers[i+j];
+            data.innerText = customers[i][j];
             row.appendChild(data);
         }
         table_body.appendChild(row);
@@ -117,7 +119,7 @@ function searchByName(event) {
     }).then(function (response) {
         return response.text();
     }).then(function (text) {
-        response = JSON.parse(text)[0];
+        response = JSON.parse(text);
         console.log(response);
         if (response.length == 0) {
             alert('No results found for customers named ' + input);
@@ -145,7 +147,7 @@ function searchByPhone(event) {
     }).then(function (response) {
         return response.text();
     }).then(function (text) {
-        response = JSON.parse(text)[0];
+        response = JSON.parse(text);
         console.log(response);
         if (response.length == 0) {
             alert('No results found for customers with phone number ' + input);
@@ -156,9 +158,48 @@ function searchByPhone(event) {
     });
 }
 
+function searchByPoints(event) {
+    var lower = document.getElementById('search-pts-lower').value;
+    var upper = document.getElementById('search-pts-upper').value;
+    console.log('You entered:', lower, upper);
+
+    // clear the inputs
+    document.getElementById('search-pts-lower').value = '';
+    document.getElementById('search-pts-upper').value = '';
+
+    // assign appropriate lower and upper bounds if left unspecified
+    if (!lower) lower = 0;
+    if (!upper) upper = 100000;
+
+    // make a request for customers with given points range
+    fetch('/search-customers-pts', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"lower": lower, "upper": upper})
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        response = JSON.parse(text);
+        console.log(response);
+        console.log('response length:', response.length);
+        console.log(response[0]);
+        console.log(response[1]);
+        if (response.length == 0) {
+            alert('No results found for customers with points between ' + lower + ' and ' + upper);
+        }
+        else {
+            pts_range = lower + ' to ' + upper + ' points';
+            generateSearchResultsTable(pts_range, response);
+        }
+    });
+}
+
 document.getElementById('search').addEventListener("click", displaySearch);
 document.getElementById('search-name').addEventListener("click", searchByName);
 document.getElementById('search-phone').addEventListener("click", searchByPhone);
+document.getElementById('search-pts').addEventListener("click", searchByPoints);
 
 document.getElementById('insert-employee').addEventListener("click", insertNewCustomer);
 document.getElementById('clear-inputs').addEventListener("click", clearInputs);
