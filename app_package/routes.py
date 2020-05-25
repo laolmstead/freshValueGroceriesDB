@@ -28,10 +28,16 @@ def customers_page():
 ################################################
 @app.route('/orders')
 def orders_page():
+    print('Fetching and rendering Orders page', flush=True)
+    db_connection = connect_to_database()
+    query = "SELECT `OrderID` AS 'Order ID', `CustomerID` AS 'Rewards ID', `EmployeeID` AS 'Employee ID' FROM Orders;"
+    result = execute_query(db_connection, query).fetchall()
+    print('Orders table query returns:', result, flush=True)
     return render_template('orders.html')
 
 @app.route('/customerOrder')
 def customerOrder_page():
+    print('Fetching and rendering Customer Orders ')
     return render_template('customerOrder.html')
 
 ################################################

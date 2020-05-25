@@ -52,41 +52,12 @@
         <th></th>
     </thead> 
     <tbody>
-        <tr> 
-            <td>0000</td> 
-            <td>0099</td> 
-            <td>0034</td> 
-            <td>
-              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                Update
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                Delete
-              </button>
-            </td>
-        </tr>
-        <tr> 
-            <td>0001</td> 
-            <td>0132</td> 
-            <td>0009</td> 
-            <td>
-              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                Update
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                Delete
-              </button>
-            </td>
-        </tr>
-        <tr> 
-            <td>0002</td> 
-            <td>0199</td> 
-            <td>0210</td> 
-            <td>
+      {% for item in results %}
+        <tr>
+            <td> {{ item[0] }} </td>
+            <td> {{ item[1] }} </td>
+            <td> {{ item[2] }} </td>
+            <td> 
               <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
                 Update
               </button>
@@ -113,66 +84,17 @@
           <th>UNIT COST</th>
           <th>QUANTITY</th>
           <th>COST</th>
-          <th></th>
-          <th></th>
       </thead> 
       <tbody>
-          <tr> 
-              <td>0001</td>
-              <td>0000</td>
-              <td>Organic Carrots</td>
-              <td>Bundles of 4. Price per Bundle</td>
-              <td>$2.47</td>
-              <td>2</td>
-              <td>$4.94</td>
-              <td>
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                  Update
-                </button>
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                  Delete
-                </button>
-              </td>
-          </tr>
-          <tr> 
-              <td>0001</td>
-              <td>0001</td>
-              <td>Red Potatoes</td>
-              <td>5lb Bag. Price per Bag</td>
-              <td>$5.86</td>
-              <td>1</td>
-              <td>$5.86</td>
-              <td>
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                  Update
-                </button>
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                  Delete
-                </button>
-              </td>
-          </tr>
-          <tr> 
-              <td>0001</td>
-              <td>0002</td>
-              <td>Fresh Peaches</td>
-              <td>Individual. Price per Peach.</td>
-              <td>$0.79</td>
-              <td>2</td>
-              <td>$1.58</td>
-              <td>
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                  Update
-                </button>
-              </td>
-              <td>
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                  Delete
-                </button>
-              </td>
+        {% for item in results %}
+          <tr>
+              <td> {{ item[0] }} </td>
+              <td> {{ item[1] }} </td>
+              <td> {{ item[2] }} </td>
+              <td> {{ item[3] }} </td>
+              <td> {{ item[4] }} </td>
+              <td> {{ item[5] }} </td>
+              <td> {{ item[6] }} </td>
           </tr>
       </tbody> 
   </table>
