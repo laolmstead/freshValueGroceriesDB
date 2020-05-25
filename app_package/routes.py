@@ -90,6 +90,11 @@ def shifts_page():
 ################################################
 @app.route('/inventory')
 def inventory_page():
+    print('Fetching and rendering Inventory page', flush=True)
+    db_connection = connect_to_database()
+    query = "SELECT PLU, Name, Description, UnitCost, FROM Inventory;"
+    result = execute_query(db_connection, query).fetchall()
+    print('Inventory table query returns: ', result, flush=True)
     return render_template('inventory.html')
 
 @app.route('/inventoryOrder')
