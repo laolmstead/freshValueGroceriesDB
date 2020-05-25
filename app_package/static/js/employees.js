@@ -22,7 +22,10 @@ function generateShiftsTable(shifts) {
     console.log('Generating shifts table');
 
     // create a table that will display the queried data
-    var parent_div = document.getElementById('shifts-table');
+    var grandparent_div = document.getElementById('shifts-table');
+    var parent_div = document.createElement('div');
+    grandparent_div.appendChild(parent_div);
+
     var table = document.createElement('table');
     table.classList.add("table");
 
@@ -44,14 +47,13 @@ function generateShiftsTable(shifts) {
     // construct and populate table body
     var table_body = document.createElement('tbody');
     // data parsed from JSON returns an array
-    // array[0] = Name, array[1] = shift ID, array[2] = day,
-    // array[3] = start time, array[4] = end time
-    var num_shifts = shifts.length / 5;
+    // array[0] = row 1 containing (name, shift ID, day, start time, end time)
+    var num_shifts = shifts.length;
     for (var i = 0; i < num_shifts; i++) {
         var row = document.createElement('tr');
         for (var j = 0; j < 5; j++) {
             var data = document.createElement('td');
-            data.innerText = shifts[i+j];
+            data.innerText = shifts[i][j];
             row.appendChild(data);
         }
         table_body.appendChild(row);
@@ -89,7 +91,7 @@ function viewShiftsButtonClicked(event){
             alert('This employee has not been assigned any shifts!');
         }
         else {
-            generateShiftsTable(shifts[0]);
+            generateShiftsTable(shifts);
         }
     });
 }

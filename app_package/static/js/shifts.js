@@ -42,7 +42,10 @@ function generateEmployeesTable(employees) {
     console.log('Generating employees table');
 
     // create a table that will display the queried data
-    var parent_div = document.getElementById('employees-table');
+    var grandparent_div = document.getElementById('employees-table');
+    var parent_div = document.createElement('div');
+    grandparent_div.appendChild(parent_div);
+
     var table = document.createElement('table');
     table.classList.add("table");
 
@@ -63,14 +66,14 @@ function generateEmployeesTable(employees) {
 
     // construct and populate table body
     var table_body = document.createElement('tbody');
-    // data parsed from JSON returns an array
-    // array[0] = shift ID, array[1] = employee name
-    var num_employees = employees.length / 2;
+    // data parsed from JSON returns an array of arrays
+    // array[0] = row 1 containing (shift ID, employee name)
+    var num_employees = employees.length;
     for (var i = 0; i < num_employees; i++) {
         var row = document.createElement('tr');
         for (var j = 0; j < 2; j++) {
             var data = document.createElement('td');
-            data.innerText = employees[i+j];
+            data.innerText = employees[i][j];
             row.appendChild(data);
         }
         table_body.appendChild(row);
@@ -109,7 +112,7 @@ function viewEmployeesButtonClicked() {
             alert('There are no employees assigned to work this shift!');
         }
         else {
-            generateEmployeesTable(employees[0]);
+            generateEmployeesTable(employees);
         }
     });
 }
@@ -143,7 +146,7 @@ function assignShift() {
         return response.text();
     }).then(function (text) {
         console.log('Server response:', text);
-        // window.location.reload();
+        clearAssignInputs();
     });
 }
 
