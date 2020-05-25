@@ -29,11 +29,23 @@ def insert_new_customer():
     db_connection = connect_to_database()
     info = request.get_json(force=True)
     query =  """INSERT INTO `Customers` 
-                    (`Name`, `PhoneNumber`, `RewardsPts`) 
-                    VALUES (%s, %s, %s);"""
+                (`Name`, `PhoneNumber`, `RewardsPts`) 
+                VALUES (%s, %s, %s);"""
     data = (info["name"], info["phone"], info["points"])
     execute_query(db_connection, query, data)
     return make_response('Customer added!', 200)
+
+@app.route('/search-customers-name', methods=['POST'])
+def search_customers_by_name():
+    db_connection = connect_to_database()
+    search_term = request.get_json(force=True)["input"]
+    query =  """SELECT CustomerID, Name, PhoneNumber, RewardsPts 
+                    FROM Customers WHERE Name = %s;"""
+    data = (search_term,)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
 
 ################################################
 # Orders
