@@ -9,16 +9,27 @@ function displaySearch(){
     }
 }
 
+// Removes shifts table that was generated for a given employee
+function closeShiftsTable(event) {
+    var parent_div = event.target.parentNode;
+    for (var i = 0; i < 3; i++) {
+        parent_div.removeChild(parent_div.lastChild); 
+    }
+}
+
 // source: https://www.mysamplecode.com/2012/04/generate-html-table-using-javascript.html
 function generateShiftsTable(shifts) {
     console.log('Generating shifts table');
-    var table_parent = document.getElementById('shifts-table');
+
+    // create a table that will display the queried data
+    var parent_div = document.getElementById('shifts-table');
     var table = document.createElement('table');
     table.classList.add("table");
 
+    // create a header for the table
     var title = document.createElement('h3');
     title.innerText = "View Shifts for " + shifts[0];
-    table_parent.appendChild(title);
+    parent_div.appendChild(title);
 
     // construct table headers
     var table_head = document.createElement('thead');
@@ -47,10 +58,16 @@ function generateShiftsTable(shifts) {
     }
     table.appendChild(table_body);
 
-    table_parent.appendChild(table);
+    parent_div.appendChild(table);
+
+    // create a 'close' button
+    var close_button = document.createElement('button');
+    close_button.setAttribute("type", "button");
+    close_button.classList.add("btn", "btn-danger");
+    close_button.innerText = "Close";
+    parent_div.appendChild(close_button);
+    close_button.addEventListener("click", closeShiftsTable);
 }
-// Currently there's no way to remove an employee's shifts from the page after it has been requested
-// Maybe it should be a modal instead? Or have a 'close' button?
 
 function viewShiftsButtonClicked(event){
     // get the employee id for the row that the button was clicked
