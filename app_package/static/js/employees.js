@@ -54,7 +54,6 @@ function generateShiftsTable(shifts) {
 
 function viewShiftsButtonClicked(event){
     // get the employee id for the row that the button was clicked
-    // TODO: this only seems to work for the first button for some reason
     var employee_id = event.target.parentNode.parentNode.children[0].innerText;
     console.log('A view shifts button was clicked', employee_id);
     
@@ -77,4 +76,10 @@ function viewShiftsButtonClicked(event){
 }
 
 document.getElementById('search').addEventListener("click", displaySearch);
-document.getElementById('view-shifts').addEventListener("click", viewShiftsButtonClicked);
+
+// add event listeners to all 'view shifts' buttons
+var num_buttons = document.getElementsByClassName('view-shifts').length;
+var buttons = document.getElementsByClassName('view-shifts');
+for (var i = 0; i < num_buttons; i++) {
+    buttons[i].addEventListener("click", viewShiftsButtonClicked);
+}
