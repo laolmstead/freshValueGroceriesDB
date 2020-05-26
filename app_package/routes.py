@@ -353,9 +353,28 @@ def search_inventory_item():
     query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost
                 FROM Inventory
                 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
-                JOIN Orders on OrderItems.OrderID = Orders.OrderID;"""
+                JOIN Orders on OrderItems.OrderID = Orders.OrderID
+                AND Inventory.Name = %s;"""
     data = (search_term)
     result = execute_query(db_connection, query, data).fetchall()
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
+
+@app.route('/new-inventory-order', methods=['POST'])
+def new_inventory_order():
+    print("Ordering new inventory and adding into database", flush=True)
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+    for item in info:
+        inv_id = item['id']
+        quantity = item['quantity']
+        print("Updating Inventory Table item", inv_id, "with", quantity, "additional items.")
+        query = """UPDATE `Inventory`
+                    SET
+                        `Quantity` = (SELECT Quantity FROM Inventory WHERE PLU = %s) + %s
+                    WHERE
+                        `PLU` = %s;"""
+        data = (inv_id, quantity, inv_id)
+        execute_query(db_connection, query, data)
+    return make_response('Inventory added!', 200)

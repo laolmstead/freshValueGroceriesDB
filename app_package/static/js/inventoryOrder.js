@@ -1,7 +1,9 @@
 // Search for Inventory Item
 function searchByName() {
 	var quantity = document.getElementById('quantity').value;
+	document.getElementById('quantity').value = '';
 	var input = document.getElementById('item').value;
+	document.getElementById('item').value = '';
 
 	console.log("Searching for " + input + ".");
 	console.log("Required quantity " + quantity);
@@ -37,7 +39,7 @@ function addToInvForm(invItem, quantItem){
     // Populate row with 
     for (var i = 0; i < 4; i++) {
     	var tableCell = document.createElement("TD");
-        var tableText = document.createTextNode(invItem[i]);
+        var tableText = document.createTextNode(invItem[0][i]);
         tableCell.appendChild(tableText);
         newRow.appendChild(tableCell);
     }
@@ -67,5 +69,44 @@ function addToInvForm(invItem, quantItem){
     newRow.appendChild(deleteTD);
 }
 
+// Add ordered items to inventory table.
+function orderInventory() {
+	invArray = [];
+	table = document.getElementById("invOrderList");
+
+	// Loop through each of the rows after the header and add to array.
+	for (var i = 1; i < table.rows.length; i++) {
+		var currentRow = table.rows.item(i).cells;
+		var newItem = {
+			"id": Number(currentRow.item(0).innerHTML),
+			"quantity": Number(currentRow.item(4).innerHTML)
+		};
+		invArray.push(newItem);
+	}
+	console.log("To be added to inventory: " + invArray);
+
+	// Clear table contents.
+	for (var i = 1; i < table.rows.length; i++) {
+		table.deleteRow(i);
+	}
+
+	// Send data to Inventory table.
+	console.log("Updated inventory items:", invArray);
+
+	fetch('/new-inventory-order', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(invArray)
+	}).then(function(response) {
+		return response.text();
+	}).then(function (text) {
+		console.log('Server response:', text);
+		window.location.reload();
+	});
+}
 
 document.getElementById('addInvOrder').addEventListener("click", searchByName);
+document.getElementById('submitInv').addEventListener("click", orderInventory);
+

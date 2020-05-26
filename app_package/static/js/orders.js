@@ -72,7 +72,7 @@ function closeSearchResultsTable(event) {
     var parent_div = event.target.parentNode;
     // 3 items: header, table, close button
     for (var i = 0; i < 3; i++) {
-        parent_div.removeChild(parent_div.lastChild); 
+        parent_div.removeChild(parent_div.lastChild);
     }
 }
 
@@ -93,7 +93,7 @@ function searchByID(input) {
             alert('No results found for customers with Rewards ID number ' + input);
         }
         else {
-            search = 'ID number ' + input
+            search = 'ID number ' + input;
             makeTable(search, response);
         }
     });
@@ -173,7 +173,6 @@ function searchOrders() {
     console.log("search mode:", selection);
     var input = document.getElementById('searchInput').value;
     document.getElementById('searchInput').value = '';
-
 
     if (selection == 'Rewards ID') {
         searchByID(input);
