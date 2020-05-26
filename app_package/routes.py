@@ -94,7 +94,7 @@ def search_orders_by_cust_id():
                 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
                 JOIN Orders on OrderItems.OrderID = Orders.OrderID
                 JOIN Customers on Orders.CustomerID = Customers.CustomerID
-                AND Customers.CustomerID = %s;
+                AND Customers.CustomerID = %s
                 ORDER BY Orders.OrderID DESC;"""
     data = (search_term,)
     result = execute_query(db_connection, query, data).fetchall()
@@ -110,7 +110,7 @@ def search_orders_by_name():
                 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
                 JOIN Orders on OrderItems.OrderID = Orders.OrderID
                 JOIN Customers on Orders.CustomerID = Customers.CustomerID
-                AND Customers.Name = %s;
+                AND Customers.Name = %s
                 ORDER BY Orders.OrderID DESC;"""
     data = (search_term,)
     result = execute_query(db_connection, query, data).fetchall()
@@ -126,7 +126,7 @@ def search_orders_by_phone():
                 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
                 JOIN Orders on OrderItems.OrderID = Orders.OrderID
                 JOIN Customers on Orders.CustomerID = Customers.CustomerID
-                AND Customers.PhoneNumber = %s;
+                AND Customers.PhoneNumber = %s
                 ORDER BY Orders.OrderID DESC;"""
     data = (search_term["phone"],)
     result = execute_query(db_connection, query, data).fetchall()
@@ -142,7 +142,7 @@ def search_orders_by_employee():
                 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
                 JOIN Orders on OrderItems.OrderID = Orders.OrderID
                 JOIN Employees on Orders.EmployeeID = Employees.EmployeeID
-                AND Employees.Name = %s;
+                AND Employees.Name = %s
                 ORDER BY Orders.OrderID DESC;"""
     data = (search_term,)
     result = execute_query(db_connection, query, data).fetchall()

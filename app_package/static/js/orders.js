@@ -32,6 +32,7 @@ function makeTable(input, orderInfo) {
 
     // Create the search results table.
     var newTable = document.createElement('table');
+    newTable.classList.add("table");
 
     // Create header row and cells.
     var headerRow = document.createElement('TR');
@@ -48,7 +49,7 @@ function makeTable(input, orderInfo) {
     for (var j = 0; j < orderInfo.length; j++) {
     	var tableRow = document.createElement("TR");
     	newTable.appendChild(tableRow);
-	    for (var k = 1; k < 5; k++) {
+	    for (var k = 0; k < headerCols.length; k++) {
 	    	var tableCell = document.createElement("TD");
 	        var tableText = document.createTextNode(orderInfo[j][k]);
 	        tableCell.appendChild(tableText);
@@ -60,7 +61,7 @@ function makeTable(input, orderInfo) {
     // Create a 'close' button
     var close_button = document.createElement('button');
     close_button.setAttribute("type", "button");
-    close_button.classList.add("btn", "btn-danger");
+    close_button.classList.add("btn", "btn-danger", "mb-5");
     close_button.innerText = "Close";
     searchResultsDiv.appendChild(close_button);
     close_button.addEventListener("click", closeSearchResultsTable);
@@ -89,7 +90,7 @@ function searchByID(input) {
         response = JSON.parse(text);
         console.log(response);
         if (response.length == 0) {
-            alert('No results found for customers with ID number ' + input);
+            alert('No results found for customers with Rewards ID number ' + input);
         }
         else {
             search = 'ID number ' + input
@@ -171,6 +172,8 @@ function searchOrders() {
     var selection = document.getElementById('searchOptions').value;
     console.log("search mode:", selection);
     var input = document.getElementById('searchInput').value;
+    document.getElementById('searchInput').value = '';
+
 
     if (selection == 'Rewards ID') {
         searchByID(input);
