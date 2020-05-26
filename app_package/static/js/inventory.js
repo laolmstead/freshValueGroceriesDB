@@ -6,9 +6,9 @@ function insertNewInventory() {
 
 	var insert = {
 		"name": name,
-		"description" = description,
-		"unit" = unit,
-		"quantity" = quantity
+		"description": description,
+		"unit": unit,
+		"quantity": quantity
 	}
 	console.log("Inventory item:", insert);
 
@@ -25,11 +25,6 @@ function insertNewInventory() {
 		window.location.reload();
 	});
 }
-
-
-
-    data = (insert["name"], insert["description"], insert["unit"], insert["quantity"])
-
 
 
 document.getElementById('orderInventory').addEventListener("click", event => {
