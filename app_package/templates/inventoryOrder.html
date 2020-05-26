@@ -7,7 +7,7 @@
 
 <!--Order Inventory Form-->
 
-<div class="col-md-8 mx-auto">
+<div class="col-md-8 mx-auto" id="inventoryOrder-page">
   <h2>Inventory Order Form</h2>
   <form>
     <div class="form-row mt-5">
@@ -48,7 +48,7 @@
     <div class="form-inline mt-3 mb-5">
       <div class="btn-group" aria-label="...">
         <div class="manage-buttons">
-          <button type="button" class="btn btn-primary mx-1" data-toggle="modal" data-target="#AddModal"> 
+          <button type="button" class="btn btn-primary mx-1" data-toggle="modal" data-target="#AddModal" id="addInvOrder"> 
               Add Item
           </button>
         </div>
@@ -59,7 +59,7 @@
   <!--Order List-->
 
   <h2>Order Items</h2>
-  <table class="table mt-3">
+  <table class="table mt-3" id="invOrderList">
     <thead> 
       <th>PLU</th>
       <th>NAME</th>
