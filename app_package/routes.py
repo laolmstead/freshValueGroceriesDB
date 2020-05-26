@@ -131,6 +131,62 @@ def insert_new_employee():
     execute_query(db_connection, string_query, data)
     return make_response('Employee added!', 200)
 
+@app.route('/search-employees-id', methods=['POST'])
+def search_employees_by_id():
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+    query =  """SELECT `EmployeeID`, `Name`, `HourlyWage`, `Responsibilities`, 
+                `SickDays` FROM `Employees` WHERE `EmployeeID` = %s;"""
+    data = (info["id"],)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/search-employees-name', methods=['POST'])
+def search_employees_by_name():
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+    query =  """SELECT `EmployeeID`, `Name`, `HourlyWage`, `Responsibilities`, 
+                `SickDays` FROM `Employees` WHERE `Name` = %s;"""
+    data = (info["name"],)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/search-employees-duties', methods=['POST'])
+def search_employees_by_duties():
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+    query =  """SELECT `EmployeeID`, `Name`, `HourlyWage`, `Responsibilities`, 
+                `SickDays` FROM `Employees` WHERE `Responsibilities` = %s;"""
+    data = (info["duties"],)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/search-employees-wage', methods=['POST'])
+def search_employees_by_wage():
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+    query =  """SELECT `EmployeeID`, `Name`, `HourlyWage`, `Responsibilities`, 
+                `SickDays` FROM `Employees` WHERE `HourlyWage` = %s;"""
+    data = (info["wage"],)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/search-employees-sick-days', methods=['POST'])
+def search_employees_by_sick_days():
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+    query =  """SELECT `EmployeeID`, `Name`, `HourlyWage`, `Responsibilities`, 
+                `SickDays` FROM `Employees` WHERE `SickDays` = %s;"""
+    data = (info["sickdays"],)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+
 ################################################
 # Shifts
 ################################################

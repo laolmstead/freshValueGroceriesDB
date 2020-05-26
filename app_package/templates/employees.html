@@ -21,20 +21,19 @@
     <div id="searchForm" style="display: none">
         <h2> Search Employees </h2>
         <div class="form-group col-md-8">
-            <select class="form-control mb-3" id="searchOptions" placeholder="Search By">
-                <option>Search By</option>
-                <option id="num-option">Employee ID</option>
-                <option id="text-option">Name</option>
-                <option id="text-option">Work Responsibilities</option>
-                <option id="num-option">Hourly Wage</option>
-                <option id="num-option">Number of Sick Days</option>
+            <select class="form-control mb-3" id="search-options" placeholder="Search By">
+                <option>Employee ID</option>
+                <option>Name</option>
+                <option>Work Responsibilities</option>
+                <option>Hourly Wage</option>
+                <option>Number of Sick Days</option>
             </select>
             <div class="form-row add-form-row" id="text-form">
                 <div class="col-10 mb-7">
-                    <input type="text" class="form-control" placeholder="Search">
+                    <input type="text" class="form-control" placeholder="Search" id="search-input">
                 </div>
                 <div class="col btn-group mb-3" aria-label="...">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#" id="showOrders">
+                    <button type="button" class="btn btn-primary" id="submit-search">
                         Submit
                     </button>
                 </div>
@@ -42,6 +41,9 @@
         </div>
     </div>
     
+    <div id="shifts-table"></div>
+    <div id="search-results"></div>
+
     <div>
         <h3> Employee Information </h3>
         <table class="table">
@@ -77,7 +79,7 @@
         </table>
     </div>
 
-    <div id="shifts-table"></div>
+    
 </div>
 
 <!-- Add Employee Modal -->
