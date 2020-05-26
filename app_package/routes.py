@@ -345,3 +345,17 @@ def insert_new_inventory():
 def inventoryOrder_page():
     return render_template('inventoryOrder.html')
 
+@app.route('/search-inventory-item', methods=['POST'])
+def search_inventory_item():
+    print('Fetching and rendering Inventory page', flush=True)
+    db_connection = connect_to_database()
+    search_term = request.get_json(force=True)["name"]
+    query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost
+                FROM Inventory
+                JOIN OrderItems on OrderItems.PLU = Inventory.PLU
+                JOIN Orders on OrderItems.OrderID = Orders.OrderID;"""
+    data = (search_term)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+

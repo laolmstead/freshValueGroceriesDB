@@ -62,3 +62,19 @@ if (document.getElementById('customers-page')) {
 else {
     remove('../static/js/customers.js');
 }
+
+// if inventoryOrder page, load the inventoryOrder.js script
+if (document.getElementById('inventoryOrder-page')) {
+    include('../static/js/inventoryOrder.js');
+}
+else {
+    remove('../static/js/inventoryOrder.js');
+}
+
+// if customerOrder page, load the customerOrder.js script
+if (document.getElementById('customerOrder-page')) {
+    include('../static/js/customerOrder.js');
+}
+else {
+    remove('../static/js/customerOrder.js');
+}

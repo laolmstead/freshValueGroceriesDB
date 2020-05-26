@@ -100,7 +100,7 @@ function searchByID(input) {
 }
 
 function searchByName(input) {
-    // make a request for employees with the given ID
+    // make a request for customer with the given name
     fetch('/search-orders-name', {
         method: 'POST',
         headers: {
@@ -123,7 +123,7 @@ function searchByName(input) {
 }
 
 function searchByPhone(input) {
-    // make a request for employees with the given ID
+    // make a request for customer with the given phone number
     fetch('/search-orders-phone', {
         method: 'POST',
         headers: {
@@ -146,7 +146,7 @@ function searchByPhone(input) {
 }
 
 function searchByEmployee(input) {
-    // make a request for employees with the given ID
+    // make a request for employees with the given name
     fetch('/search-orders-employee', {
         method: 'POST',
         headers: {
