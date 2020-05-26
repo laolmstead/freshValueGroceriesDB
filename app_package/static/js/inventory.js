@@ -1,14 +1,14 @@
 function insertNewInventory() {
-	var name = document.getElementById('item');
-	var description = document.getElementById('description');
-	var unit = document.getElementById('unitCost');
-	var quantity = document.getElementById('quantity');
+	var item = document.getElementById('itemName').value;
+	var description = document.getElementById('description').value;
+	var unit = document.getElementById('unitCost').value;
+	var quantity = document.getElementById('quantity').value;
 
 	var insert = {
-		"name": name,
+		"item": item,
 		"description": description,
-		"unit": unit,
-		"quantity": quantity
+		"unit": Number(unit),
+		"quantity": Number(quantity)
 	}
 	console.log("Inventory item:", insert);
 
@@ -25,6 +25,36 @@ function insertNewInventory() {
 		window.location.reload();
 	});
 }
+
+/*function insertNewInventory() {
+    var item = document.getElementById('itemName').value;
+    var description = document.getElementById('description').value;
+    var unit = document.getElementById('unitCost').value;
+    var quantity = document.getElementById('quantity').value;
+
+    var info = {
+        "item": item,
+        "description": description,
+        "unit": unit,
+        "quantity": quantity
+    }
+    console.log('Inventory info:', info);
+
+    // send customer's info to flask
+    fetch('/new-inventory', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(info)
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('Server response:', text);
+        // refresh the page to show updated table
+        window.location.reload();
+    });
+}*/
 
 
 document.getElementById('orderInventory').addEventListener("click", event => {

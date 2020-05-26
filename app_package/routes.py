@@ -263,11 +263,13 @@ def inventory_page():
 def insert_new_inventory():
     print("Inserting new inventory into database", flush=True)
     db_connection = connect_to_database()
-    insert = request.get_json(force=True)
-    query = """INSERT INTO `Inventory` 
-            (`Name`, Description`, `UnitCost`, `Quantity`)
-            VALUES (%s, %s, %d, %d);"""
-    data = (insert["name"], insert["description"], insert["unit"], insert["quantity"])
+    item = request.get_json(force=True)['item']
+    description = request.get_json(force=True)['description']
+    unit = float(request.get_json(force=True)['unit'])
+    quantity = int(request.get_json(force=True)['quantity'])
+    print(type(item), type(description), type(unit), type(quantity))
+    query = """INSERT INTO `Inventory` (`Name`, `Description`, `UnitCost`, `Quantity`) VALUES (%s, %s, %s, %s);"""
+    data = (item, description, unit, quantity)
     execute_query(db_connection, query, data)
     return make_response('Inventory added!', 200)
 
