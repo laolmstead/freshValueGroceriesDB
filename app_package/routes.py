@@ -76,10 +76,78 @@ def search_customers_by_points():
 def orders_page():
     print('Fetching and rendering Orders page', flush=True)
     db_connection = connect_to_database()
-    query = "SELECT OrderID, CustomerID, EmployeeID FROM Orders;"
+    query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
+                FROM Inventory
+                JOIN OrderItems on OrderItems.PLU = Inventory.PLU
+                JOIN Orders on OrderItems.OrderID = Orders.OrderID
+                ORDER BY Orders.OrderID DESC;"""
     result = execute_query(db_connection, query).fetchall()
     print('Orders table query returns:', result, flush=True)
     return render_template('orders.html', results=result)
+
+@app.route('/search-orders-cust-id', methods=['POST'])
+def search_orders_by_cust_id():
+    db_connection = connect_to_database()
+    search_term = request.get_json(force=True)["id"]
+    query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
+                FROM Inventory
+                JOIN OrderItems on OrderItems.PLU = Inventory.PLU
+                JOIN Orders on OrderItems.OrderID = Orders.OrderID
+                JOIN Customers on Orders.CustomerID = Customers.CustomerID
+                AND Customers.CustomerID = %s;
+                ORDER BY Orders.OrderID DESC;"""
+    data = (search_term,)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/search-orders-name', methods=['POST'])
+def search_orders_by_name():
+    db_connection = connect_to_database()
+    search_term = request.get_json(force=True)["name"]
+    query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
+                FROM Inventory
+                JOIN OrderItems on OrderItems.PLU = Inventory.PLU
+                JOIN Orders on OrderItems.OrderID = Orders.OrderID
+                JOIN Customers on Orders.CustomerID = Customers.CustomerID
+                AND Customers.Name = %s;
+                ORDER BY Orders.OrderID DESC;"""
+    data = (search_term,)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/search-orders-phone', methods=['POST'])
+def search_orders_by_phone():
+    db_connection = connect_to_database()
+    search_term = request.get_json(force=True)["phone"]
+    query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
+                FROM Inventory
+                JOIN OrderItems on OrderItems.PLU = Inventory.PLU
+                JOIN Orders on OrderItems.OrderID = Orders.OrderID
+                JOIN Customers on Orders.CustomerID = Customers.CustomerID
+                AND Customers.PhoneNumber = %s;
+                ORDER BY Orders.OrderID DESC;"""
+    data = (search_term["phone"],)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/search-orders-employee', methods=['POST'])
+def search_orders_by_employee():
+    db_connection = connect_to_database()
+    search_term = request.get_json(force=True)["name"]
+    query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
+                FROM Inventory
+                JOIN OrderItems on OrderItems.PLU = Inventory.PLU
+                JOIN Orders on OrderItems.OrderID = Orders.OrderID
+                JOIN Employees on Orders.EmployeeID = Employees.EmployeeID
+                AND Employees.Name = %s;
+                ORDER BY Orders.OrderID DESC;"""
+    data = (search_term,)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
 @app.route('/customerOrder')
 def customerOrder_page():

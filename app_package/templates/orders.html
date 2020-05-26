@@ -7,100 +7,111 @@
 
 <!--Buttons header-->
 <div class="col-md-8 mx-auto" id="orders-page">
-<div class="manage-buttons mb-5">
-    <h1>Orders</h1>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal" id="add">
-          Place an Order
-      </button>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AssignModal" id="search"> 
-          Search
-      </button>
-</div>
-
-<!--Search Form-->
-<div id="searchForm" style="display: none">
-  <h2>Search Orders</h2>
-  <div class="form-group col-md-8">
-    <select class="form-control mb-3" id="searchOptions" placeholder="Search By">
-      <option>Search By</option>
-      <option>Order ID</option>
-      <option>Customer ID</option>
-      <option>Employee ID</option>
-    </select>
-    <div class="form-row">
-      <div class="col-10 mb-3">
-        <input type="text" class="form-control" id="search" placeholder="Enter ID">
-      </div>
-      <div class="col btn-group mb-3" aria-label="...">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#" id="showOrders">
-            Submit
+  <div class="manage-buttons mb-5">
+      <h1>Orders</h1>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal" id="add">
+            Place an Order
         </button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AssignModal" id="search"> 
+            Search
+        </button>
+  </div>
+
+  <!--Search Form-->
+  <div id="searchForm" style="display: none">
+    <h2>Search Orders</h2>
+    <div class="form-group col-md-8">
+      <select class="form-control mb-3" id="searchOptions" placeholder="Search By">
+        <option>Search By</option>
+        <option>Rewards ID</option>
+        <option>Customer Name</option>
+        <option>Customer Phone Number</option>
+        <option>Employee Name</option>
+      </select>
+      <div class="form-row">
+        <div class="col-10 mb-3">
+          <input type="text" class="form-control" id="searchInput" placeholder="Enter ID">
+        </div>
+        <div class="col btn-group mb-3" aria-label="...">
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#" id="showOrders">
+              Submit
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!--Order Table-->
+  <!-- Search Results Table-->
+  <div id="searchResults"></div>
 
-<h2> All Orders </h2>
-<table class="table">
-    <thead> 
-        <th>ORDER ID</th>
-        <th>REWARDS ID</th>
-        <th>EMPLOYEE ID</th>
-        <th></th>
-        <th></th>
-    </thead> 
-    <tbody>
-      {% for item in results %}
-        <tr>
-            <td> {{ item[0] }} </td>
-            <td> {{ item[1] }} </td>
-            <td> {{ item[2] }} </td>
-            <td> 
-              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                Update
-              </button>
-            </td>
-            <td>
-              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                Delete
-              </button>
-            </td>
-        </tr>
-      {% endfor %}
-    </tbody> 
-</table>
+  <!--Order Table-->
+  <div id="allOrders">
+    <h2> All Orders </h2>
+    <table class="table">
+        <thead> 
+            <th>ORDER ID</th>
+            <th>ITEM</th>
+            <th>DESCRIPTION</th>
+            <th>UNIT COST</th>
+            <th>QUANTITY</th>
+            <th>COST</th>
+            <th></th>
+            <th></th>
+        </thead> 
+        <tbody>
+          {% for item in results %}
+            <tr>
+                <td> {{ item[0] }} </td>
+                <td> {{ item[1] }} </td>
+                <td> {{ item[2] }} </td>
+                <td> {{ item[3] }} </td>
+                <td> {{ item[4] }} </td>
+                <td> {{ item[5] }} </td>
+                <td> 
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
+                    Update
+                  </button>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
+                    Delete
+                  </button>
+                </td>
+            </tr>
+          {% endfor %}
+        </tbody> 
+    </table>
+  </div>
 
 
-<!--Displays Details of Order Based on Search Criteria.-->
-<div id="orderDetails" style="display: none">
-  <h2> Order Details </h2>
-  <table class="table">
-      <thead>
-          <th>ORDER ID</th>
-          <th>PLU</th>
-          <th>ITEM</th>
-          <th>DESCRIPTION</th>
-          <th>UNIT COST</th>
-          <th>QUANTITY</th>
-          <th>COST</th>
-      </thead> 
-      <tbody>
-        {% for item in results %}
-          <tr>
-              <td> {{ item[0] }} </td>
-              <td> {{ item[1] }} </td>
-              <td> {{ item[2] }} </td>
-              <td> {{ item[3] }} </td>
-              <td> {{ item[4] }} </td>
-              <td> {{ item[5] }} </td>
-              <td> {{ item[6] }} </td>
-          </tr>
-        {% endfor %}
-      </tbody> 
-  </table>
-</div>
+  <!--Displays Details of Order Based on Search Criteria.-->
+  <div id="orderDetails" style="display: none">
+    <h2> Order Details </h2>
+    <table class="table">
+        <thead>
+            <th>ORDER ID</th>
+            <th>PLU</th>
+            <th>ITEM</th>
+            <th>DESCRIPTION</th>
+            <th>UNIT COST</th>
+            <th>QUANTITY</th>
+            <th>COST</th>
+        </thead>
+        <tbody>
+          {% for item in results %}
+            <tr>
+                <td> {{ item[0] }} </td>
+                <td> {{ item[1] }} </td>
+                <td> {{ item[2] }} </td>
+                <td> {{ item[3] }} </td>
+                <td> {{ item[4] }} </td>
+                <td> {{ item[5] }} </td>
+                <td> {{ item[6] }} </td>
+            </tr>
+          {% endfor %}
+        </tbody> 
+    </table>
+  </div>
 </div>
     {% endblock %}
 
