@@ -154,6 +154,65 @@ def customerOrder_page():
     print('Fetching and rendering Customer Orders ')
     return render_template('customerOrder.html')
 
+@app.route('/new-order-customer', methods=['POST'])
+def insert_order_new_customer():
+    print('Inserting new customer into the database', flush=True)
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+    query =  """INSERT INTO `Customers` 
+                (`Name`, `PhoneNumber`, `RewardsPts`) 
+                VALUES (%s, %s, %s);"""
+    data = (info["name"], info["phone"], info["points"])
+    execute_query(db_connection, query, data)
+    return make_response('Customer added!', 200)
+
+@app.route('/get-customer-id', methods=['POST'])
+def get_customer_id():
+    print('Fetching customer id', flush=True)
+    db_connection = connect_to_database()
+    search_term = request.get_json(force=True)["name"]
+    query = """SELECT CustomerID FROM Customers WHERE Name = %s;"""
+    data = (search_term,)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+########### NOT WORKING ###################
+@app.route('/insert-order', methods=['POST'])
+def insert_order():
+    print('Inserting new order into the database', flush=True)
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+    query =  """INSERT INTO `Orders` 
+                (`CustomerID`, `EmployeeID`)
+                VALUES (%s, %s);"""
+    data = (info["CustomerID"], info["EmployeeID"])
+    execute_query(db_connection, query, data)
+    return make_response('Order added!', 200)
+
+########### NOT WORKING ###################
+@app.route('/get-order-id', methods=['POST'])
+def get_order_id():
+    print('Get more recent order id from database', flush=True)
+    db_connection = connect_to_database()
+    query = """LAST_INSERT_ID();"""
+    result = execute_query(db_connection, query).fetchall()
+    print("result:",result)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/search-order-item', methods=['POST'])
+def search_order_item():
+    print('Fetching and rendering Order page', flush=True)
+    db_connection = connect_to_database()
+    search_term = request.get_json(force=True)["name"]
+    query = """SELECT Inventory.PLU, Inventory.Name, Inventory.Description, Inventory.UnitCost
+                FROM Inventory WHERE Inventory.Name = %s;"""
+    data = (search_term)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+
 ################################################
 # Employees
 ################################################

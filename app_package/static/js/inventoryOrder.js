@@ -36,7 +36,7 @@ function addToInvForm(invItem, quantItem){
 	var newRow = document.createElement("TR");
     addTable.appendChild(newRow);
 
-    // Populate row with 
+    // Populate row with inventory items.
     for (var i = 0; i < 4; i++) {
     	var tableCell = document.createElement("TD");
         var tableText = document.createTextNode(invItem[0][i]);
