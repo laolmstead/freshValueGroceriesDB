@@ -420,11 +420,33 @@ def assign_shift():
     print('Received shiftID:', shift_id, flush=True)
     print('Received employeeID:', employee_id, flush=True)
 
-    # Construct the query
-    query = """INSERT INTO `EmployeeShifts` (`EmployeeID`, `ShiftID`) VALUES (%s, %s);"""
+    # check if shiftID is valid
+    query = """SELECT ShiftID FROM `Shifts` WHERE ShiftID = %s"""
+    data = (shift_id,)
+    result = execute_query(db_connection, query, data).fetchall()
+    if result == ():
+        return make_response('Invalid ShiftID', 500)
+
+    # check if employeeID is valid
+    query = """SELECT EmployeeID FROM `Employees` WHERE EmployeeID = %s"""
+    data = (employee_id,)
+    result = execute_query(db_connection, query, data).fetchall()
+    if result == ():
+        return make_response('Invalid EmployeeID', 500)
+
+    # check if assignment already exists
+    query = """SELECT EmployeeID, ShiftID FROM `EmployeeShifts` 
+            WHERE EmployeeID = %s AND ShiftID = %s;"""
     data = (employee_id, shift_id)
-    execute_query(db_connection, query, data)
-    return make_response('Assigned a shift to an employee!', 200)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('result:', result, flush=True)
+    if result:
+        return make_response('Employee already works this shift!', 500)
+    else:
+        query = """INSERT INTO `EmployeeShifts` (`EmployeeID`, `ShiftID`) VALUES (%s, %s);"""
+        data = (employee_id, shift_id)
+        execute_query(db_connection, query, data)
+        return make_response('Assigned a shift to an employee!', 200)
 
 @app.route('/delete-shift', methods=['POST'])
 def delete_shift():

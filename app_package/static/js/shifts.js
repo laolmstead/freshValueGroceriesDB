@@ -140,6 +140,7 @@ function assignShift() {
     employee_id = document.getElementById('assign-employee').value;
     if (!shift_id || !employee_id) {
         alert('Please provide valid shift and employee IDs');
+        return;
     }
 
     info = {
@@ -159,7 +160,19 @@ function assignShift() {
         return response.text();
     }).then(function (text) {
         console.log('Server response:', text);
-        clearAssignInputs();
+        if (text == 'Invalid ShiftID') {
+            alert('Invalid ShiftID');
+        }
+        else if (text == 'Invalid EmployeeID') {
+            alert('Invalid EmployeeID');
+        }
+        else if (text == 'Employee already works this shift!') {
+            alert('Employee already works this shift!');
+        }
+        else {
+            clearAssignInputs();
+            alert('Employee has been assigned to this shift');
+        }
     });
 }
 
