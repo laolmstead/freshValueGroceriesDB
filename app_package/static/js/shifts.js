@@ -1,7 +1,17 @@
 function insertNewShift() {
     var day = document.getElementById('select-day').value;
+    
     var start_time = document.getElementById('start-time').value;
+    if (!start_time) {
+        alert('Enter a valid start time in the format hh:mm:ss');
+        return;
+    }
+    
     var end_time = document.getElementById('end-time').value;
+    if (!end_time) {
+        alert('Enter a valid end time in the format hh:mm:ss');
+        return;
+    }
 
     var info = {
         "day": day,
@@ -20,7 +30,10 @@ function insertNewShift() {
     }).then(function (response) {
         return response.text();
     }).then(function (text) {
-        console.log('Server response:', text);
+        console.log('response text:', text);
+        if (text == 'Shift already exists!') {
+            alert('Shift already exists!');
+        }
         // refresh the page to show updated table
         window.location.reload();
     });
