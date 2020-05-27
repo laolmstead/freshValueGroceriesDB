@@ -196,6 +196,30 @@ function searchByPoints(event) {
     });
 }
 
+function deleteCustomer(event) {
+    // get the customer id for the row that the delete button was clicked
+    var customer_id = event.target.parentNode.parentNode.children[0].innerText;
+    console.log('Delete customer with id:', customer_id);
+
+    // make a request to delete from the database
+    fetch('/delete-customer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"customer_id": customer_id})
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('server response:', text);
+        // refresh the page to show updated table
+        window.location.reload();
+    });
+}
+
+
+// Attach all event listeners
+
 document.getElementById('search').addEventListener("click", displaySearch);
 document.getElementById('search-name').addEventListener("click", searchByName);
 document.getElementById('search-phone').addEventListener("click", searchByPhone);
@@ -204,3 +228,9 @@ document.getElementById('search-pts').addEventListener("click", searchByPoints);
 document.getElementById('insert-employee').addEventListener("click", insertNewCustomer);
 document.getElementById('clear-inputs').addEventListener("click", clearInputs);
 
+// add event listeners to all 'delete' buttons
+var num_buttons = document.getElementsByClassName('delete').length;
+var buttons = document.getElementsByClassName('delete');
+for (var i = 0; i < num_buttons; i++) {
+    buttons[i].addEventListener("click", deleteCustomer);
+}

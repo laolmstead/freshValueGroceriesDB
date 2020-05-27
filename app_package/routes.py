@@ -68,6 +68,16 @@ def search_customers_by_points():
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
+@app.route('/delete-customer', methods=['POST'])
+def delete_customer():
+    db_connection = connect_to_database()
+    customer_id = request.get_json(force=True)["customer_id"]
+    query =  """DELETE FROM `Customers` WHERE `CustomerID` = %s;"""
+    data = (customer_id,)
+    execute_query(db_connection, query, data).fetchall()
+    message = 'Customer with ID ' + customer_id + ' removed from the database'
+    return make_response(message, 200)
+
 
 ################################################
 # Orders
