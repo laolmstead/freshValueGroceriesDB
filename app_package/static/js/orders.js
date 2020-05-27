@@ -10,7 +10,7 @@ function displaySearch(){
  }
 
  // Display either add or search form based on which button is clicked.
-function displayOrders(){
+/*function displayOrders(){
 	var order = document.getElementById('orderDetails');
 	if (order.style.display === 'block') {
 		order.style.display = 'none';
@@ -18,17 +18,20 @@ function displayOrders(){
 	else {
 		order.style.display = 'block';
 	}
- }
+ }*/
 
 
 function makeTable(input, orderInfo) {
     var searchResultsDiv = document.getElementById('searchResults');
 
+    var innerDiv = document.createElement('div');
+    searchResultsDiv.appendChild(innerDiv);
+
     // Create a header for the table.
     var header = document.createElement('h3');
     var headerText = document.createTextNode("Order details for " + input + ":");
     header.appendChild(headerText);
-    searchResultsDiv.appendChild(header);
+    innerDiv.appendChild(header);
 
     // Create the search results table.
     var newTable = document.createElement('table');
@@ -56,7 +59,7 @@ function makeTable(input, orderInfo) {
 	        tableRow.appendChild(tableCell);
 	    }
     }
-	searchResultsDiv.appendChild(newTable);
+	innerDiv.appendChild(newTable);
 
     // Create a 'close' button
     var close_button = document.createElement('button');
