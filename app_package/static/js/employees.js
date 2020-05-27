@@ -97,13 +97,25 @@ function viewShiftsButtonClicked(event){
 }
 
 function insertNewEmployee() {
-    var first_name = document.getElementById('add-name').value;
+    var name = document.getElementById('add-name').value;
+    if (!name) {
+        alert('Enter a valid name');
+        return;
+    }
     var hourly_wage = document.getElementById('add-wage').value;
+    if (!hourly_wage) {
+        alert('Enter a valid hourly wage');
+        return;
+    }
     var sick_days = document.getElementById('add-sick-days').value;
+    if (!sick_days) {
+        alert('Enter a valid number of sick days');
+        return;
+    }
     var duties = document.getElementById('add-duties').value;
 
     var info = {
-        "name": first_name, 
+        "name": name, 
         "wage": hourly_wage, 
         "sick_days": sick_days,
         "duties": duties

@@ -10,8 +10,20 @@ function displaySearch(){
 
 function insertNewCustomer() {
     var name = document.getElementById('add-name').value;
+    if (!name) {
+        alert('Enter a valid name');
+        return;
+    }
     var phone = document.getElementById('add-phone').value;
+    if (!phone) {
+        alert('Enter a valid phone number in the format ###-###-####');
+        return;
+    }
     var points = document.getElementById('add-pts').value;
+    if (!points) {
+        alert('Enter a valid number of rewards points (at least 0)');
+        return;
+    }
 
     var info = {
         "name": name,
