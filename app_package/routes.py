@@ -338,6 +338,23 @@ def search_employees_by_sick_days():
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
+@app.route('/delete-employee', methods=['POST'])
+def delete_employee():
+    db_connection = connect_to_database()
+    employee_id = request.get_json(force=True)["employee_id"]
+
+    # delete from the Employees table
+    query =  """DELETE FROM `Employees` WHERE `EmployeeID` = %s;"""
+    data = (employee_id,)
+    execute_query(db_connection, query, data)
+
+    # delete rows with null foreign keys from the EmployeeShifts table
+    query = """DELETE FROM `EmployeeShifts` WHERE `EmployeeID` IS NULL OR `ShiftID` IS NULL"""
+    execute_query(db_connection, query)
+
+    message = 'Employee with ID ' + employee_id + ' removed from the database'
+    return make_response(message, 200)
+
 
 ################################################
 # Shifts
@@ -398,6 +415,24 @@ def assign_shift():
     data = (employee_id, shift_id)
     execute_query(db_connection, query, data)
     return make_response('Assigned a shift to an employee!', 200)
+
+@app.route('/delete-shift', methods=['POST'])
+def delete_shift():
+    db_connection = connect_to_database()
+    shift_id = request.get_json(force=True)["shift_id"]
+
+    # delete from the Employees table
+    query =  """DELETE FROM `Shifts` WHERE `ShiftID` = %s;"""
+    data = (shift_id,)
+    execute_query(db_connection, query, data)
+
+    # delete rows with null foreign keys from the EmployeeShifts table
+    query = """DELETE FROM `EmployeeShifts` WHERE `EmployeeID` IS NULL OR `ShiftID` IS NULL"""
+    execute_query(db_connection, query)
+
+    message = 'Shift with ID ' + employee_id + ' removed from the database'
+    return make_response(message, 200)
+
 
 ################################################
 # Inventory

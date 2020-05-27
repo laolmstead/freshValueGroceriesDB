@@ -150,6 +150,30 @@ function assignShift() {
     });
 }
 
+function deleteEmployee(event) {
+    // get the customer id for the row that the delete button was clicked
+    var shift_id = event.target.parentNode.parentNode.children[0].innerText;
+    console.log('Delete shift with id:', shift_id);
+
+    // make a request to delete from the database
+    fetch('/delete-shift', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"shift_id": shift_id})
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('server response:', text);
+        // refresh the page to show updated table
+        window.location.reload();
+    });
+}
+
+
+// Attach all event listeners
+
 document.getElementById('insert-shift').addEventListener("click", insertNewShift);
 document.getElementById('clear-inputs').addEventListener("click", clearInputs);
 
@@ -161,4 +185,11 @@ var num_buttons = document.getElementsByClassName('view-employees').length;
 var buttons = document.getElementsByClassName('view-employees');
 for (var i = 0; i < num_buttons; i++) {
     buttons[i].addEventListener("click", viewEmployeesButtonClicked);
+}
+
+// add event listeners to all 'delete' buttons
+var num_buttons = document.getElementsByClassName('delete').length;
+var buttons = document.getElementsByClassName('delete');
+for (var i = 0; i < num_buttons; i++) {
+    buttons[i].addEventListener("click", deleteEmployee);
 }

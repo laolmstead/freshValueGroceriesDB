@@ -334,6 +334,30 @@ function searchEmployees() {
     }
 }
 
+function deleteEmployee(event) {
+    // get the customer id for the row that the delete button was clicked
+    var employee_id = event.target.parentNode.parentNode.children[0].innerText;
+    console.log('Delete employee with id:', employee_id);
+
+    // make a request to delete from the database
+    fetch('/delete-employee', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"employee_id": employee_id})
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('server response:', text);
+        // refresh the page to show updated table
+        window.location.reload();
+    });
+}
+
+
+// Attach all event listeners
+
 document.getElementById('search').addEventListener("click", displaySearch);
 document.getElementById('submit-search').addEventListener("click", searchEmployees);
 
@@ -345,5 +369,12 @@ var num_buttons = document.getElementsByClassName('view-shifts').length;
 var buttons = document.getElementsByClassName('view-shifts');
 for (var i = 0; i < num_buttons; i++) {
     buttons[i].addEventListener("click", viewShiftsButtonClicked);
+}
+
+// add event listeners to all 'delete' buttons
+var num_buttons = document.getElementsByClassName('delete').length;
+var buttons = document.getElementsByClassName('delete');
+for (var i = 0; i < num_buttons; i++) {
+    buttons[i].addEventListener("click", deleteEmployee);
 }
 
