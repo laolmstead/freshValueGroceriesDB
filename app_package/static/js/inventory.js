@@ -1,3 +1,5 @@
+// Insert new Inventory items into table.
+
 function insertNewInventory() {
 	var item = document.getElementById('itemName').value;
 	var description = document.getElementById('description').value;
