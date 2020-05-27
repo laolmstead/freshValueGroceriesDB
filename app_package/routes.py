@@ -177,12 +177,12 @@ def get_customer_id():
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
-########### NOT WORKING ###################
 @app.route('/insert-order', methods=['POST'])
 def insert_order():
     print('Inserting new order into the database', flush=True)
     db_connection = connect_to_database()
     info = request.get_json(force=True)
+    print("Info", info)
     query =  """INSERT INTO `Orders` 
                 (`CustomerID`, `EmployeeID`)
                 VALUES (%s, %s);"""
@@ -190,7 +190,7 @@ def insert_order():
     execute_query(db_connection, query, data)
     return make_response('Order added!', 200)
 
-########### NOT WORKING ###################
+###### NOT WORKING #####
 @app.route('/get-order-id', methods=['POST'])
 def get_order_id():
     print('Get more recent order id from database', flush=True)
@@ -212,6 +212,21 @@ def search_order_item():
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
+@app.route('/place-order', methods=['POST'])
+def place_order():
+    print("Place an Order and update OrderItems database", flush=True)
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+    for item in info:
+        quantity = item['quantity']
+        order_id = item['OrderID']
+        plu = item['PLU']
+        query = """INSERT INTO `OrderItems` 
+                    (`Quantity`, `Order_ID`, `PLU`) 
+                    VALUES (%s, %s, %s);"""
+        data = (quantity, order_id, plu)
+        execute_query(db_connection, query, data)
+    return make_response('Employees added!', 200)
 
 ################################################
 # Employees

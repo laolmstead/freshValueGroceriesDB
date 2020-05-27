@@ -30,9 +30,10 @@ function insertNewCustomer() {
     });
 }
 
-function placeOrder() {
-    var employeeID = document.getElementById('employeeID').value;
+function startOrder() {
+    var employeeID = Number(document.getElementById('employeeID').value);
     var customerName = document.getElementById('custName').value;
+    var newOrder = {};
 
     // make a request for customer id with the given name
     fetch('/get-customer-id', {
@@ -51,66 +52,24 @@ function placeOrder() {
         else {
             var customerID = Number(response[0][0]);
 
-            newOrder = {
-                "CustomerID": customerID,
-                "EmployeeID": employeeID
-            };
-            return newOrder;
+            newOrder.CustomerID = customerID;
+            newOrder.EmployeeID = employeeID;
         }
-    });
-}
 
-function insertNewOrder(order) {
+        return newOrder;
 
-    // send order info to flask
-    fetch('/insert-order', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(orderInfo)
-    }).then(function (response) {
-        return response.text();
-    }).then(function (text) {
-        console.log('Server response:', text);
-        // refresh the page to show updated table
-        window.location.reload();
-    });
-}
-
-function manageOrder() {
-    // Calling both of these functions leads to a Promise conflict
-    // which results in the insertNewOrder() not being called properly.
-    // Reearch how to handle this.
-
-    orderInfo = placeOrder();
-    console.log(orderInfo);
-
-    if (orderInfo > 0) {
-        insertNewOrder(orderInfo);
-    }
-}
-
-
-// This function will have the same issue as above.
-function getOrderID() {
-    // get OrderID from Flask
-    fetch('/get-order-id', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }).then(function (response) {
-        return response.text();
-    }).then(function (text) {
-        response = JSON.parse(text);
-        console.log(response);
-        if (response.length == 0) {
-            alert('Order failed. Please try again.');
-        }
-        else {
-            var orderID = response[0][0];
-        }
+    }).then(function(newOrder) {
+        return fetch('/insert-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newOrder)
+        });
+    }).then(function(data) {
+        return data.text();
+    }).then(function(text) {
+        console.log('Server response', text);
     });
 }
 
@@ -144,7 +103,6 @@ function searchByName() {
         }
     });
 }
-
 
 
 // Add item to order form.
@@ -193,7 +151,113 @@ function addToInvForm(orderItem, quantItem){
     newRow.appendChild(deleteTD);
 }
 
+// This function will have the same issue as above.
+function placeOrder() {
+    var orderID;
+    // get OrderID from Flask
+    fetch('/get-order-id', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        response = JSON.parse(text);
+        console.log(response);
+        if (response.length == 0) {
+            alert('Order failed. Please try again.');
+        }
+        else {
+            orderID = Number(response[0][0]);
+        }
+
+        return orderID;
+    }).then(function(orderID) {
+        orderArray = [];
+        table = document.getElementById("orderTable");
+
+        // Loop through each of the rows after the header and add to array.
+        for (var i = 1; i < table.rows.length; i++) {
+            var currentRow = table.rows.item(i).cells;
+            var newItem = {
+                "quantity": currentRow.item(4).innerHTML,
+                "OrderID": orderID,
+                "PLU": currentRow.item(0).innerHTML
+            };
+            orderArray.push(newItem);
+        }
+        console.log("To be added to inventory: " + invArray);
+
+        // Clear table contents.
+        for (var i = 1; i < table.rows.length; i++) {
+            table.deleteRow(i);
+        }
+
+        // Send data to Inventory table.
+        console.log("Order items:", orderArray);
+
+        fetch('/place-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(orderArray)
+        }).then(function(response) {
+            return response.text();
+        }).then(function (text) {
+            console.log('Server response:', text);
+            window.location.reload(); 
+        });
+    });
+}
+
+/* DELETE
+    var employeeID = Number(document.getElementById('employeeID').value);
+    var customerName = document.getElementById('custName').value;
+    var newOrder = {};
+
+    // make a request for customer id with the given name
+    fetch('/get-customer-id', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"name": customerName})
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        response = JSON.parse(text);
+        if (response.length == 0) {
+            alert('Customer does not exist. \nRegister by clicking the "New Customer" button and signing up.');
+        }
+        else {
+            var customerID = Number(response[0][0]);
+
+            newOrder.CustomerID = customerID;
+            newOrder.EmployeeID = employeeID;
+        }
+
+        return newOrder;
+
+    }).then(function(newOrder) {
+        return fetch('/insert-order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newOrder)
+        });
+    }).then(function(data) {
+        return data.text();
+    }).then(function(text) {
+        console.log('Server response', text);
+    });
+*/
+
 document.getElementById('registerCustomer').addEventListener("click", insertNewCustomer);
-document.getElementById('startOrder').addEventListener("click", manageOrder);
+document.getElementById('startOrder').addEventListener("click", startOrder);
 document.getElementById('addToOrder').addEventListener("click", searchByName);
+document.getElementById('placeOrder').addEventListener("click", placeOrder);
+
 
