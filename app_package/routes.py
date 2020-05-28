@@ -228,18 +228,6 @@ def customerOrder_page():
     print('Fetching and rendering Customer Orders ')
     return render_template('customerOrder.html')
 
-@app.route('/new-order-customer', methods=['POST'])
-def insert_order_new_customer():
-    print('Inserting new customer into the database', flush=True)
-    db_connection = connect_to_database()
-    info = request.get_json(force=True)
-    query =  """INSERT INTO `Customers` 
-                (`Name`, `PhoneNumber`, `RewardsPts`) 
-                VALUES (%s, %s, %s);"""
-    data = (info["name"], info["phone"], info["points"])
-    execute_query(db_connection, query, data)
-    return make_response('Customer added!', 200)
-
 @app.route('/get-customer-id', methods=['POST'])
 def get_customer_id():
     print('Fetching customer id', flush=True)
@@ -269,7 +257,7 @@ def insert_order():
 def get_order_id():
     print('Get more recent order id from database', flush=True)
     db_connection = connect_to_database()
-    query = """LAST_INSERT_ID();"""
+    query = """ SELECT MAX(OrderID) FROM Orders;"""
     result = execute_query(db_connection, query).fetchall()
     print("result:",result)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
@@ -296,11 +284,11 @@ def place_order():
         order_id = item['OrderID']
         plu = item['PLU']
         query = """INSERT INTO `OrderItems` 
-                    (`Quantity`, `Order_ID`, `PLU`) 
+                    (`Quantity`, `OrderID`, `PLU`) 
                     VALUES (%s, %s, %s);"""
         data = (quantity, order_id, plu)
         execute_query(db_connection, query, data)
-    return make_response('Employees added!', 200)
+    return make_response('Order added!', 200)
 
 ################################################
 # Employees
