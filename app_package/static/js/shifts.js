@@ -1,7 +1,17 @@
 function insertNewShift() {
     var day = document.getElementById('select-day').value;
+    
     var start_time = document.getElementById('start-time').value;
+    if (!start_time) {
+        alert('Enter a valid start time in the format hh:mm:ss');
+        return;
+    }
+    
     var end_time = document.getElementById('end-time').value;
+    if (!end_time) {
+        alert('Enter a valid end time in the format hh:mm:ss');
+        return;
+    }
 
     var info = {
         "day": day,
@@ -20,7 +30,10 @@ function insertNewShift() {
     }).then(function (response) {
         return response.text();
     }).then(function (text) {
-        console.log('Server response:', text);
+        console.log('response text:', text);
+        if (text == 'Shift already exists!') {
+            alert('Shift already exists!');
+        }
         // refresh the page to show updated table
         window.location.reload();
     });
@@ -127,6 +140,7 @@ function assignShift() {
     employee_id = document.getElementById('assign-employee').value;
     if (!shift_id || !employee_id) {
         alert('Please provide valid shift and employee IDs');
+        return;
     }
 
     info = {
@@ -146,9 +160,45 @@ function assignShift() {
         return response.text();
     }).then(function (text) {
         console.log('Server response:', text);
-        clearAssignInputs();
+        if (text == 'Invalid ShiftID') {
+            alert('Invalid ShiftID');
+        }
+        else if (text == 'Invalid EmployeeID') {
+            alert('Invalid EmployeeID');
+        }
+        else if (text == 'Employee already works this shift!') {
+            alert('Employee already works this shift!');
+        }
+        else {
+            clearAssignInputs();
+            alert('Employee has been assigned to this shift');
+        }
     });
 }
+
+function deleteEmployee(event) {
+    // get the customer id for the row that the delete button was clicked
+    var shift_id = event.target.parentNode.parentNode.children[0].innerText;
+    console.log('Delete shift with id:', shift_id);
+
+    // make a request to delete from the database
+    fetch('/delete-shift', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"shift_id": shift_id})
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('server response:', text);
+        // refresh the page to show updated table
+        window.location.reload();
+    });
+}
+
+
+// Attach all event listeners
 
 document.getElementById('insert-shift').addEventListener("click", insertNewShift);
 document.getElementById('clear-inputs').addEventListener("click", clearInputs);
@@ -161,4 +211,11 @@ var num_buttons = document.getElementsByClassName('view-employees').length;
 var buttons = document.getElementsByClassName('view-employees');
 for (var i = 0; i < num_buttons; i++) {
     buttons[i].addEventListener("click", viewEmployeesButtonClicked);
+}
+
+// add event listeners to all 'delete' buttons
+var num_buttons = document.getElementsByClassName('delete').length;
+var buttons = document.getElementsByClassName('delete');
+for (var i = 0; i < num_buttons; i++) {
+    buttons[i].addEventListener("click", deleteEmployee);
 }

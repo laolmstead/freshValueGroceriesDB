@@ -68,6 +68,16 @@ def search_customers_by_points():
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
+@app.route('/delete-customer', methods=['POST'])
+def delete_customer():
+    db_connection = connect_to_database()
+    customer_id = request.get_json(force=True)["customer_id"]
+    query =  """DELETE FROM `Customers` WHERE `CustomerID` = %s;"""
+    data = (customer_id,)
+    execute_query(db_connection, query, data).fetchall()
+    message = 'Customer with ID ' + customer_id + ' removed from the database'
+    return make_response(message, 200)
+
 
 ################################################
 # Orders
@@ -316,6 +326,23 @@ def search_employees_by_sick_days():
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
+@app.route('/delete-employee', methods=['POST'])
+def delete_employee():
+    db_connection = connect_to_database()
+    employee_id = request.get_json(force=True)["employee_id"]
+
+    # delete from the Employees table
+    query =  """DELETE FROM `Employees` WHERE `EmployeeID` = %s;"""
+    data = (employee_id,)
+    execute_query(db_connection, query, data)
+
+    # delete rows with null foreign keys from the EmployeeShifts table
+    query = """DELETE FROM `EmployeeShifts` WHERE `EmployeeID` IS NULL OR `ShiftID` IS NULL"""
+    execute_query(db_connection, query)
+
+    message = 'Employee with ID ' + employee_id + ' removed from the database'
+    return make_response(message, 200)
+
 
 ################################################
 # Shifts
@@ -334,12 +361,22 @@ def insert_new_shift():
     print('Inserting new shift into the database', flush=True)
     db_connection = connect_to_database()
     info = request.get_json(force=True)
-    query = """INSERT INTO `Shifts` 
-            (`Day`, `StartTime`, `EndTime`)  
-            VALUES (%s, %s, %s);"""
+
+    # check if the shift already exists
+    query = """SELECT Day, StartTime, EndTime FROM `Shifts` 
+            WHERE Day = %s AND StartTime = %s AND EndTime = %s;"""
     data = (info["day"], info["start_time"], info["end_time"])
-    execute_query(db_connection, query, data)
-    return make_response('Shift added!', 200)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('result:', result, flush=True)
+    if result:
+        return make_response('Shift already exists!', 500)
+    else:
+        query = """INSERT INTO `Shifts` 
+                (`Day`, `StartTime`, `EndTime`)  
+                VALUES (%s, %s, %s);"""
+        data = (info["day"], info["start_time"], info["end_time"])
+        execute_query(db_connection, query, data)
+        return make_response('Shift added!', 200)
 
 @app.route('/get-employees', methods=['POST'])
 def get_employees_for_shift():
@@ -371,11 +408,51 @@ def assign_shift():
     print('Received shiftID:', shift_id, flush=True)
     print('Received employeeID:', employee_id, flush=True)
 
-    # Construct the query
-    query = """INSERT INTO `EmployeeShifts` (`EmployeeID`, `ShiftID`) VALUES (%s, %s);"""
+    # check if shiftID is valid
+    query = """SELECT ShiftID FROM `Shifts` WHERE ShiftID = %s"""
+    data = (shift_id,)
+    result = execute_query(db_connection, query, data).fetchall()
+    if result == ():
+        return make_response('Invalid ShiftID', 500)
+
+    # check if employeeID is valid
+    query = """SELECT EmployeeID FROM `Employees` WHERE EmployeeID = %s"""
+    data = (employee_id,)
+    result = execute_query(db_connection, query, data).fetchall()
+    if result == ():
+        return make_response('Invalid EmployeeID', 500)
+
+    # check if assignment already exists
+    query = """SELECT EmployeeID, ShiftID FROM `EmployeeShifts` 
+            WHERE EmployeeID = %s AND ShiftID = %s;"""
     data = (employee_id, shift_id)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('result:', result, flush=True)
+    if result:
+        return make_response('Employee already works this shift!', 500)
+    else:
+        query = """INSERT INTO `EmployeeShifts` (`EmployeeID`, `ShiftID`) VALUES (%s, %s);"""
+        data = (employee_id, shift_id)
+        execute_query(db_connection, query, data)
+        return make_response('Assigned a shift to an employee!', 200)
+
+@app.route('/delete-shift', methods=['POST'])
+def delete_shift():
+    db_connection = connect_to_database()
+    shift_id = request.get_json(force=True)["shift_id"]
+
+    # delete from the Employees table
+    query =  """DELETE FROM `Shifts` WHERE `ShiftID` = %s;"""
+    data = (shift_id,)
     execute_query(db_connection, query, data)
-    return make_response('Assigned a shift to an employee!', 200)
+
+    # delete rows with null foreign keys from the EmployeeShifts table
+    query = """DELETE FROM `EmployeeShifts` WHERE `EmployeeID` IS NULL OR `ShiftID` IS NULL"""
+    execute_query(db_connection, query)
+
+    message = 'Shift with ID ' + employee_id + ' removed from the database'
+    return make_response(message, 200)
+
 
 ################################################
 # Inventory
