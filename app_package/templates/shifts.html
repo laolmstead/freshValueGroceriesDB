@@ -19,6 +19,38 @@
     </div>
 
     <div id="employees-table"></div>
+
+    <div id="update-form" style="display: none">
+        <h3></h3>
+        <p> Enter information in the fields you want to update. All else remains the same. </p>
+        <p id="update-id" style="display: none"></p>
+        <form>
+            <div class="form-row add-form-row">
+                <div class="col">
+                    <select class="form-control mb-3" id="update-day">
+                        <option> Sunday </option>
+                        <option> Monday </option>
+                        <option> Tuesday </option>
+                        <option> Wednesday </option>
+                        <option> Thursday </option>
+                        <option> Friday </option>
+                        <option> Saturday </option>
+                        <option> No Update </option>
+                    </select>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Start Time" id="update-start">
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="End Time" id="update-end">
+                </div>
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary" id="save-update"> Save </button>
+                <button type="button" class="btn btn-danger" id="clear-update"> Cancel </button>
+            </div>
+        </form>
+    </div>
     
     <div>
         <h2> View All Shifts </h2>
@@ -44,7 +76,7 @@
                             </button>
                         </td>
                         <td> 
-                            <button type="button" class="btn btn-success"> Update </button> 
+                            <button type="button" class="btn btn-success show-update"> Update </button> 
                             <button type="button" class="btn btn-danger delete"> Delete </button>
                         </td>
                     </tr>

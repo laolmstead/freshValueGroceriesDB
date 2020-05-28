@@ -176,7 +176,7 @@ function assignShift() {
     });
 }
 
-function deleteEmployee(event) {
+function deleteShift(event) {
     // get the customer id for the row that the delete button was clicked
     var shift_id = event.target.parentNode.parentNode.children[0].innerText;
     console.log('Delete shift with id:', shift_id);
@@ -197,6 +197,64 @@ function deleteEmployee(event) {
     });
 }
 
+function closeUpdateForm() {
+    var update_form = document.getElementById('update-form');
+    if (update_form.style.display === 'block') {
+        update_form.style.display = 'none';
+    }
+}
+
+function showUpdateForm(event) {
+    var update_form = document.getElementById('update-form');
+    if (update_form.style.display === 'block') {
+        update_form.style.display = 'none';
+    }
+    else {
+        update_form.style.display = 'block';
+        name = event.target.parentNode.parentNode.children[1].innerText;
+        id = event.target.parentNode.parentNode.children[0].innerText;
+        update_form.children[0].innerText = 'Update form for ShiftID: ' + id;
+        var update_id = document.getElementById('update-id');
+        update_id.innerText = id;
+    }
+}
+
+function updateShift(event) {
+    var id = event.target.parentNode.parentNode.parentNode.children[2].innerText;
+    console.log('Updating shift with id:', id);
+
+    var day = document.getElementById('update-day').value;
+    var start_time = document.getElementById('update-start').value;
+    var end_time = document.getElementById('update-end').value;
+    
+    if (!start_time && !end_time && day == 'No Update') return;
+    if (day == 'No Update') day = 'no_update';
+    if (!start_time) start_time = 'no_update';
+    if (!end_time) end_time = 'no_update';
+
+    var info = {
+        "id": id,
+        "day": day,
+        "start_time": start_time,
+        "end_time": end_time
+    }
+    console.log('Updated shift info:', info);
+
+    // send updated customer info to flask
+    fetch('/update-shift', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(info)
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('Server response:', text);
+        // refresh the page to show updated table
+        window.location.reload();
+    });
+}
 
 // Attach all event listeners
 
@@ -205,6 +263,9 @@ document.getElementById('clear-inputs').addEventListener("click", clearInputs);
 
 document.getElementById('insert-employee-shift').addEventListener("click", assignShift);
 document.getElementById('clear-assign-inputs').addEventListener("click", clearAssignInputs);
+
+document.getElementById('save-update').addEventListener("click", updateShift);
+document.getElementById('clear-update').addEventListener("click", closeUpdateForm);
 
 // add event listeners to all 'view employees' buttons
 var num_buttons = document.getElementsByClassName('view-employees').length;
@@ -217,5 +278,13 @@ for (var i = 0; i < num_buttons; i++) {
 var num_buttons = document.getElementsByClassName('delete').length;
 var buttons = document.getElementsByClassName('delete');
 for (var i = 0; i < num_buttons; i++) {
-    buttons[i].addEventListener("click", deleteEmployee);
+    buttons[i].addEventListener("click", deleteShift);
 }
+
+// add event listeners to all 'update' buttons
+var num_buttons = document.getElementsByClassName('show-update').length;
+var buttons = document.getElementsByClassName('show-update');
+for (var i = 0; i < num_buttons; i++) {
+    buttons[i].addEventListener("click", showUpdateForm);
+}
+
