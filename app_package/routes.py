@@ -407,6 +407,41 @@ def delete_employee():
     message = 'Employee with ID ' + employee_id + ' removed from the database'
     return make_response(message, 200)
 
+@app.route('/update-employee', methods=['POST'])
+def update_employee():
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+
+    # Get current employee information
+    query =  """SELECT `Name`, `HourlyWage`, `Responsibilities`, 
+                `SickDays` FROM `Employees` WHERE `EmployeeID` = %s;"""
+    data = (info["id"],)
+    result = execute_query(db_connection, query, data).fetchall()
+    print("current employee info:", result, flush=True)
+    # result returns a tuple of tuples
+
+    # Update all 'no_update' fields to the current values
+    if info["name"] == 'no_update':
+        info["name"] = result[0][0]
+    if info["wage"] == 'no_update':
+        info["wage"] = result[0][1]
+    if info["duties"] == 'no_update':
+        info["duties"] = result[0][2]
+    if info["sick_days"] == 'no_update':
+        info["sick_days"] = result[0][3]
+    print("updated info fields:", info, flush=True)
+
+    # Update the employee
+    data = (info["name"], info["wage"], info["duties"], info["sick_days"], info["id"])
+    query = """UPDATE `Employees` 
+                SET `Name` = %s,
+                    `HourlyWage` = %s,
+                    `Responsibilities` = %s,
+                    `SickDays` = %s
+                WHERE `EmployeeID` = %s;"""
+    execute_query(db_connection, query, data)
+    return make_response('Updated employee information', 200)
+
 
 ################################################
 # Shifts
