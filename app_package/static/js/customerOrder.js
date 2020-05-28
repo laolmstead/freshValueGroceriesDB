@@ -187,7 +187,7 @@ function placeOrder() {
             };
             orderArray.push(newItem);
         }
-        console.log("To be added to inventory: " + invArray);
+        console.log("To be added to inventory: " + orderArray);
 
         // Clear table contents.
         for (var i = 1; i < table.rows.length; i++) {
