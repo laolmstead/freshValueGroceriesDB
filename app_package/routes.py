@@ -78,6 +78,70 @@ def delete_customer():
     message = 'Customer with ID ' + customer_id + ' removed from the database'
     return make_response(message, 200)
 
+@app.route('/update-customer', methods=['POST'])
+def update_customer():
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+
+    # Determine what fields to update in the database
+    # for this particular customer
+   
+    # case 1: update all fields
+    if (info["name"] != 'no_update' and info["phone"] != 'no_update' and info["points"] != 'no_update'):
+        data = (info["name"], info["phone"], info["points"], info["id"])
+        query = """UPDATE `Customers` 
+                SET `Name` = %s,
+                    `PhoneNumber` = %s,
+                    `RewardsPts` = %s
+                WHERE `CustomerID` = %s;"""
+        execute_query(db_connection, query, data)
+
+    # case 2: update only name
+    elif (info["name"] != 'no_update' and info["phone"] == 'no_update' and info["points"] == 'no_update'):
+        data = (info["name"], info["id"])
+        query = """UPDATE `Customers` SET `Name` = %s WHERE `CustomerID` = %s;"""
+        execute_query(db_connection, query, data)
+
+    # case 3: update only phone
+    elif (info["name"] == 'no_update' and info["phone"] != 'no_update' and info["points"] == 'no_update'):
+        data = (info["phone"], info["id"])
+        query = """UPDATE `Customers` SET `PhoneNumber` = %s WHERE `CustomerID` = %s;"""
+        execute_query(db_connection, query, data)
+
+    # case 4: update only points
+    elif (info["name"] == 'no_update' and info["phone"] == 'no_update' and info["points"] != 'no_update'):
+        data = (info["points"], info["id"])
+        query = """UPDATE `Customers` SET `RewardsPts` = %s WHERE `CustomerID` = %s;"""
+        execute_query(db_connection, query, data)
+
+    # case 5: update name and phone
+    elif (info["name"] != 'no_update' and info["phone"] != 'no_update' and info["points"] == 'no_update'):
+        data = (info["name"], info["phone"], info["id"])
+        query = """UPDATE `Customers` 
+                SET `Name` = %s,
+                    `PhoneNumber` = %s
+                WHERE `CustomerID` = %s;"""
+        execute_query(db_connection, query, data)
+
+    # case 6: update phone and points
+    elif (info["name"] == 'no_update' and info["phone"] != 'no_update' and info["points"] != 'no_update'):
+        data = (info["phone"], info["points"], info["id"])
+        query = """UPDATE `Customers` 
+                SET `PhoneNumber` = %s,
+                    `RewardsPts` = %s
+                WHERE `CustomerID` = %s;"""
+        execute_query(db_connection, query, data)
+
+    # case 7: update name and points
+    else:
+        data = (info["name"], info["points"], info["id"])
+        query = """UPDATE `Customers` 
+                SET `Name` = %s,
+                    `RewardsPts` = %s
+                WHERE `CustomerID` = %s;"""
+        execute_query(db_connection, query, data)
+    
+    return make_response('Updated customer information', 200)
 
 ################################################
 # Orders

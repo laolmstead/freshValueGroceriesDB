@@ -229,6 +229,65 @@ function deleteCustomer(event) {
     });
 }
 
+function showUpdateForm(event) {
+    var update_form = document.getElementById('update-form');
+    if (update_form.style.display === 'block') {
+        update_form.style.display = 'none';
+    }
+    else {
+        update_form.style.display = 'block';
+        name = event.target.parentNode.parentNode.children[1].innerText;
+        id = event.target.parentNode.parentNode.children[0].innerText;
+        update_form.children[0].innerText = 'Update form for ' + name + ' (CustomerID: ' + id + ')';
+        var update_id = document.getElementById('update-id');
+        update_id.innerText = id;
+    }
+}
+
+function closeUpdateForm() {
+    var update_form = document.getElementById('update-form');
+    if (update_form.style.display === 'block') {
+        update_form.style.display = 'none';
+    }
+}
+
+function updateCustomer(event) {
+    var customer_id = event.target.parentNode.parentNode.parentNode.children[2].innerText;
+    console.log('Updating customer with id:', customer_id);
+
+    var name = document.getElementById('update-name').value;
+    var phone = document.getElementById('update-phone').value;
+    var points = document.getElementById('update-pts').value;
+    
+    if (!name && !phone && !points) return;
+    if (!name) name = 'no_update';
+    if (!phone) phone = 'no_update';
+    if (!points) points = 'no_update';
+
+    var info = {
+        "id": customer_id,
+        "name": name,
+        "phone": phone,
+        "points": points
+    }
+    console.log('Updated customer info:', info);
+
+    // send updated customer info to flask
+    fetch('/update-customer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(info)
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('Server response:', text);
+        // refresh the page to show updated table
+        window.location.reload();
+    });
+}
+
 
 // Attach all event listeners
 
@@ -239,6 +298,16 @@ document.getElementById('search-pts').addEventListener("click", searchByPoints);
 
 document.getElementById('insert-employee').addEventListener("click", insertNewCustomer);
 document.getElementById('clear-inputs').addEventListener("click", clearInputs);
+
+document.getElementById('save-update').addEventListener("click", updateCustomer);
+document.getElementById('clear-update').addEventListener("click", closeUpdateForm);
+
+// add event listeners to all 'update' buttons
+var num_buttons = document.getElementsByClassName('show-update').length;
+var buttons = document.getElementsByClassName('show-update');
+for (var i = 0; i < num_buttons; i++) {
+    buttons[i].addEventListener("click", showUpdateForm);
+}
 
 // add event listeners to all 'delete' buttons
 var num_buttons = document.getElementsByClassName('delete').length;

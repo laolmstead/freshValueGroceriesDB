@@ -48,6 +48,31 @@
     </div>
 
     <div id="search-results"></div>
+
+    <div id="update-form" style="display: none">
+        <h3></h3>
+        <p> Enter information in the fields you want to update. All else remains the same. </p>
+        <p id="update-id" style="display: none"></p>
+        <form>
+            <div class="form-row add-form-row">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Name" id="update-name">
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" placeholder="Rewards Points" id="update-pts">
+                </div>
+            </div>
+            <div class="form-row add-form-row">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Phone Number" id="update-phone">
+                </div>
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary" id="save-update"> Save </button>
+                <button type="button" class="btn btn-danger" id="clear-update"> Cancel </button>
+            </div>
+        </form>
+    </div>
     
     <div class="customers-table">
         <h3> Customer Information </h3>
@@ -68,7 +93,7 @@
                     <td> {{ row[2] }} </td>
                     <td> {{ row[3] }} </td>
                     <td> 
-                        <button type="button" class="btn btn-success"> Update </button> 
+                        <button type="button" class="btn btn-success show-update"> Update </button> 
                         <button type="button" class="btn btn-danger delete"> Delete </button> 
                     </td>
                 </tr>
@@ -90,7 +115,7 @@
             </div>
             <div class="modal-body">
                 <p> Enter New Customer Information </p>
-                <form class="add-employee">
+                <form>
                     <div class="form-row add-form-row">
                         <div class="col">
                             <input type="text" class="form-control" placeholder="Name" id="add-name">
