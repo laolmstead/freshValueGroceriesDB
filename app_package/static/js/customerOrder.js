@@ -255,9 +255,10 @@ function placeOrder() {
     });
 */
 
-document.getElementById('registerCustomer').addEventListener("click", insertNewCustomer);
 document.getElementById('startOrder').addEventListener("click", startOrder);
 document.getElementById('addToOrder').addEventListener("click", searchByName);
 document.getElementById('placeOrder').addEventListener("click", placeOrder);
+document.getElementById('newButton').addEventListener("click", event => {
+    location.href = "customers"});
 
 

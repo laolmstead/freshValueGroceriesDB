@@ -11,48 +11,9 @@
   <h2>Place an Order</h2>
 
   <!--New Customer Form-->
-  <button type="button" class="btn btn-primary mx-1 mt-3" data-toggle="modal" data-target="#addNewCustomer" id="newButton"> 
+  <button type="button" class="btn btn-primary mx-1 mt-3" data-toggle="modal" data-target="#" id="newButton"> 
       New Customer
   </button>
-
-  <!-- New Customer Modal -->
-  <div id="addNewCustomer" class="modal" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content mx-3">
-              <div class="modal-header">
-                <h5 class="modal-title">New Customer</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-          <div class="add-customer mx-3 my-3">
-            <p> Enter New Customer Information </p>
-                <form>
-                  <div class="form-row">
-                    <div class="col mx-1 mb-1">
-                      <label for="fname"></label>
-                      <input type="text" class="form-control" id="addName" placeholder="Name">
-                    </div>
-                  </div>
-                  <div class="form-row mb-3">
-                    <div class="col mx-1 mb-2">
-                      <label for="phone"></label>
-                      <input type="text" class="form-control" id="addPhone" placeholder="Phone Number">
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-primary px-1" data-dismiss="modal" id="registerCustomer">
-                      Register
-                    </button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" data-target="#">
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-          </div>
-          </div>
-      </div>
-  </div>
 
 
   <!--Place Order Form - Customer/Employee Info-->
