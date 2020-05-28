@@ -83,64 +83,31 @@ def update_customer():
     db_connection = connect_to_database()
     info = request.get_json(force=True)
 
-    # Determine what fields to update in the database
-    # for this particular customer
-   
-    # case 1: update all fields
-    if (info["name"] != 'no_update' and info["phone"] != 'no_update' and info["points"] != 'no_update'):
-        data = (info["name"], info["phone"], info["points"], info["id"])
-        query = """UPDATE `Customers` 
-                SET `Name` = %s,
-                    `PhoneNumber` = %s,
-                    `RewardsPts` = %s
-                WHERE `CustomerID` = %s;"""
-        execute_query(db_connection, query, data)
+    # Get current customer information
+    query =  """SELECT `Name`, `PhoneNumber`, `RewardsPts` 
+                FROM `Customers` WHERE `CustomerID` = %s;"""
+    data = (info["id"],)
+    result = execute_query(db_connection, query, data).fetchall()
+    print("current customer info:", result, flush=True)
+    # result returns a tuple of tuples
 
-    # case 2: update only name
-    elif (info["name"] != 'no_update' and info["phone"] == 'no_update' and info["points"] == 'no_update'):
-        data = (info["name"], info["id"])
-        query = """UPDATE `Customers` SET `Name` = %s WHERE `CustomerID` = %s;"""
-        execute_query(db_connection, query, data)
+    # Update all 'no_update' fields to the current values
+    if info["name"] == 'no_update':
+        info["name"] = result[0][0]
+    if info["phone"] == 'no_update':
+        info["phone"] = result[0][1]
+    if info["points"] == 'no_update':
+        info["points"] = result[0][2]
+    print("updated info fields:", info, flush=True)
 
-    # case 3: update only phone
-    elif (info["name"] == 'no_update' and info["phone"] != 'no_update' and info["points"] == 'no_update'):
-        data = (info["phone"], info["id"])
-        query = """UPDATE `Customers` SET `PhoneNumber` = %s WHERE `CustomerID` = %s;"""
-        execute_query(db_connection, query, data)
-
-    # case 4: update only points
-    elif (info["name"] == 'no_update' and info["phone"] == 'no_update' and info["points"] != 'no_update'):
-        data = (info["points"], info["id"])
-        query = """UPDATE `Customers` SET `RewardsPts` = %s WHERE `CustomerID` = %s;"""
-        execute_query(db_connection, query, data)
-
-    # case 5: update name and phone
-    elif (info["name"] != 'no_update' and info["phone"] != 'no_update' and info["points"] == 'no_update'):
-        data = (info["name"], info["phone"], info["id"])
-        query = """UPDATE `Customers` 
-                SET `Name` = %s,
-                    `PhoneNumber` = %s
-                WHERE `CustomerID` = %s;"""
-        execute_query(db_connection, query, data)
-
-    # case 6: update phone and points
-    elif (info["name"] == 'no_update' and info["phone"] != 'no_update' and info["points"] != 'no_update'):
-        data = (info["phone"], info["points"], info["id"])
-        query = """UPDATE `Customers` 
-                SET `PhoneNumber` = %s,
-                    `RewardsPts` = %s
-                WHERE `CustomerID` = %s;"""
-        execute_query(db_connection, query, data)
-
-    # case 7: update name and points
-    else:
-        data = (info["name"], info["points"], info["id"])
-        query = """UPDATE `Customers` 
-                SET `Name` = %s,
-                    `RewardsPts` = %s
-                WHERE `CustomerID` = %s;"""
-        execute_query(db_connection, query, data)
-    
+    # Update the customer
+    data = (info["name"], info["phone"], info["points"], info["id"])
+    query = """UPDATE `Customers` 
+            SET `Name` = %s,
+                `PhoneNumber` = %s,
+                `RewardsPts` = %s
+            WHERE `CustomerID` = %s;"""
+    execute_query(db_connection, query, data)
     return make_response('Updated customer information', 200)
 
 ################################################
