@@ -78,6 +78,37 @@ def delete_customer():
     message = 'Customer with ID ' + customer_id + ' removed from the database'
     return make_response(message, 200)
 
+@app.route('/update-customer', methods=['POST'])
+def update_customer():
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+
+    # Get current customer information
+    query =  """SELECT `Name`, `PhoneNumber`, `RewardsPts` 
+                FROM `Customers` WHERE `CustomerID` = %s;"""
+    data = (info["id"],)
+    result = execute_query(db_connection, query, data).fetchall()
+    print("current customer info:", result, flush=True)
+    # result returns a tuple of tuples
+
+    # Update all 'no_update' fields to the current values
+    if info["name"] == 'no_update':
+        info["name"] = result[0][0]
+    if info["phone"] == 'no_update':
+        info["phone"] = result[0][1]
+    if info["points"] == 'no_update':
+        info["points"] = result[0][2]
+    print("updated info fields:", info, flush=True)
+
+    # Update the customer
+    data = (info["name"], info["phone"], info["points"], info["id"])
+    query = """UPDATE `Customers` 
+            SET `Name` = %s,
+                `PhoneNumber` = %s,
+                `RewardsPts` = %s
+            WHERE `CustomerID` = %s;"""
+    execute_query(db_connection, query, data)
+    return make_response('Updated customer information', 200)
 
 ################################################
 # Orders
@@ -343,6 +374,41 @@ def delete_employee():
     message = 'Employee with ID ' + employee_id + ' removed from the database'
     return make_response(message, 200)
 
+@app.route('/update-employee', methods=['POST'])
+def update_employee():
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+
+    # Get current employee information
+    query =  """SELECT `Name`, `HourlyWage`, `Responsibilities`, 
+                `SickDays` FROM `Employees` WHERE `EmployeeID` = %s;"""
+    data = (info["id"],)
+    result = execute_query(db_connection, query, data).fetchall()
+    print("current employee info:", result, flush=True)
+    # result returns a tuple of tuples
+
+    # Update all 'no_update' fields to the current values
+    if info["name"] == 'no_update':
+        info["name"] = result[0][0]
+    if info["wage"] == 'no_update':
+        info["wage"] = result[0][1]
+    if info["duties"] == 'no_update':
+        info["duties"] = result[0][2]
+    if info["sick_days"] == 'no_update':
+        info["sick_days"] = result[0][3]
+    print("updated info fields:", info, flush=True)
+
+    # Update the employee
+    data = (info["name"], info["wage"], info["duties"], info["sick_days"], info["id"])
+    query = """UPDATE `Employees` 
+                SET `Name` = %s,
+                    `HourlyWage` = %s,
+                    `Responsibilities` = %s,
+                    `SickDays` = %s
+                WHERE `EmployeeID` = %s;"""
+    execute_query(db_connection, query, data)
+    return make_response('Updated employee information', 200)
+
 
 ################################################
 # Shifts
@@ -453,6 +519,37 @@ def delete_shift():
     message = 'Shift with ID ' + employee_id + ' removed from the database'
     return make_response(message, 200)
 
+@app.route('/update-shift', methods=['POST'])
+def update_shift():
+    db_connection = connect_to_database()
+    info = request.get_json(force=True)
+
+    # Get current customer information
+    query =  """SELECT `Day`, `StartTime`, `EndTime` 
+                FROM `Shifts` WHERE `ShiftID` = %s;"""
+    data = (info["id"],)
+    result = execute_query(db_connection, query, data).fetchall()
+    print("current shift info:", result, flush=True)
+    # result returns a tuple of tuples
+
+    # Update all 'no_update' fields to the current values
+    if info["day"] == 'no_update':
+        info["day"] = result[0][0]
+    if info["start_time"] == 'no_update':
+        info["start_time"] = result[0][1]
+    if info["end_time"] == 'no_update':
+        info["end_time"] = result[0][2]
+    print("updated info fields:", info, flush=True)
+
+    # Update the shift
+    data = (info["day"], info["start_time"], info["end_time"], info["id"])
+    query = """UPDATE `Shifts` 
+                SET `Day` = %s,
+                    `StartTime` = %s,
+                    `EndTime` = %s
+                WHERE `ShiftID` = %s;"""
+    execute_query(db_connection, query, data)
+    return make_response('Updated shift information', 200)
 
 ################################################
 # Inventory

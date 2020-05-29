@@ -44,6 +44,34 @@
     <div id="shifts-table"></div>
     <div id="search-results"></div>
 
+    <div id="update-form" style="display: none">
+        <h3></h3>
+        <p> Enter information in the fields you want to update. All else remains the same. </p>
+        <p id="update-id" style="display: none"></p>
+        <form>
+            <div class="form-row add-form-row">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Name" id="update-name">
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" placeholder="Hourly Wage" id="update-wage">
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" placeholder="Sick Days" id="update-sick-days">
+                </div>
+            </div>
+            <div class="form-row add-form-row">
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Work Responsibilities" id="update-duties">
+                </div>
+            </div>
+            <div>
+                <button type="button" class="btn btn-primary" id="save-update"> Save </button>
+                <button type="button" class="btn btn-danger" id="clear-update"> Cancel </button>
+            </div>
+        </form>
+    </div>
+
     <div>
         <h3> Employee Information </h3>
         <table class="table">
@@ -70,7 +98,7 @@
                             </button>
                         </td>
                         <td> 
-                            <button type="button" class="btn btn-success"> Update </button> 
+                            <button type="button" class="btn btn-success show-update"> Update </button> 
                             <button type="button" class="btn btn-danger delete"> Delete </button> 
                         </td>
                     </tr>

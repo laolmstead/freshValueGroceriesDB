@@ -31,7 +31,11 @@
     margin-bottom: 15px;
 }
 
+#update-form {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
 .form-cell-style {
     padding:10px;
     box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
-}

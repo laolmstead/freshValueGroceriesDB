@@ -367,6 +367,68 @@ function deleteEmployee(event) {
     });
 }
 
+function closeUpdateForm() {
+    var update_form = document.getElementById('update-form');
+    if (update_form.style.display === 'block') {
+        update_form.style.display = 'none';
+    }
+}
+
+function showUpdateForm(event) {
+    var update_form = document.getElementById('update-form');
+    if (update_form.style.display === 'block') {
+        update_form.style.display = 'none';
+    }
+    else {
+        update_form.style.display = 'block';
+        name = event.target.parentNode.parentNode.children[1].innerText;
+        id = event.target.parentNode.parentNode.children[0].innerText;
+        update_form.children[0].innerText = 'Update form for ' + name + ' (EmployeeID: ' + id + ')';
+        var update_id = document.getElementById('update-id');
+        update_id.innerText = id;
+    }
+}
+
+function updateEmployee(event) {
+    var id = event.target.parentNode.parentNode.parentNode.children[2].innerText;
+    console.log('Updating employee with id:', id);
+
+    var name = document.getElementById('update-name').value;
+    var wage = document.getElementById('update-wage').value;
+    var sick_days = document.getElementById('update-sick-days').value;
+    var duties = document.getElementById('update-duties').value;
+    
+    if (!name && !wage && !sick_days && !duties) return;
+    if (!name) name = 'no_update';
+    if (!wage) wage = 'no_update';
+    if (!sick_days) sick_days = 'no_update';
+    if (!duties) duties = 'no_update';
+
+    var info = {
+        "id": id,
+        "name": name,
+        "wage": wage,
+        "sick_days": sick_days,
+        "duties": duties
+    }
+    console.log('Updated employee info:', info);
+
+    // send updated customer info to flask
+    fetch('/update-employee', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(info)
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('Server response:', text);
+        // refresh the page to show updated table
+        window.location.reload();
+    });
+}
+
 
 // Attach all event listeners
 
@@ -375,6 +437,9 @@ document.getElementById('submit-search').addEventListener("click", searchEmploye
 
 document.getElementById('insert-employee').addEventListener("click", insertNewEmployee);
 document.getElementById('clear-inputs').addEventListener("click", clearInputs);
+
+document.getElementById('save-update').addEventListener("click", updateEmployee);
+document.getElementById('clear-update').addEventListener("click", closeUpdateForm);
 
 // add event listeners to all 'view shifts' buttons
 var num_buttons = document.getElementsByClassName('view-shifts').length;
@@ -389,4 +454,12 @@ var buttons = document.getElementsByClassName('delete');
 for (var i = 0; i < num_buttons; i++) {
     buttons[i].addEventListener("click", deleteEmployee);
 }
+
+// add event listeners to all 'update' buttons
+var num_buttons = document.getElementsByClassName('show-update').length;
+var buttons = document.getElementsByClassName('show-update');
+for (var i = 0; i < num_buttons; i++) {
+    buttons[i].addEventListener("click", showUpdateForm);
+}
+
 
