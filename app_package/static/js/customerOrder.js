@@ -1,35 +1,3 @@
-// Implement new customer add function on customerOrders page.
-
-function insertNewCustomer() {
-    var name = document.getElementById('addName').value;
-    var phone = document.getElementById('addPhone').value;
-
-    document.getElementById('addName').value = '';
-    document.getElementById('addPhone').value = '';
-
-    var info = {
-        "name": name,
-        "phone": phone,
-        "points": 0
-    }
-    console.log('Customer info:', info);
-
-    // send customer's info to flask
-    fetch('/new-order-customer', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(info)
-    }).then(function (response) {
-        return response.text();
-    }).then(function (text) {
-        console.log('Server response:', text);
-        // refresh the page to show updated table
-        window.location.reload();
-    });
-}
-
 function startOrder() {
     var employeeID = Number(document.getElementById('employeeID').value);
     var customerName = document.getElementById('custName').value;

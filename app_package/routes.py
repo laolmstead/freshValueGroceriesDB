@@ -474,11 +474,42 @@ def insert_new_inventory():
     description = request.get_json(force=True)['description']
     unit = float(request.get_json(force=True)['unit'])
     quantity = int(request.get_json(force=True)['quantity'])
-    print(type(item), type(description), type(unit), type(quantity))
     query = """INSERT INTO `Inventory` (`Name`, `Description`, `UnitCost`, `Quantity`) VALUES (%s, %s, %s, %s);"""
     data = (item, description, unit, quantity)
     execute_query(db_connection, query, data)
     return make_response('Inventory added!', 200)
+
+@app.route('/update-inventory', methods=['POST'])
+def update_inventory():
+    print("Updating Inventory in database", flush=True)
+    db_connection = connect_to_database()
+    plu = request.get_json(force=True)['plu']
+    item = request.get_json(force=True)['item']
+    description = request.get_json(force=True)['description']
+    unit = float(request.get_json(force=True)['unit'])
+    quantity = int(request.get_json(force=True)['quantity'])
+    query = """UPDATE `Inventory`
+            SET
+                `Name` = %s,
+                `Description` = %s,
+                `UnitCost` = %s,
+                `Quantity` = %s
+            WHERE
+                `PLU` = %s;"""
+    data = (item, description, unit, quantity, plu)
+    execute_query(db_connection, query, data)
+    return make_response('Inventory added!', 200)
+
+@app.route('/delete-inventory', methods=['POST'])
+def delete_inventory():
+    print("Deleting Inventory from database", flush=True)
+    db_connection = connect_to_database()
+    plu = request.get_json(force=True)["info"]
+    print("plu:", plu)
+    query = """DELETE FROM `Inventory` WHERE `PLU` = %s;"""
+    data = (plu,)
+    execute_query(db_connection, query, data)
+    return make_response('Inventory deleted!', 200)
 
 @app.route('/inventoryOrder')
 def inventoryOrder_page():
@@ -498,7 +529,6 @@ def search_inventory_item():
     result = execute_query(db_connection, query, data).fetchall()
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
-
 
 @app.route('/new-inventory-order', methods=['POST'])
 def new_inventory_order():

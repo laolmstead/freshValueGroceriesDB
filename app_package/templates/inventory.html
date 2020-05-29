@@ -81,23 +81,29 @@
         </thead> 
         <tbody>
           {% for item in results %}
-            <tr>
-                 <td> {{ item[0] }} </td>
-                 <td> {{ item[1] }} </td>
-                 <td> {{ item[2] }} </td>
-                 <td> {{ item[3] }} </td>
-                 <td> {{ item[4] }} </td>
-                 <td> 
-                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
-                    Update
-                  </button>
-                </td>
-                <td>
-                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
-                    Delete
-                  </button>
-                </td>
-            </tr>
+              <tr>
+                   <td> {{ item[0] }} </td>
+                   <td contenteditable="false"> {{ item[1] }} </td>
+                   <td contenteditable="false"> {{ item[2] }} </td>
+                   <td contenteditable="false"> {{ item[3] }} </td>
+                   <td contenteditable="false"> {{ item[4] }} </td>
+                   <td> 
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#" onclick="makeEditable(this)" style="display:block"> 
+                      Update
+                    </button>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#" onclick="submitEdit(this)" style="display:none">
+                      Submit
+                    </button>
+                  </td>
+                  <td>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#" onclick="deleteInventory(this)" style="display:block">
+                      Delete
+                    </button>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#" onclick="cancelEdit(this)" style="display:none">
+                      Cancel
+                    </button>
+                  </td>
+              </tr>
           {% endfor %}
         </tbody> 
     </table>
