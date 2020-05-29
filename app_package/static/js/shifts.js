@@ -1,3 +1,4 @@
+// Insert a new shift into the Shifts table
 function insertNewShift() {
     var day = document.getElementById('select-day').value;
     
@@ -39,11 +40,13 @@ function insertNewShift() {
     });
 }
 
+// Clears the fields in the 'Add New Shift' modal
 function clearInputs() {
     document.getElementById('start-time').value = '';
     document.getElementById('end-time').value = '';
 }
 
+// Removes 'View Employees on Shift' search results from the page
 function closeEmployeesTable(event) {
     var parent_div = event.target.parentNode;
     for (var i = 0; i < 3; i++) {
@@ -51,6 +54,7 @@ function closeEmployeesTable(event) {
     }
 }
 
+// Creates a table for 'View Employees on Shift' search results
 function generateEmployeesTable(employees) {
     console.log('Generating employees table');
 
@@ -64,7 +68,7 @@ function generateEmployeesTable(employees) {
 
     // create a header for the table
     var title = document.createElement('h3');
-    title.innerText = "View Employees for " + employees[0];
+    title.innerText = "View Employees for " + employees[0][1] + ' (EmployeeID: ' + employees[0][0] + ')';
     parent_div.appendChild(title);
 
     // construct table headers
@@ -104,6 +108,7 @@ function generateEmployeesTable(employees) {
     close_button.addEventListener("click", closeEmployeesTable);
 }
 
+// Makes a request for the employees assigned to a particular shift
 function viewEmployeesButtonClicked() {
     // get the shift id for the row the button was clicked
     var shift_id = event.target.parentNode.parentNode.children[0].innerText;
@@ -130,11 +135,13 @@ function viewEmployeesButtonClicked() {
     });
 }
 
+// Clears the fields in the 'Assign Shift' modal
 function clearAssignInputs() {
     document.getElementById('assign-shift').value = '';
     document.getElementById('assign-employee').value = '';
 }
 
+// Inserts a new relationship into the EmployeeShifts table
 function assignShift() {
     shift_id = document.getElementById('assign-shift').value;
     employee_id = document.getElementById('assign-employee').value;
@@ -176,6 +183,7 @@ function assignShift() {
     });
 }
 
+// Deletes a shift from the Shifts table
 function deleteShift(event) {
     // get the customer id for the row that the delete button was clicked
     var shift_id = event.target.parentNode.parentNode.children[0].innerText;
@@ -197,41 +205,93 @@ function deleteShift(event) {
     });
 }
 
-function closeUpdateForm() {
-    var update_form = document.getElementById('update-form');
-    if (update_form.style.display === 'block') {
-        update_form.style.display = 'none';
+// Makes the cells in the table editable.
+function makeEditable(button) {
+    var td = button.parentNode;
+    var tr = td.parentNode;
+
+    // Source: https://www.golangprograms.com/highlight-and-get-the-details-of-table-row-on-click-using-javascript.html
+    var currentRow = tr.cells;
+    for (var i = 1; i < 4; i++) {
+        currentRow.item(i).contentEditable = "true";
+        currentRow.item(i).classList.add("form-cell-style");
     }
+
+    // Hide Update Button and Show Submit button.
+    var updateButton = currentRow.item(5).childNodes[1];
+    updateButton.style.display = 'none';
+    var submitButton = currentRow.item(5).childNodes[3];
+    submitButton.style.display = 'block';
+
+    // Hide Delete Button and Show Cancel Button.
+    var deleteButton = currentRow.item(6).childNodes[1];
+    deleteButton.style.display = 'none';
+    var cancelButton = currentRow.item(6).childNodes[3];
+    cancelButton.style.display = 'block';
 }
 
-function showUpdateForm(event) {
-    var update_form = document.getElementById('update-form');
-    if (update_form.style.display === 'block') {
-        update_form.style.display = 'none';
-    }
-    else {
-        update_form.style.display = 'block';
-        name = event.target.parentNode.parentNode.children[1].innerText;
-        id = event.target.parentNode.parentNode.children[0].innerText;
-        update_form.children[0].innerText = 'Update form for ShiftID: ' + id;
-        var update_id = document.getElementById('update-id');
-        update_id.innerText = id;
-    }
+// Cancels table edit.
+function cancelEdit(button) {
+	var td = button.parentNode;
+	var tr = td.parentNode;
+
+	// Remove cell's editability.
+	var currentRow = tr.cells;
+	for (var i = 1; i < 4; i++) {
+		currentRow.item(i).contentEditable = "false";
+		currentRow.item(i).classList.remove("form-cell-style");
+	}
+
+	// Show Update Button and Hide Submit button.
+	var updateButton = currentRow.item(5).childNodes[1];
+	updateButton.style.display = 'block';
+	var submitButton = currentRow.item(5).childNodes[3];
+	submitButton.style.display = 'none';
+
+	// Show Delete Button and Hide Cancel Button.
+	var deleteButton = currentRow.item(6).childNodes[1];
+	deleteButton.style.display = 'block';
+	var cancelButton = currentRow.item(6).childNodes[3];
+	cancelButton.style.display = 'none';
+
+	window.location.reload();
 }
 
-function updateShift(event) {
-    var id = event.target.parentNode.parentNode.parentNode.children[2].innerText;
-    console.log('Updating shift with id:', id);
+// Submit data to the server to update the database
+function submitEdit(button) {
+	var td = button.parentNode;
+	var tr = td.parentNode;
+	var currentRow = tr.cells;
 
-    var day = document.getElementById('update-day').value;
-    var start_time = document.getElementById('update-start').value;
-    var end_time = document.getElementById('update-end').value;
+    var id = currentRow.item(0).innerText;
     
-    if (!start_time && !end_time && day == 'No Update') return;
-    if (day == 'No Update') day = 'no_update';
-    if (!start_time) start_time = 'no_update';
-    if (!end_time) end_time = 'no_update';
+    // grab and verify valid input for day of week
+    var day = currentRow.item(1).innerText;
+    console.log('day of the week entered:', day);
+    if (day != 'Monday' && day != 'Tuesday' && day != 'Wednesday'
+        && day != 'Thursday' && day != 'Friday' && day != 'Saturday'
+        && day != 'Sunday') {
+            cancelEdit(button);
+            alert('Please enter a valid day of the week');
+            return;
+        }
 
+    // grab and verify valid input for start time
+    var start_time = currentRow.item(2).innerText;
+    if (start_time.length < 7 || start_time.length > 8) {
+        cancelEdit(button);
+        alert('Please enter a valid start time in the format hh:mm:ss (24-hour clock)');
+        return;
+    }
+
+    // grab and verify valid input for end time
+    var end_time = currentRow.item(3).innerText;
+    if (end_time.length < 7 || end_time.length > 8) {
+        cancelEdit(button);
+        alert('Please enter a valid end time in the format hh:mm:ss (24-hour clock)');
+        return;
+    }
+    
     var info = {
         "id": id,
         "day": day,
@@ -264,8 +324,8 @@ document.getElementById('clear-inputs').addEventListener("click", clearInputs);
 document.getElementById('insert-employee-shift').addEventListener("click", assignShift);
 document.getElementById('clear-assign-inputs').addEventListener("click", clearAssignInputs);
 
-document.getElementById('save-update').addEventListener("click", updateShift);
-document.getElementById('clear-update').addEventListener("click", closeUpdateForm);
+// document.getElementById('save-update').addEventListener("click", updateShift);
+// document.getElementById('clear-update').addEventListener("click", closeUpdateForm);
 
 // add event listeners to all 'view employees' buttons
 var num_buttons = document.getElementsByClassName('view-employees').length;
@@ -282,9 +342,9 @@ for (var i = 0; i < num_buttons; i++) {
 }
 
 // add event listeners to all 'update' buttons
-var num_buttons = document.getElementsByClassName('show-update').length;
-var buttons = document.getElementsByClassName('show-update');
-for (var i = 0; i < num_buttons; i++) {
-    buttons[i].addEventListener("click", showUpdateForm);
-}
+// var num_buttons = document.getElementsByClassName('show-update').length;
+// var buttons = document.getElementsByClassName('show-update');
+// for (var i = 0; i < num_buttons; i++) {
+//     buttons[i].addEventListener("click", showUpdateForm);
+// }
 

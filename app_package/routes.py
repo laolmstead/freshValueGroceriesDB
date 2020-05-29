@@ -516,32 +516,14 @@ def delete_shift():
     query = """DELETE FROM `EmployeeShifts` WHERE `EmployeeID` IS NULL OR `ShiftID` IS NULL"""
     execute_query(db_connection, query)
 
-    message = 'Shift with ID ' + employee_id + ' removed from the database'
+    message = 'Shift with ID ' + shift_id + ' removed from the database'
     return make_response(message, 200)
 
 @app.route('/update-shift', methods=['POST'])
 def update_shift():
+    print("Updating Shift in database", flush=True)
     db_connection = connect_to_database()
     info = request.get_json(force=True)
-
-    # Get current customer information
-    query =  """SELECT `Day`, `StartTime`, `EndTime` 
-                FROM `Shifts` WHERE `ShiftID` = %s;"""
-    data = (info["id"],)
-    result = execute_query(db_connection, query, data).fetchall()
-    print("current shift info:", result, flush=True)
-    # result returns a tuple of tuples
-
-    # Update all 'no_update' fields to the current values
-    if info["day"] == 'no_update':
-        info["day"] = result[0][0]
-    if info["start_time"] == 'no_update':
-        info["start_time"] = result[0][1]
-    if info["end_time"] == 'no_update':
-        info["end_time"] = result[0][2]
-    print("updated info fields:", info, flush=True)
-
-    # Update the shift
     data = (info["day"], info["start_time"], info["end_time"], info["id"])
     query = """UPDATE `Shifts` 
                 SET `Day` = %s,
