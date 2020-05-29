@@ -151,7 +151,6 @@ function addToInvForm(orderItem, quantItem){
     newRow.appendChild(deleteTD);
 }
 
-// This function will have the same issue as above.
 function placeOrder() {
     var orderID;
     // get OrderID from Flask
@@ -211,49 +210,6 @@ function placeOrder() {
         });
     });
 }
-
-/* DELETE
-    var employeeID = Number(document.getElementById('employeeID').value);
-    var customerName = document.getElementById('custName').value;
-    var newOrder = {};
-
-    // make a request for customer id with the given name
-    fetch('/get-customer-id', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({"name": customerName})
-    }).then(function (response) {
-        return response.text();
-    }).then(function (text) {
-        response = JSON.parse(text);
-        if (response.length == 0) {
-            alert('Customer does not exist. \nRegister by clicking the "New Customer" button and signing up.');
-        }
-        else {
-            var customerID = Number(response[0][0]);
-
-            newOrder.CustomerID = customerID;
-            newOrder.EmployeeID = employeeID;
-        }
-
-        return newOrder;
-
-    }).then(function(newOrder) {
-        return fetch('/insert-order', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newOrder)
-        });
-    }).then(function(data) {
-        return data.text();
-    }).then(function(text) {
-        console.log('Server response', text);
-    });
-*/
 
 document.getElementById('startOrder').addEventListener("click", startOrder);
 document.getElementById('addToOrder').addEventListener("click", searchByName);
