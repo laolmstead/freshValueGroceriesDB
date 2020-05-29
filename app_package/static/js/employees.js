@@ -31,7 +31,7 @@ function generateShiftsTable(shifts) {
 
     // create a header for the table
     var title = document.createElement('h3');
-    title.innerText = "View Shifts for " + shifts[0];
+    title.innerText = "View Shifts for " + shifts[0][0] + ' (EmployeeID: ' + shifts[0][1] + ')';
     parent_div.appendChild(title);
 
     // construct table headers
@@ -367,49 +367,98 @@ function deleteEmployee(event) {
     });
 }
 
-function closeUpdateForm() {
-    var update_form = document.getElementById('update-form');
-    if (update_form.style.display === 'block') {
-        update_form.style.display = 'none';
+// Makes the cells in the table editable.
+function makeEditable(button) {
+    var td = button.parentNode;
+    var tr = td.parentNode;
+
+    // Source: https://www.golangprograms.com/highlight-and-get-the-details-of-table-row-on-click-using-javascript.html
+    var currentRow = tr.cells;
+    for (var i = 1; i < 5; i++) {
+        currentRow.item(i).contentEditable = "true";
+        currentRow.item(i).classList.add("form-cell-style");
     }
+
+    // Hide Update Button and Show Submit button.
+    var updateButton = currentRow.item(6).childNodes[1];
+    updateButton.style.display = 'none';
+    var submitButton = currentRow.item(6).childNodes[3];
+    submitButton.style.display = 'block';
+
+    // Hide Delete Button and Show Cancel Button.
+    var deleteButton = currentRow.item(7).childNodes[1];
+    deleteButton.style.display = 'none';
+    var cancelButton = currentRow.item(7).childNodes[3];
+    cancelButton.style.display = 'block';
 }
 
-function showUpdateForm(event) {
-    var update_form = document.getElementById('update-form');
-    if (update_form.style.display === 'block') {
-        update_form.style.display = 'none';
-    }
-    else {
-        update_form.style.display = 'block';
-        name = event.target.parentNode.parentNode.children[1].innerText;
-        id = event.target.parentNode.parentNode.children[0].innerText;
-        update_form.children[0].innerText = 'Update form for ' + name + ' (EmployeeID: ' + id + ')';
-        var update_id = document.getElementById('update-id');
-        update_id.innerText = id;
-    }
+// Cancels table edit.
+function cancelEdit(button) {
+	var td = button.parentNode;
+	var tr = td.parentNode;
+
+	// Remove cell's editability.
+	var currentRow = tr.cells;
+	for (var i = 1; i < 5; i++) {
+		currentRow.item(i).contentEditable = "false";
+		currentRow.item(i).classList.remove("form-cell-style");
+	}
+
+	// Show Update Button and Hide Submit button.
+	var updateButton = currentRow.item(6).childNodes[1];
+	updateButton.style.display = 'block';
+	var submitButton = currentRow.item(6).childNodes[3];
+	submitButton.style.display = 'none';
+
+	// Show Delete Button and Hide Cancel Button.
+	var deleteButton = currentRow.item(7).childNodes[1];
+	deleteButton.style.display = 'block';
+	var cancelButton = currentRow.item(7).childNodes[3];
+	cancelButton.style.display = 'none';
+
+	window.location.reload();
 }
 
-function updateEmployee(event) {
-    var id = event.target.parentNode.parentNode.parentNode.children[2].innerText;
-    console.log('Updating employee with id:', id);
+// Submit data to the server to update the database
+function submitEdit(button) {
+	var td = button.parentNode;
+	var tr = td.parentNode;
+	var currentRow = tr.cells;
 
-    var name = document.getElementById('update-name').value;
-    var wage = document.getElementById('update-wage').value;
-    var sick_days = document.getElementById('update-sick-days').value;
-    var duties = document.getElementById('update-duties').value;
+    var id = currentRow.item(0).innerText;
+    var name = currentRow.item(1).innerText;
+    var duties = currentRow.item(3).innerText;
+
+    // verify wage is a float
+    var wage = currentRow.item(2).innerText;
+    if (isNaN(wage)) {
+        cancelEdit(button);
+        alert('Please enter a valid decimal value for hourly wage');
+        return;
+    }
     
-    if (!name && !wage && !sick_days && !duties) return;
-    if (!name) name = 'no_update';
-    if (!wage) wage = 'no_update';
-    if (!sick_days) sick_days = 'no_update';
-    if (!duties) duties = 'no_update';
-
+    // verify sick_days is an int
+    var sick_days = currentRow.item(4).innerText;
+    if (isNaN(sick_days)) {
+        cancelEdit(button);
+        alert('Please enter a valid integer for number of sick days');
+        return;
+    }
+    else if (!isNaN(sick_days)) {
+        var is_num = Number(sick_days)
+        if (!is_num) {
+            cancelEdit(button);
+            alert('Please enter a valid integer for number of sick days');
+            return;
+        }
+    }
+    
     var info = {
         "id": id,
         "name": name,
         "wage": wage,
-        "sick_days": sick_days,
-        "duties": duties
+        "duties": duties,
+        "sick_days": sick_days
     }
     console.log('Updated employee info:', info);
 
@@ -438,9 +487,6 @@ document.getElementById('submit-search').addEventListener("click", searchEmploye
 document.getElementById('insert-employee').addEventListener("click", insertNewEmployee);
 document.getElementById('clear-inputs').addEventListener("click", clearInputs);
 
-document.getElementById('save-update').addEventListener("click", updateEmployee);
-document.getElementById('clear-update').addEventListener("click", closeUpdateForm);
-
 // add event listeners to all 'view shifts' buttons
 var num_buttons = document.getElementsByClassName('view-shifts').length;
 var buttons = document.getElementsByClassName('view-shifts');
@@ -455,11 +501,5 @@ for (var i = 0; i < num_buttons; i++) {
     buttons[i].addEventListener("click", deleteEmployee);
 }
 
-// add event listeners to all 'update' buttons
-var num_buttons = document.getElementsByClassName('show-update').length;
-var buttons = document.getElementsByClassName('show-update');
-for (var i = 0; i < num_buttons; i++) {
-    buttons[i].addEventListener("click", showUpdateForm);
-}
 
 
