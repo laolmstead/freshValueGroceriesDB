@@ -44,34 +44,6 @@
     <div id="shifts-table"></div>
     <div id="search-results"></div>
 
-    <div id="update-form" style="display: none">
-        <h3></h3>
-        <p> Enter information in the fields you want to update. All else remains the same. </p>
-        <p id="update-id" style="display: none"></p>
-        <form>
-            <div class="form-row add-form-row">
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Name" id="update-name">
-                </div>
-                <div class="col">
-                    <input type="number" class="form-control" placeholder="Hourly Wage" id="update-wage">
-                </div>
-                <div class="col">
-                    <input type="number" class="form-control" placeholder="Sick Days" id="update-sick-days">
-                </div>
-            </div>
-            <div class="form-row add-form-row">
-                <div class="col">
-                    <input type="text" class="form-control" placeholder="Work Responsibilities" id="update-duties">
-                </div>
-            </div>
-            <div>
-                <button type="button" class="btn btn-primary" id="save-update"> Save </button>
-                <button type="button" class="btn btn-danger" id="clear-update"> Cancel </button>
-            </div>
-        </form>
-    </div>
-
     <div>
         <h3> Employee Information </h3>
         <table class="table">
@@ -88,18 +60,30 @@
                 {% for row in rows %}
                     <tr>
                         <td> {{ row[0] }} </td>
-                        <td> {{ row[1] }} </td>
-                        <td> {{ row[2] }} </td>
-                        <td> {{ row[3] }} </td>
-                        <td> {{ row[4] }} </td>
+                        <td contenteditable="false"> {{ row[1] }} </td>
+                        <td contenteditable="false"> {{ row[2] }} </td>
+                        <td contenteditable="false"> {{ row[3] }} </td>
+                        <td contenteditable="false"> {{ row[4] }} </td>
                         <td>
                             <button type="button" class="btn btn-primary view-shifts"> 
                                 View Shifts 
                             </button>
                         </td>
+                        <td>
+                            <button type="button" class="btn btn-success" onclick="makeEditable(this)" style="display:block"> 
+                                Update
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="submitEdit(this)" style="display:none">
+                                Submit
+                            </button>
+                        </td>
                         <td> 
-                            <button type="button" class="btn btn-success show-update"> Update </button> 
-                            <button type="button" class="btn btn-danger delete"> Delete </button> 
+                            <button type="button" class="btn btn-danger delete"> 
+                                Delete 
+                            </button>
+                            <button type="button" class="btn btn-danger" onclick="cancelEdit(this)" style="display:none">
+                                Cancel
+                            </button>
                         </td>
                     </tr>
                 {% endfor %}

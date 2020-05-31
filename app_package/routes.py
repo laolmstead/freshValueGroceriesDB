@@ -379,27 +379,6 @@ def delete_employee():
 def update_employee():
     db_connection = connect_to_database()
     info = request.get_json(force=True)
-
-    # Get current employee information
-    query =  """SELECT `Name`, `HourlyWage`, `Responsibilities`, 
-                `SickDays` FROM `Employees` WHERE `EmployeeID` = %s;"""
-    data = (info["id"],)
-    result = execute_query(db_connection, query, data).fetchall()
-    print("current employee info:", result, flush=True)
-    # result returns a tuple of tuples
-
-    # Update all 'no_update' fields to the current values
-    if info["name"] == 'no_update':
-        info["name"] = result[0][0]
-    if info["wage"] == 'no_update':
-        info["wage"] = result[0][1]
-    if info["duties"] == 'no_update':
-        info["duties"] = result[0][2]
-    if info["sick_days"] == 'no_update':
-        info["sick_days"] = result[0][3]
-    print("updated info fields:", info, flush=True)
-
-    # Update the employee
     data = (info["name"], info["wage"], info["duties"], info["sick_days"], info["id"])
     query = """UPDATE `Employees` 
                 SET `Name` = %s,
@@ -517,32 +496,14 @@ def delete_shift():
     query = """DELETE FROM `EmployeeShifts` WHERE `EmployeeID` IS NULL OR `ShiftID` IS NULL"""
     execute_query(db_connection, query)
 
-    message = 'Shift with ID ' + employee_id + ' removed from the database'
+    message = 'Shift with ID ' + shift_id + ' removed from the database'
     return make_response(message, 200)
 
 @app.route('/update-shift', methods=['POST'])
 def update_shift():
+    print("Updating Shift in database", flush=True)
     db_connection = connect_to_database()
     info = request.get_json(force=True)
-
-    # Get current customer information
-    query =  """SELECT `Day`, `StartTime`, `EndTime` 
-                FROM `Shifts` WHERE `ShiftID` = %s;"""
-    data = (info["id"],)
-    result = execute_query(db_connection, query, data).fetchall()
-    print("current shift info:", result, flush=True)
-    # result returns a tuple of tuples
-
-    # Update all 'no_update' fields to the current values
-    if info["day"] == 'no_update':
-        info["day"] = result[0][0]
-    if info["start_time"] == 'no_update':
-        info["start_time"] = result[0][1]
-    if info["end_time"] == 'no_update':
-        info["end_time"] = result[0][2]
-    print("updated info fields:", info, flush=True)
-
-    # Update the shift
     data = (info["day"], info["start_time"], info["end_time"], info["id"])
     query = """UPDATE `Shifts` 
                 SET `Day` = %s,
