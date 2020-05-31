@@ -113,6 +113,7 @@ def update_customer():
 ################################################
 # Orders
 ################################################
+
 @app.route('/orders')
 def orders_page():
     print('Fetching and rendering Orders page', flush=True)
@@ -195,6 +196,7 @@ def customerOrder_page():
     print('Fetching and rendering Customer Orders ')
     return render_template('customerOrder.html')
 
+
 @app.route('/get-customer-id', methods=['POST'])
 def get_customer_id():
     print('Fetching customer id', flush=True)
@@ -219,7 +221,6 @@ def insert_order():
     execute_query(db_connection, query, data)
     return make_response('Order added!', 200)
 
-###### NOT WORKING #####
 @app.route('/get-order-id', methods=['POST'])
 def get_order_id():
     print('Get more recent order id from database', flush=True)
@@ -612,17 +613,25 @@ def delete_inventory():
 def inventoryOrder_page():
     return render_template('inventoryOrder.html')
 
+@app.route('/orders-inv-dropdown', methods=['POST'])
+def orders_inv_dropdown():
+    print('Fetching List of Inventory names')
+    db_connection = connect_to_database()
+    query = """SELECT Name FROM `Inventory` ORDER BY Name ASC;"""
+    result = execute_query(db_connection, query).fetchall()
+    print('Inventory name results')
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
 @app.route('/search-inventory-item', methods=['POST'])
 def search_inventory_item():
     print('Fetching and rendering Inventory page', flush=True)
     db_connection = connect_to_database()
     search_term = request.get_json(force=True)["name"]
-    query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost
+    query = """SELECT PLU, Name, Description, UnitCost
                 FROM Inventory
-                JOIN OrderItems on OrderItems.PLU = Inventory.PLU
-                JOIN Orders on OrderItems.OrderID = Orders.OrderID
-                AND Inventory.Name = %s;"""
-    data = (search_term)
+                WHERE Name LIKE %s
+                ORDER BY Name;"""
+    data = ("%" + search_term + "%")
     result = execute_query(db_connection, query, data).fetchall()
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
