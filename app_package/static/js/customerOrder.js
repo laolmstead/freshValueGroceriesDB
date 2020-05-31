@@ -1,7 +1,110 @@
+// Create a dropdown menu for Customer Name search.
+function customerDropdown() {
+    // Get all of the Inventory IDs and names to populate dropdown.
+    fetch('/customer-order-dropdown', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        response = JSON.parse(text);
+        if (response.length == 0) {
+            alert('No Customers by that name exist.');
+        }
+        else {
+            for (var i = 0; i < response.length; i++) {
+                var value = response[i][0];
+                if (value) {
+                    var select = document.getElementById("customerDropdown");
+                    var option = document.createElement("option");
+                    select.appendChild(option);
+                    option.text = value;
+                    select.add(option);
+                }
+            }
+        }
+    })
+}
+
+// Create a dropdown menu for Customer Name search.
+function employeeDropdown() {
+    // Get all of the Inventory IDs and names to populate dropdown.
+    fetch('/employee-order-dropdown', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        response = JSON.parse(text);
+        if (response.length == 0) {
+            alert('No Employees with that ID exist.');
+        }
+        else {
+            for (var i = 0; i < response.length; i++) {
+                var value = response[i][0];
+                if (value) {
+                    var select = document.getElementById("employeeDropdown");
+                    var option = document.createElement("option");
+                    select.appendChild(option);
+                    option.text = value;
+                    select.add(option);
+                }
+            }
+        }
+    })
+}
+
+// Create a dropdown menu for Item Name search.
+function inventoryDropdown() {
+    // Get all of the Inventory IDs and names to populate dropdown.
+    input = "Get Inventory names"
+    fetch('/cust-order-inv-dropdown', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"message": input})
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        response = JSON.parse(text);
+        if (response.length == 0) {
+            alert('No Inventory items available.');
+        }
+        else {
+            for (var i = 0; i < response.length; i++) {
+                var value = response[i][0];
+                if (value) {
+                    var select = document.getElementById("inventoryDropdown");
+                    var option = document.createElement("option");
+                    select.appendChild(option);
+                    console.log(value);
+                    option.text = value;
+                    select.add(option);
+                }
+            }
+        }
+    })
+}
+
+// Start a new customer order by getting Customer Info and Employee Info if applicable.
 function startOrder() {
-    var employeeID = Number(document.getElementById('employeeID').value);
-    var customerName = document.getElementById('custName').value;
+    var employeeID = Number(document.getElementById('employeeDropdown').value);
+    var customerName = document.getElementById('customerDropdown').value;
     var newOrder = {};
+
+    var existingCustomer = document.getElementById("startOrderForm");
+    existingCustomer.style.display = 'none';
+
+    var getHeader = document.getElementById("insertHeader");
+    getHeader.innerText = "Hello, " + customerName + "! Add items to your order below."
+
+    var addItems = document.getElementById("addItems");
+    addItems.style.display = 'block';
 
     // make a request for customer id with the given name
     fetch('/get-customer-id', {
@@ -23,10 +126,9 @@ function startOrder() {
             newOrder.CustomerID = customerID;
             newOrder.EmployeeID = employeeID;
         }
-
         return newOrder;
-
     }).then(function(newOrder) {
+
         return fetch('/insert-order', {
             method: 'POST',
             headers: {
@@ -45,36 +147,43 @@ function startOrder() {
 function searchByName() {
     var quantity = document.getElementById('quantity').value;
     document.getElementById('quantity').value = '';
-    var input = document.getElementById('item').value;
-    document.getElementById('item').value = '';
+    var input = document.getElementById('inventoryDropdown').value;
 
     console.log("Searching for " + input + ".");
     console.log("Required quantity " + quantity);
 
-    // make a request for inventory with the given name
-    fetch('/search-order-item', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({"name": input})
-    }).then(function (response) {
-        return response.text();
-    }).then(function (text) {
-        response = JSON.parse(text);
-        console.log(response);
-        if (response.length == 0) {
-            alert('Inventory item does not exist. \nCreate new item on Inventory page before adding to order.');
-        }
-        else {
-            addToInvForm(response, quantity);
-        }
-    });
+    if (Number(quantity) < 1) {
+        alert('Quantity must be greater than zero.');
+    }
+    else {
+        // make a request for inventory with the given name
+        fetch('/search-order-item', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"name": input})
+        }).then(function (response) {
+            return response.text();
+        }).then(function (text) {
+            response = JSON.parse(text);
+            console.log(response);
+            if (response.length == 0) {
+                alert('Inventory item does not exist. \nCreate new item on Inventory page before adding to order.');
+            }
+            else {
+                addToInvForm(response, quantity);
+            }
+        });
+    }
 }
 
 
 // Add item to order form.
 function addToInvForm(orderItem, quantItem){
+    var orderList = document.getElementById('orderList');
+    orderList.style.display = 'block';
+
     var addTable = document.getElementById('orderTable');
 
     var newRow = document.createElement("TR");
@@ -174,11 +283,14 @@ function placeOrder() {
             return response.text();
         }).then(function (text) {
             console.log('Server response:', text);
-            window.location.reload(); 
+            window.location.reload();
         });
     });
 }
 
+customerDropdown();
+employeeDropdown();
+inventoryDropdown();
 document.getElementById('startOrder').addEventListener("click", startOrder);
 document.getElementById('addToOrder').addEventListener("click", searchByName);
 document.getElementById('placeOrder').addEventListener("click", placeOrder);

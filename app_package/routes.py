@@ -196,7 +196,6 @@ def customerOrder_page():
     print('Fetching and rendering Customer Orders ')
     return render_template('customerOrder.html')
 
-
 @app.route('/get-customer-id', methods=['POST'])
 def get_customer_id():
     print('Fetching customer id', flush=True)
@@ -235,9 +234,11 @@ def search_order_item():
     print('Fetching and rendering Order page', flush=True)
     db_connection = connect_to_database()
     search_term = request.get_json(force=True)["name"]
-    query = """SELECT Inventory.PLU, Inventory.Name, Inventory.Description, Inventory.UnitCost
-                FROM Inventory WHERE Inventory.Name = %s;"""
-    data = (search_term)
+    query = """SELECT PLU, Name, Description, UnitCost
+                FROM Inventory
+                WHERE Name LIKE %s
+                ORDER BY Name;"""
+    data = ("%" + search_term + "%")
     result = execute_query(db_connection, query, data).fetchall()
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
@@ -257,6 +258,33 @@ def place_order():
         data = (quantity, order_id, plu)
         execute_query(db_connection, query, data)
     return make_response('Order added!', 200)
+
+@app.route('/customer-order-dropdown', methods=['POST'])
+def customer_order_dropdown():
+    print('Fetching List of Customer names')
+    db_connection = connect_to_database()
+    query = """SELECT Name FROM `Customers` ORDER BY Name;"""
+    result = execute_query(db_connection, query).fetchall()
+    print('Customer name results')
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/employee-order-dropdown', methods=['POST'])
+def employee_order_dropdown():
+    print('Fetching List of Employee names')
+    db_connection = connect_to_database()
+    query = """SELECT EmployeeID FROM `Employees`;"""
+    result = execute_query(db_connection, query).fetchall()
+    print('Employee name results')
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/cust-order-inv-dropdown', methods=['POST'])
+def cust_order_inv_dropdown():
+    print('Fetching List of Inventory names')
+    db_connection = connect_to_database()
+    query = """SELECT Name FROM Inventory;"""
+    result = execute_query(db_connection, query).fetchall()
+    print('Inventory name results')
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
 ################################################
 # Employees

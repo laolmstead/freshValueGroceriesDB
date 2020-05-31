@@ -17,12 +17,15 @@ function dropdownMenu() {
         }
         else {
             for (var i = 0; i < response.length; i++) {
-                var select = document.getElementById("dropdown");
-                var option = document.createElement("option");
-                select.appendChild(option);
-                console.log(response[i]);
-                option.text = response[i];
-                select.add(option);
+                var value = response[i][0];
+                if (value) {
+                    var select = document.getElementById("dropdown");
+                    var option = document.createElement("option");
+                    select.appendChild(option);
+                    console.log(value);
+                    option.text = value;
+                    select.add(option);
+                }
             }
         }
     })
