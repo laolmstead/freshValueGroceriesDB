@@ -9,17 +9,6 @@ function displaySearch(){
 	}
  }
 
- // Display either add or search form based on which button is clicked.
-/*function displayOrders(){
-	var order = document.getElementById('orderDetails');
-	if (order.style.display === 'block') {
-		order.style.display = 'none';
-	}
-	else {
-		order.style.display = 'block';
-	}
- }*/
-
 
 function makeTable(input, orderInfo) {
     var searchResultsDiv = document.getElementById('searchResults');
@@ -73,8 +62,8 @@ function makeTable(input, orderInfo) {
 // Closes Search Results Table
 function closeSearchResultsTable(event) {
     var parent_div = event.target.parentNode;
-    // 3 items: header, table, close button
-    for (var i = 0; i < 3; i++) {
+    // 2 items: div, close button
+    for (var i = 0; i < 2; i++) {
         parent_div.removeChild(parent_div.lastChild);
     }
 }
@@ -192,6 +181,103 @@ function searchOrders() {
     else {
         console.log('invalid search mode');
     }
+}
+
+// Make the cells editable so that UPDATE can be implemented.
+function makeEditable(button) {
+    var td = button.parentNode;
+    var tr = td.parentNode;
+
+    var currentRow = tr.cells;
+    currentRow.item(4).contentEditable = "true";
+    currentRow.item(4).classList.add("form-cell-style");
+
+    // Hide Update Button and Show Submit button.
+    var updateButton = currentRow.item(7).childNodes[1];
+    updateButton.style.display = 'none';
+    var submitButton = currentRow.item(7).childNodes[3];
+    submitButton.style.display = 'block';
+
+    // Hide Delete Button and Show Cancel Button.
+    var deleteButton = currentRow.item(8).childNodes[1];
+    deleteButton.style.display = 'none';
+    var cancelButton = currentRow.item(8).childNodes[3];
+    cancelButton.style.display = 'block';
+}
+
+// Cancels table edit.
+function cancelEdit(button) {
+    var td = button.parentNode;
+    var tr = td.parentNode;
+
+    // Remove cell's editability.
+    var currentRow = tr.cells;
+    currentRow.item(4).contentEditable = "false";
+    currentRow.item(4).classList.remove("form-cell-style");
+
+    // Show Update Button and Hide Submit button.
+    var updateButton = currentRow.item(7).childNodes[1];
+    updateButton.style.display = 'block';
+    var submitButton = currentRow.item(7).childNodes[3];
+    submitButton.style.display = 'none';
+
+    // Show Delete Button and Hide Cancel Button.
+    var deleteButton = currentRow.item(8).childNodes[1];
+    deleteButton.style.display = 'block';
+    var cancelButton = currentRow.item(8).childNodes[3];
+    cancelButton.style.display = 'none';
+
+    window.location.reload();
+}
+
+// Submit data to be updated to server.
+function submitEdit(button) {
+    var td = button.parentNode;
+    var tr = td.parentNode;
+    var currentRow = tr.cells;
+
+    var id = currentRow.item(6).innerHTML;
+    var quantity = currentRow.item(4).innerHTML;
+
+    var info = {
+        "id": Number(id),
+        "quantity": Number(quantity)
+    }
+
+    fetch('/update-orders', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(info)
+    }).then(function(response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('Server response:', text);
+        window.location.reload();
+    });
+}
+
+// Delete data from server.
+function deleteInventory(button) {
+    var td = button.parentNode;
+    var tr = td.parentNode;
+    var currentRow = tr.cells;
+
+    var id = currentRow.item(6).innerHTML;
+
+    fetch('/delete-order-item', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({"info": id})
+    }).then(function(response) {
+        return response.text();
+    }).then(function (text) {
+        console.log('Server response:', text);
+        window.location.reload();
+    });
 }
 
 //document.getElementById('add').addEventListener("click", displayAdd);

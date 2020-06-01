@@ -28,7 +28,7 @@ function insertNewInventory() {
 	});
 }
 
-// Makes the cells editable.
+// Makes the cells editable so that UPDATE can be implemented.
 function makeEditable(button) {
 	var td = button.parentNode;
 	var tr = td.parentNode;
@@ -65,7 +65,7 @@ function cancelEdit(button) {
 		currentRow.item(i).classList.remove("form-cell-style");
 	}
 
-	// Hide Submit Button and Hide Submit button.
+	// Show Update Button and Hide Submit button.
 	var updateButton = currentRow.item(5).childNodes[1];
 	updateButton.style.display = 'block';
 	var submitButton = currentRow.item(5).childNodes[3];

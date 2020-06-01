@@ -118,7 +118,7 @@ def update_customer():
 def orders_page():
     print('Fetching and rendering Orders page', flush=True)
     db_connection = connect_to_database()
-    query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
+    query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity), OrderItems.OrderItemID AS `Total`
                 FROM Inventory
                 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
                 JOIN Orders on OrderItems.OrderID = Orders.OrderID
@@ -190,6 +190,38 @@ def search_orders_by_employee():
     result = execute_query(db_connection, query, data).fetchall()
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/update-orders', methods=['POST'])
+def update_orders():
+    print("Updating OrderItems in database", flush=True)
+    db_connection = connect_to_database()
+    OrderItemID = request.get_json(force=True)['id']
+    quantity = int(request.get_json(force=True)['quantity'])
+
+    # Update Quantity of items ordered
+    query = """UPDATE `OrderItems`
+            SET
+                `Quantity` = %s
+            WHERE
+                `OrderItemID` = %s;"""
+    data = (quantity, OrderItemID)
+    execute_query(db_connection, query, data)
+    return make_response('Inventory added!', 200)
+
+@app.route('/delete-order-item', methods=['POST'])
+def delete_order_item():
+    print("Deleting OrderItems from database", flush=True)
+    db_connection = connect_to_database()
+    OrderItemID = request.get_json(force=True)["info"]
+    print("id:", OrderItemID)
+    query = """DELETE FROM `OrderItems` WHERE `OrderItemID` = %s;"""
+    data = (OrderItemID,)
+    execute_query(db_connection, query, data)
+    return make_response('OrderItem deleted!', 200)
+
+
+
+
 
 @app.route('/customerOrder')
 def customerOrder_page():
