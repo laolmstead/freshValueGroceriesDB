@@ -30,14 +30,12 @@
       </select>
       <div class="form-row">
         <div class="col-10 mb-3">
-          <input type="text" class="form-control" id="searchInput" placeholder="Enter ID">
-        </div>
-        <div class="col btn-group mb-3" aria-label="...">
-          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#" id="showOrders">
-              Submit
-          </button>
+          <input type="text" class="form-control" id="searchInput">
         </div>
       </div>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#" id="showOrders"> 
+            Submit
+        </button>
     </div>
   </div>
 
@@ -49,13 +47,14 @@
     <br/>
     <h2> All Orders </h2>
     <table class="table">
-        <thead> 
+        <thead>
             <th>ORDER ID</th>
             <th>ITEM</th>
             <th>DESCRIPTION</th>
             <th>UNIT COST</th>
             <th>QUANTITY</th>
             <th>COST</th>
+            <th style="display:none">ORDERITEM ID</th>
             <th></th>
             <th></th>
         </thead> 
@@ -66,16 +65,23 @@
                 <td> {{ item[1] }} </td>
                 <td> {{ item[2] }} </td>
                 <td> {{ item[3] }} </td>
-                <td> {{ item[4] }} </td>
+                <td contenteditable="false"> {{ item[4] }} </td>
                 <td> {{ item[5] }} </td>
+                <td style="display:none"> {{ item[6] }} </td>
                 <td> 
-                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#"> 
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#" onclick="makeEditable(this)" style="display:block"> 
                     Update
+                  </button>
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#" onclick="submitEdit(this)" style="display:none">
+                    Submit
                   </button>
                 </td>
                 <td>
-                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#">
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#" onclick="deleteInventory(this)" style="display:block">
                     Delete
+                  </button>
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#" onclick="cancelEdit(this)" style="display:none">
+                    Cancel
                   </button>
                 </td>
             </tr>

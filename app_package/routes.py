@@ -94,11 +94,12 @@ def update_customer():
 ################################################
 # Orders
 ################################################
+
 @app.route('/orders')
 def orders_page():
     print('Fetching and rendering Orders page', flush=True)
     db_connection = connect_to_database()
-    query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
+    query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity), OrderItems.OrderItemID AS `Total`
                 FROM Inventory
                 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
                 JOIN Orders on OrderItems.OrderID = Orders.OrderID
@@ -171,6 +172,38 @@ def search_orders_by_employee():
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
+@app.route('/update-orders', methods=['POST'])
+def update_orders():
+    print("Updating OrderItems in database", flush=True)
+    db_connection = connect_to_database()
+    OrderItemID = request.get_json(force=True)['id']
+    quantity = int(request.get_json(force=True)['quantity'])
+
+    # Update Quantity of items ordered
+    query = """UPDATE `OrderItems`
+            SET
+                `Quantity` = %s
+            WHERE
+                `OrderItemID` = %s;"""
+    data = (quantity, OrderItemID)
+    execute_query(db_connection, query, data)
+    return make_response('Inventory added!', 200)
+
+@app.route('/delete-order-item', methods=['POST'])
+def delete_order_item():
+    print("Deleting OrderItems from database", flush=True)
+    db_connection = connect_to_database()
+    OrderItemID = request.get_json(force=True)["info"]
+    print("id:", OrderItemID)
+    query = """DELETE FROM `OrderItems` WHERE `OrderItemID` = %s;"""
+    data = (OrderItemID,)
+    execute_query(db_connection, query, data)
+    return make_response('OrderItem deleted!', 200)
+
+
+
+
+
 @app.route('/customerOrder')
 def customerOrder_page():
     print('Fetching and rendering Customer Orders ')
@@ -200,7 +233,6 @@ def insert_order():
     execute_query(db_connection, query, data)
     return make_response('Order added!', 200)
 
-###### NOT WORKING #####
 @app.route('/get-order-id', methods=['POST'])
 def get_order_id():
     print('Get more recent order id from database', flush=True)
@@ -215,9 +247,11 @@ def search_order_item():
     print('Fetching and rendering Order page', flush=True)
     db_connection = connect_to_database()
     search_term = request.get_json(force=True)["name"]
-    query = """SELECT Inventory.PLU, Inventory.Name, Inventory.Description, Inventory.UnitCost
-                FROM Inventory WHERE Inventory.Name = %s;"""
-    data = (search_term)
+    query = """SELECT PLU, Name, Description, UnitCost
+                FROM Inventory
+                WHERE Name LIKE %s
+                ORDER BY Name;"""
+    data = ("%" + search_term + "%")
     result = execute_query(db_connection, query, data).fetchall()
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
@@ -237,6 +271,33 @@ def place_order():
         data = (quantity, order_id, plu)
         execute_query(db_connection, query, data)
     return make_response('Order added!', 200)
+
+@app.route('/customer-order-dropdown', methods=['POST'])
+def customer_order_dropdown():
+    print('Fetching List of Customer names')
+    db_connection = connect_to_database()
+    query = """SELECT Name FROM `Customers` ORDER BY Name;"""
+    result = execute_query(db_connection, query).fetchall()
+    print('Customer name results')
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/employee-order-dropdown', methods=['POST'])
+def employee_order_dropdown():
+    print('Fetching List of Employee names')
+    db_connection = connect_to_database()
+    query = """SELECT EmployeeID FROM `Employees`;"""
+    result = execute_query(db_connection, query).fetchall()
+    print('Employee name results')
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+@app.route('/cust-order-inv-dropdown', methods=['POST'])
+def cust_order_inv_dropdown():
+    print('Fetching List of Inventory names')
+    db_connection = connect_to_database()
+    query = """SELECT Name FROM Inventory;"""
+    result = execute_query(db_connection, query).fetchall()
+    print('Inventory name results')
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
 ################################################
 # Employees
@@ -554,17 +615,25 @@ def delete_inventory():
 def inventoryOrder_page():
     return render_template('inventoryOrder.html')
 
+@app.route('/orders-inv-dropdown', methods=['POST'])
+def orders_inv_dropdown():
+    print('Fetching List of Inventory names')
+    db_connection = connect_to_database()
+    query = """SELECT Name FROM `Inventory` ORDER BY Name ASC;"""
+    result = execute_query(db_connection, query).fetchall()
+    print('Inventory name results')
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
 @app.route('/search-inventory-item', methods=['POST'])
 def search_inventory_item():
     print('Fetching and rendering Inventory page', flush=True)
     db_connection = connect_to_database()
     search_term = request.get_json(force=True)["name"]
-    query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost
+    query = """SELECT PLU, Name, Description, UnitCost
                 FROM Inventory
-                JOIN OrderItems on OrderItems.PLU = Inventory.PLU
-                JOIN Orders on OrderItems.OrderID = Orders.OrderID
-                AND Inventory.Name = %s;"""
-    data = (search_term)
+                WHERE Name LIKE %s
+                ORDER BY Name;"""
+    data = ("%" + search_term + "%")
     result = execute_query(db_connection, query, data).fetchall()
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
