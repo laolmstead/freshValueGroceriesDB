@@ -82,25 +82,6 @@ def delete_customer():
 def update_customer():
     db_connection = connect_to_database()
     info = request.get_json(force=True)
-
-    # Get current customer information
-    query =  """SELECT `Name`, `PhoneNumber`, `RewardsPts` 
-                FROM `Customers` WHERE `CustomerID` = %s;"""
-    data = (info["id"],)
-    result = execute_query(db_connection, query, data).fetchall()
-    print("current customer info:", result, flush=True)
-    # result returns a tuple of tuples
-
-    # Update all 'no_update' fields to the current values
-    if info["name"] == 'no_update':
-        info["name"] = result[0][0]
-    if info["phone"] == 'no_update':
-        info["phone"] = result[0][1]
-    if info["points"] == 'no_update':
-        info["points"] = result[0][2]
-    print("updated info fields:", info, flush=True)
-
-    # Update the customer
     data = (info["name"], info["phone"], info["points"], info["id"])
     query = """UPDATE `Customers` 
             SET `Name` = %s,

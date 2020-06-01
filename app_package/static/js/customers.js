@@ -229,43 +229,78 @@ function deleteCustomer(event) {
     });
 }
 
-function showUpdateForm(event) {
-    var update_form = document.getElementById('update-form');
-    if (update_form.style.display === 'block') {
-        update_form.style.display = 'none';
+// Makes the cells in the table editable.
+function makeEditable(button) {
+    var td = button.parentNode;
+    var tr = td.parentNode;
+
+    // Source: https://www.golangprograms.com/highlight-and-get-the-details-of-table-row-on-click-using-javascript.html
+    var currentRow = tr.cells;
+    for (var i = 1; i < 4; i++) {
+        currentRow.item(i).contentEditable = "true";
+        currentRow.item(i).classList.add("form-cell-style");
     }
-    else {
-        update_form.style.display = 'block';
-        name = event.target.parentNode.parentNode.children[1].innerText;
-        id = event.target.parentNode.parentNode.children[0].innerText;
-        update_form.children[0].innerText = 'Update form for ' + name + ' (CustomerID: ' + id + ')';
-        var update_id = document.getElementById('update-id');
-        update_id.innerText = id;
-    }
+
+    // Hide Update Button and Show Submit button.
+    var updateButton = currentRow.item(4).childNodes[1];
+    updateButton.style.display = 'none';
+    var submitButton = currentRow.item(4).childNodes[3];
+    submitButton.style.display = 'block';
+
+    // Hide Delete Button and Show Cancel Button.
+    var deleteButton = currentRow.item(5).childNodes[1];
+    deleteButton.style.display = 'none';
+    var cancelButton = currentRow.item(5).childNodes[3];
+    cancelButton.style.display = 'block';
 }
 
-function closeUpdateForm() {
-    var update_form = document.getElementById('update-form');
-    if (update_form.style.display === 'block') {
-        update_form.style.display = 'none';
-    }
+// Cancels table edit.
+function cancelEdit(button) {
+	var td = button.parentNode;
+	var tr = td.parentNode;
+
+	// Remove cell's editability.
+	var currentRow = tr.cells;
+	for (var i = 1; i < 4; i++) {
+		currentRow.item(i).contentEditable = "false";
+		currentRow.item(i).classList.remove("form-cell-style");
+	}
+
+	// Show Update Button and Hide Submit button.
+	var updateButton = currentRow.item(4).childNodes[1];
+	updateButton.style.display = 'block';
+	var submitButton = currentRow.item(4).childNodes[3];
+	submitButton.style.display = 'none';
+
+	// Show Delete Button and Hide Cancel Button.
+	var deleteButton = currentRow.item(5).childNodes[1];
+	deleteButton.style.display = 'block';
+	var cancelButton = currentRow.item(5).childNodes[3];
+	cancelButton.style.display = 'none';
+
+	window.location.reload();
 }
 
-function updateCustomer(event) {
-    var customer_id = event.target.parentNode.parentNode.parentNode.children[2].innerText;
-    console.log('Updating customer with id:', customer_id);
+// Submit data to the server to update the database
+function submitEdit(button) {
+	var td = button.parentNode;
+	var tr = td.parentNode;
+	var currentRow = tr.cells;
 
-    var name = document.getElementById('update-name').value;
-    var phone = document.getElementById('update-phone').value;
-    var points = document.getElementById('update-pts').value;
+    var id = currentRow.item(0).innerText;
+    var name = currentRow.item(1).innerText;
+    var phone = currentRow.item(2).innerText;
+
+    // verify that points is a number
+    var points = currentRow.item(3).innerText;
+    if (isNaN(points)) {
+        cancelEdit(button);
+        alert('Please enter a valid number for rewards points');
+        return;
+    }
     
-    if (!name && !phone && !points) return;
-    if (!name) name = 'no_update';
-    if (!phone) phone = 'no_update';
-    if (!points) points = 'no_update';
-
     var info = {
-        "id": customer_id,
+        "id": id,
         "name": name,
         "phone": phone,
         "points": points
@@ -298,16 +333,6 @@ document.getElementById('search-pts').addEventListener("click", searchByPoints);
 
 document.getElementById('insert-employee').addEventListener("click", insertNewCustomer);
 document.getElementById('clear-inputs').addEventListener("click", clearInputs);
-
-document.getElementById('save-update').addEventListener("click", updateCustomer);
-document.getElementById('clear-update').addEventListener("click", closeUpdateForm);
-
-// add event listeners to all 'update' buttons
-var num_buttons = document.getElementsByClassName('show-update').length;
-var buttons = document.getElementsByClassName('show-update');
-for (var i = 0; i < num_buttons; i++) {
-    buttons[i].addEventListener("click", showUpdateForm);
-}
 
 // add event listeners to all 'delete' buttons
 var num_buttons = document.getElementsByClassName('delete').length;
