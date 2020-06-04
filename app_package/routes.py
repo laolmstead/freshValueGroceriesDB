@@ -200,10 +200,6 @@ def delete_order_item():
     execute_query(db_connection, query, data)
     return make_response('OrderItem deleted!', 200)
 
-
-
-
-
 @app.route('/customerOrder')
 def customerOrder_page():
     print('Fetching and rendering Customer Orders ')
@@ -251,7 +247,7 @@ def search_order_item():
                 FROM Inventory
                 WHERE Name LIKE %s
                 ORDER BY Name;"""
-    data = ("%" + search_term + "%")
+    data = (["%" + search_term + "%"])
     result = execute_query(db_connection, query, data).fetchall()
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
