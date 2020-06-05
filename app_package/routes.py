@@ -575,6 +575,17 @@ def insert_new_inventory():
     execute_query(db_connection, query, data)
     return make_response('Inventory added!', 200)
 
+@app.route('/search-inventory-name', methods=['POST'])
+def search_inventory_by_name():
+    db_connection = connect_to_database()
+    search_term = request.get_json(force=True)["name"]
+    query = """SELECT PLU, Name, Description, UnitCost, Quantity FROM Inventory WHERE Name = %s;"""
+    data = (search_term,)
+    result = execute_query(db_connection, query, data).fetchall()
+    print('Query returns:', result, flush=True)
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
+
 @app.route('/update-inventory', methods=['POST'])
 def update_inventory():
     print("Updating Inventory in database", flush=True)
