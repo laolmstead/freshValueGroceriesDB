@@ -69,7 +69,7 @@ DELETE FROM `Orders` WHERE `OrderID` = :OrderID;
 /**************************************/
 
 /* Display Order Details table on Manage Orders Page when user searches by CustomerID.*/
---Variable OrderID to be passed to the database from Python/Flask app.
+--Variable Customers.CustomerID to be passed to the database from Python/Flask app.
 SELECT Orders.OrderID, Inventory.PLU, Inventory.Name, Inventory.UnitCost AS `Unit Cost`, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
 FROM Inventory
 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
@@ -79,7 +79,7 @@ AND Customers.CustomerID = :CustomerID
 ORDER BY Orders.OrderID DESC;
 
 /* Display Order Details table on Manage Orders Page when user searches by Customer Name.*/
---Variable Customer.Name to be passed to the database from Python/Flask app.
+--Variable Customers.Name to be passed to the database from Python/Flask app.
 SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
 FROM Inventory
 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
@@ -88,17 +88,27 @@ JOIN Customers on Orders.CustomerID = Customers.CustomerID
 AND Customers.Name = %s
 ORDER BY Orders.OrderID DESC;
 
-/* Display Order Details table on Manage Orders Page when user searches by CustomerID.*/
--- Variable OrderID to be passed to the database from Python/Flask app.
-SELECT Orders.OrderID, Inventory.PLU, Inventory.Name, Inventory.UnitCost AS `Unit Cost`, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
+/* Display Order Details table on Manage Orders Page when user searches by Customer Phone Number.*/
+-- Variable Customers.PhoneNumber to be passed to the database from Python/Flask app.
+SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
+FROM Inventory
+JOIN OrderItems on OrderItems.PLU = Inventory.PLU
+JOIN Orders on OrderItems.OrderID = Orders.OrderID
+JOIN Customers on Orders.CustomerID = Customers.CustomerID
+AND Customers.PhoneNumber = %s
+ORDER BY Orders.OrderID DESC;
+
+/* Display Order Details table on Manage Orders Page when user searches by Employee Name.*/
+-- Variable Employees.Name to be passed to the database from Python/Flask app.
+SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
 FROM Inventory
 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
 JOIN Orders on OrderItems.OrderID = Orders.OrderID
 JOIN Employees on Orders.EmployeeID = Employees.EmployeeID
-AND Employees.EmployeeID = :EmployeeID
+AND Employees.Name = %s
 ORDER BY Orders.OrderID DESC;
 
-/* Display Items in Inventory Order and Customer Order Form tables*/
+/* Display Items in Customer Order Form tables*/
 -- Pulls items one at a time from Inventory by searching by PLU or Item Name
 -- And stores data in a temporary list on Flask.
 -- Variable PLU to be passed to the database from Python/Flask app.
