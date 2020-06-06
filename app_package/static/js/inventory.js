@@ -61,6 +61,10 @@ function displaySearch(){
 // Make a request for inventory with the given name.
  function searchInventory() {
  	var input = document.getElementById('searchInput').value;
+
+    if (!input) {
+    	alert('Enter a valid search term.');
+	}
  	document.getElementById('searchInput').value = '';
 
  	fetch('/search-inventory-name', {
