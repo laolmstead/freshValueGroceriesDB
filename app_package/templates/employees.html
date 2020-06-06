@@ -1,0 +1,137 @@
+<!-- Inherits the navbar from base.html. Embeds this template inside base.html-->
+{% extends "base.html" %}
+
+<!-- The block statements define where this template can insert itself-->
+<!-- This block is named 'content'-->
+{% block content %}
+<div class="col-md-8 mx-auto" id="employees-page">
+    <h1> Manage Employee Information </h1>
+    <div class="manage-buttons">
+        <div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal"> 
+                Add an Employee 
+            </button>
+            <button type="button" class="btn btn-primary" id="search"> 
+                Search for an Employee
+            </button>
+        </div>
+    </div>
+
+    <!-- Search by ID, Name, Wage, Responsibilities, or Sick Days -->
+    <div id="searchForm" style="display: none">
+        <h2> Search Employees </h2>
+        <div class="form-group col-md-8">
+            <select class="form-control mb-3" id="search-options" placeholder="Search By">
+                <option>Employee ID</option>
+                <option>Name</option>
+                <option>Work Responsibilities</option>
+                <option>Hourly Wage</option>
+                <option>Number of Sick Days</option>
+            </select>
+            <div class="form-row add-form-row" id="text-form">
+                <div class="col-10 mb-7">
+                    <input type="text" class="form-control" placeholder="Search" id="search-input">
+                </div>
+                <div class="col btn-group mb-3" aria-label="...">
+                    <button type="button" class="btn btn-primary" id="submit-search">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="shifts-table"></div>
+    <div id="search-results"></div>
+
+    <div>
+        <h3> Employee Information </h3>
+        <table class="table">
+            <thead>
+                <th> EmployeeID </th>
+                <th> Name </th>
+                <th> Hourly Wage </th>
+                <th> Work Responsibilities </th>
+                <th> Sick Days Remaining </th>
+                <th> Shifts </th>
+                <th> Options </th>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        <td> {{ row[0] }} </td>
+                        <td contenteditable="false"> {{ row[1] }} </td>
+                        <td contenteditable="false"> {{ row[2] }} </td>
+                        <td contenteditable="false"> {{ row[3] }} </td>
+                        <td contenteditable="false"> {{ row[4] }} </td>
+                        <td>
+                            <button type="button" class="btn btn-primary view-shifts"> 
+                                View Shifts 
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success" onclick="makeEditable(this)" style="display:block"> 
+                                Update
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="submitEdit(this)" style="display:none">
+                                Submit
+                            </button>
+                        </td>
+                        <td> 
+                            <button type="button" class="btn btn-danger delete"> 
+                                Delete 
+                            </button>
+                            <button type="button" class="btn btn-danger" onclick="cancelEdit(this)" style="display:none">
+                                Cancel
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    
+</div>
+
+<!-- Add Employee Modal -->
+<div id="AddModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Add an Employee </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p> Enter New Employee Information </p>
+                <form class="add-employee">
+                    <div class="form-row add-form-row">
+                        <div class="col">
+                            <input type="text" class="form-control" placeholder="Name" id="add-name">
+                        </div>
+                    </div>
+                    <div class="form-row add-form-row">
+                        <div class="col">
+                            <input type="number" class="form-control" placeholder="Hourly Wage" id="add-wage">
+                        </div>
+                        <div class="col">
+                            <input type="number" class="form-control" placeholder="Number of Sick Days" id="add-sick-days">
+                        </div>
+                    </div>
+                    <div class="form-row add-form-row">
+                        <div class="col">
+                            <input type="text" class="form-control" placeholder="Work Responsibilities" id="add-duties">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="insert-employee"> Save </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="clear-inputs"> Cancel </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

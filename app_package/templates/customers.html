@@ -1,0 +1,128 @@
+<!-- Inherits the navbar from base.html. Embeds this template inside base.html-->
+{% extends "base.html" %}
+
+<!-- The block statements define where this template can insert itself-->
+<!-- This block is named 'content'-->
+{% block content %}
+
+<div class="col-md-8 mx-auto" id="customers-page">
+    <h1> View and Manage Customer Information </h1>
+
+    <div class="manage-buttons">
+        <div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal"> 
+                Add a Customer 
+            </button>
+            <button type="button" class="btn btn-primary" id="search"> 
+                Search for a Customer
+            </button>
+        </div>
+    </div>
+
+    <div id="searchForm" style="display: none">
+        <div class="col-md-8 mx-auto search-bar">
+            <form class="form-inline" onsubmit="return false;">
+                <div class="form-group">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                    <button class="btn btn-primary" id="search-name"> Search by Name </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-8 mx-auto search-bar">
+            <form class="form-inline" onsubmit="return false;">
+                <div class="form-group">
+                    <input class="form-control mr-sm-2" type="text" placeholder="Search">
+                    <button class="btn btn-primary" id="search-phone"> Search by Phone Number </button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-8 mx-auto search-bar">
+            <form class="form-inline" onsubmit="return false;">
+                <div class="form-group">
+                    <input class="form-control mr-sm-2" type="number" placeholder="Lower Bound" id="search-pts-lower">
+                    <input class="form-control mr-sm-2" type="number" placeholder="Upper Bound" id="search-pts-upper">
+                    <button class="btn btn-primary" id="search-pts"> Search by Rewards Points </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="search-results"></div>
+
+    <div class="customers-table">
+        <h3> Customer Information </h3>
+        <table class="table">
+            <thead>
+                <th> CustomerID </th>
+                <th> Name </th>
+                <th> Phone Number </th>
+                <th> Rewards Points </th>
+                <th> Options </th>
+            </thead>
+
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    <td> {{ row[0] }} </td>
+                    <td contenteditable="false"> {{ row[1] }} </td>
+                    <td contenteditable="false"> {{ row[2] }} </td>
+                    <td contenteditable="false"> {{ row[3] }} </td>
+                    <td>
+                        <button type="button" class="btn btn-success" onclick="makeEditable(this)" style="display:block"> 
+                            Update
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="submitEdit(this)" style="display:none">
+                            Submit
+                        </button>
+                    </td>
+                    <td> 
+                        <button type="button" class="btn btn-danger delete"> 
+                            Delete 
+                        </button>
+                        <button type="button" class="btn btn-danger" onclick="cancelEdit(this)" style="display:none">
+                            Cancel
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add Customer Modal -->
+<div id="AddModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Add a Customer </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p> Enter New Customer Information </p>
+                <form>
+                    <div class="form-row add-form-row">
+                        <div class="col">
+                            <input type="text" class="form-control" placeholder="Name" id="add-name">
+                        </div>
+                        <div class="col">
+                            <input type="number" class="form-control" placeholder="Rewards Points" id="add-pts">
+                        </div>
+                    </div>
+                    <div class="form-row add-form-row">
+                        <div class="col">
+                            <input type="text" class="form-control" placeholder="Phone Number" id="add-phone">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="insert-employee"> Save </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="clear-inputs"> Cancel </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

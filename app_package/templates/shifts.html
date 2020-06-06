@@ -1,0 +1,140 @@
+<!-- Inherits the navbar from base.html. Embeds this template inside base.html-->
+{% extends "base.html" %}
+
+<!-- The block statements define where this template can insert itself-->
+<!-- This block is named 'content'-->
+{% block content %}
+
+<div class="col-md-8 mx-auto" id="shifts-page">
+    <h1> Manage Shifts </h1>
+    <div class="manage-buttons">
+        <div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal"> 
+                Add a New Shift
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AssignModal"> 
+                Assign a Shift
+            </button>
+        </div>
+    </div>
+
+    <div id="employees-table"></div>
+    
+    <div>
+        <h2> View All Shifts </h2>
+        <table class="table">
+            <thead>
+                <th> ShiftID </th>
+                <th> Day </th>
+                <th> Start Time </th>
+                <th> End Time </th>
+                <th> Employees on Shift </th>
+                <th> Options </th>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        <td> {{ row[0] }} </td>
+                        <td contenteditable="false"> {{ row[1] }} </td>
+                        <td contenteditable="false"> {{ row[2] }} </td>
+                        <td contenteditable="false"> {{ row[3] }} </td>
+                        <td>
+                            <button type="button" class="btn btn-primary view-employees"> 
+                                View Employees 
+                            </button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success" onclick="makeEditable(this)" style="display:block"> 
+                                Update
+                            </button>
+                            <button type="button" class="btn btn-success" onclick="submitEdit(this)" style="display:none">
+                                Submit
+                            </button>
+                        </td>
+                        <td> 
+                            <button type="button" class="btn btn-danger delete"> 
+                                Delete 
+                            </button>
+                            <button type="button" class="btn btn-danger" onclick="cancelEdit(this)" style="display:none">
+                                Cancel
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add Shift Modal -->
+<div id="AddModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Add a Shift </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p> Enter Shift Information </p>
+                <form>
+                    <div class="form-row add-form-row">
+                        <div class="col">
+                            <select class="form-control mb-3" id="select-day" placeholder="Day of Week">
+                                <option> Sunday </option>
+                                <option> Monday </option>
+                                <option> Tuesday </option>
+                                <option> Wednesday </option>
+                                <option> Thursday </option>
+                                <option> Friday </option>
+                                <option> Saturday </option>
+                            </select>
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" placeholder="Start Time" id="start-time">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control" placeholder="End Time" id="end-time">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="insert-shift"> Save </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="clear-inputs"> Cancel </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Shift Modal -->
+<div id="AssignModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"> Assign a Shift to an Employee </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row add-form-row">
+                    <div class="col">
+                        <label for="id">Employee ID</label>
+                        <select class="form-control" id="employeeDropdown" name="id"></select>
+                    </div>
+                    <div class="col">
+                        <label for="name">Shift ID</label>
+                        <select class="form-control" id="shiftDropdown" name="name"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="insert-employee-shift"> Assign </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" id="clear-assign-inputs"> Cancel </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

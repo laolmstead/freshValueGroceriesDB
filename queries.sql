@@ -59,8 +59,8 @@ WHERE
 UNLOCK TABLES;
 
 /* Delect a row in the Orders table*/
---Variables OrderID, EmployeeID, and CustomerID
---to be passed to the database from Python/Flask app
+-- Variables OrderID, EmployeeID, and CustomerID
+-- to be passed to the database from Python/Flask app
 DELETE FROM `Orders` WHERE `OrderID` = :OrderID;
 
 
@@ -68,17 +68,8 @@ DELETE FROM `Orders` WHERE `OrderID` = :OrderID;
 -- Orders / OrderItems
 /**************************************/
 
-/* Display Order Details table on Manage Orders Page when user searches by OrderID.*/
---Variable OrderID to be passed to the database from Python/Flask app.
-SELECT Orders.OrderID, Inventory.PLU, Inventory.Name, Inventory.UnitCost AS `Unit Cost`, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
-FROM Inventory
-JOIN OrderItems on OrderItems.PLU = Inventory.PLU
-JOIN Orders on OrderItems.OrderID = Orders.OrderID
-AND Orders.OrderID = :OrderID
-ORDER BY Orders.OrderID DESC;
-
 /* Display Order Details table on Manage Orders Page when user searches by CustomerID.*/
---Variable OrderID to be passed to the database from Python/Flask app.
+--Variable Customers.CustomerID to be passed to the database from Python/Flask app.
 SELECT Orders.OrderID, Inventory.PLU, Inventory.Name, Inventory.UnitCost AS `Unit Cost`, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
 FROM Inventory
 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
@@ -87,25 +78,45 @@ JOIN Customers on Orders.CustomerID = Customers.CustomerID
 AND Customers.CustomerID = :CustomerID
 ORDER BY Orders.OrderID DESC;
 
-/* Display Order Details table on Manage Orders Page when user searches by CustomerID.*/
---Variable OrderID to be passed to the database from Python/Flask app.
-SELECT Orders.OrderID, Inventory.PLU, Inventory.Name, Inventory.UnitCost AS `Unit Cost`, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
+/* Display Order Details table on Manage Orders Page when user searches by Customer Name.*/
+--Variable Customers.Name to be passed to the database from Python/Flask app.
+SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
+FROM Inventory
+JOIN OrderItems on OrderItems.PLU = Inventory.PLU
+JOIN Orders on OrderItems.OrderID = Orders.OrderID
+JOIN Customers on Orders.CustomerID = Customers.CustomerID
+AND Customers.Name = %s
+ORDER BY Orders.OrderID DESC;
+
+/* Display Order Details table on Manage Orders Page when user searches by Customer Phone Number.*/
+-- Variable Customers.PhoneNumber to be passed to the database from Python/Flask app.
+SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
+FROM Inventory
+JOIN OrderItems on OrderItems.PLU = Inventory.PLU
+JOIN Orders on OrderItems.OrderID = Orders.OrderID
+JOIN Customers on Orders.CustomerID = Customers.CustomerID
+AND Customers.PhoneNumber = %s
+ORDER BY Orders.OrderID DESC;
+
+/* Display Order Details table on Manage Orders Page when user searches by Employee Name.*/
+-- Variable Employees.Name to be passed to the database from Python/Flask app.
+SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
 FROM Inventory
 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
 JOIN Orders on OrderItems.OrderID = Orders.OrderID
 JOIN Employees on Orders.EmployeeID = Employees.EmployeeID
-AND Employees.EmployeeID = :EmployeeID
+AND Employees.Name = %s
 ORDER BY Orders.OrderID DESC;
 
-/* Display Items in Inventory Order and Customer Order Form tables*/
---Pulls items one at a time from Inventory by searching by PLU or Item Name
---And stores data in a temporary list on Flask.
---Variable PLU to be passed to the database from Python/Flask app.
+/* Display Items in Customer Order Form tables*/
+-- Pulls items one at a time from Inventory by searching by PLU or Item Name
+-- And stores data in a temporary list on Flask.
+-- Variable PLU to be passed to the database from Python/Flask app.
 SELECT `PLU`, `Name`, `Description`, `UnitCost` AS 'Unit Cost' FROM `Inventory`
 WHERE `PLU` = :PLU;
 
 /* Create a new row in Orders and new rows in OrderItems when customer submits the Customer Order Form.*/
---CustomerID, OrderID, EmployeeID, PLU, Item Name, Description and 
+-- CustomerID, OrderID, EmployeeID, PLU, Item Name, Description and 
 LOCK TABLES `Orders` WRITE;
 INSERT INTO `Orders` (CustomerID, EmployeeID) VALUES (:CustomerID, :EmployeeID);
 UNLOCK TABLES;
@@ -137,9 +148,16 @@ WHERE `PhoneNumber` = :PhoneNumber;
 SELECT `CustomerID`, `Name`, `PhoneNumber`, `RewardsPts` FROM Customers
 WHERE `RewardsPts` >= :RewardsLowerBound AND `RewardsPts` <= :RewardsUpperBound;
 
+/* Insert a new Customer into the Customers table*/
+-- Variables to be passed to the database from Python/Flask app
+LOCK TABLES `Customers` WRITE;
+INSERT INTO `Customers` (`Name`, `PhoneNumber`, `RewardsPts`) 
+VALUES (:Name, :Phone, :Points);
+UNLOCK TABLES;
+
 /* Update a row in the Customers table*/
---Variables Name, PhoneNumber, and RewardsPts
---to be passed to the database from Python/Flask app
+-- Variables Name, PhoneNumber, and RewardsPts
+-- to be passed to the database from Python/Flask app
 LOCK TABLES `Customers` WRITE;
 UPDATE `Customers` 
 SET
@@ -182,8 +200,8 @@ SELECT `EmployeeID`, `Name`, `HourlyWage`, `Responsibilities`, `SickDays` FROM `
 WHERE `SickDays` = :SickDays;
 
 /* Update a row in the Employees table*/
---Variables Name, HourlyWage, Responsibilities, and SickDays
---to be passed to the database from Python/Flask app
+-- Variables Name, HourlyWage, Responsibilities, and SickDays
+-- to be passed to the database from Python/Flask app
 LOCK TABLES `Employees` WRITE;
 UPDATE `Employees` 
 SET
@@ -206,7 +224,7 @@ JOIN `Employees` ON EmployeeShifts.EmployeeID = Employees.EmployeeID
 WHERE Employees.EmployeeID = :EmployeeID;
 
 /* Insert a new Employee into the Employees table*/
---Variables to be passed to the database from Python/Flask app
+-- Variables to be passed to the database from Python/Flask app
 LOCK TABLES `Employees` WRITE;
 INSERT INTO `Employees` (`Name`, `HourlyWage`, `Responsibilities`, `SickDays`) 
 VALUES (:Name, :HourlyWage, :Responsibilities, :SickDays);
@@ -236,8 +254,11 @@ WHERE `StartTime` = :StartTime;
 SELECT `ShiftID`, `Day`, `StartTime`, `EndTime` FROM `Shifts`
 WHERE `StartTime` = :StartTime;
 
+/* Select ShiftIDs to populate the Assign Shift dropdown menu */
+SELECT `ShiftID` FROM `Shifts`;
+
 /* Update a row in the Shifts table*/
---Variables to be passed to the database from Python/Flask app
+-- Variables to be passed to the database from Python/Flask app
 LOCK TABLES `Shifts` WRITE;
 UPDATE `Shifts` 
 SET
@@ -252,14 +273,14 @@ UNLOCK TABLES;
 DELETE FROM `Shifts` WHERE `ShiftID` = :ShiftID;
 
 /* Display Employees assigned to selected Shift */
-SELECT Employees.Name, Shifts.ShiftID, Shifts.Day, Shifts.StartTime, Shifts.EndTime
+SELECT Employees.Name, Shifts.ShiftID
 FROM `Shifts`
 JOIN `EmployeeShifts` ON Shifts.ShiftID = EmployeeShifts.ShiftID
 JOIN `Employees` ON EmployeeShifts.EmployeeID = Employees.EmployeeID
 WHERE Shifts.ShiftID = :ShiftID;
 
 /* Insert a new Shift into the Shifts table*/
---Variables to be passed to the database from Python/Flask app
+-- Variables to be passed to the database from Python/Flask app
 LOCK TABLES `Shifts` WRITE;
 INSERT INTO `Shifts` (`Day`, `StartTime`, `EndTime`) 
 VALUES (:Day, :StartTime, :EndTime);

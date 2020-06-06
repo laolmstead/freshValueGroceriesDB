@@ -1,0 +1,93 @@
+<!-- Inherits the navbar from base.html. Embeds this template inside base.html-->
+{% extends "base.html" %}
+
+<!-- The block statements define where this template can insert itself-->
+<!-- This block is named 'content'-->
+{% block content %}
+
+<!--Buttons header-->
+<div class="col-md-8 mx-auto" id="orders-page">
+  <h1>Orders</h1>
+  <div class="manage-buttons">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AddModal" id="add">
+            Place an Order
+        </button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#AssignModal" id="search"> 
+            Search
+        </button>
+  </div>
+
+  <!--Search Form-->
+  <div id="searchForm" style="display: none">
+    <h2>Search Orders</h2>
+    <div class="form-group col-md-8">
+      <select class="form-control mb-3" id="searchOptions" placeholder="Search By">
+        <option>Search By</option>
+        <option>Rewards ID</option>
+        <option>Customer Name</option>
+        <option>Customer Phone Number</option>
+        <option>Employee Name</option>
+      </select>
+      <div class="form-row">
+        <div class="col-10 mb-3">
+          <input type="text" class="form-control" id="searchInput">
+        </div>
+      </div>
+        <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#" id="showOrders"> 
+            Submit
+        </button>
+    </div>
+  </div>
+
+  <!-- Search Results Table-->
+  <div id="searchResults"></div>
+
+  <!--Order Table-->
+  <div id="allOrders">
+    <h2> All Orders </h2>
+    <table class="table">
+        <thead>
+            <th>ORDER ID</th>
+            <th>ITEM</th>
+            <th>DESCRIPTION</th>
+            <th>UNIT COST</th>
+            <th>QUANTITY</th>
+            <th>COST</th>
+            <th style="display:none">ORDERITEM ID</th>
+            <th></th>
+            <th></th>
+        </thead> 
+        <tbody>
+          {% for item in results %}
+            <tr>
+                <td> {{ item[0] }} </td>
+                <td> {{ item[1] }} </td>
+                <td> {{ item[2] }} </td>
+                <td> {{ item[3] }} </td>
+                <td contenteditable="false"> {{ item[4] }} </td>
+                <td> {{ item[5] }} </td>
+                <td style="display:none"> {{ item[6] }} </td>
+                <td> 
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#" onclick="makeEditable(this)" style="display:block"> 
+                    Update
+                  </button>
+                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#" onclick="submitEdit(this)" style="display:none">
+                    Submit
+                  </button>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#" onclick="deleteInventory(this)" style="display:block">
+                    Delete
+                  </button>
+                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#" onclick="cancelEdit(this)" style="display:none">
+                    Cancel
+                  </button>
+                </td>
+            </tr>
+          {% endfor %}
+        </tbody> 
+    </table>
+  </div>
+</div>
+    {% endblock %}
+

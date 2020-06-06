@@ -1,0 +1,14 @@
+<!-- Inherits the navbar from base.html. Embeds this template inside base.html-->
+{% extends "base.html" %}
+
+<!-- The block statements define where this template can insert itself-->
+<!-- This block is named 'content'-->
+{% block content %}
+<div class="col-md-8 mx-auto">
+  <h1>Welcome to Fresh Value</h1>
+    <img src="../static/logo.png" width="500" height="500" alt="">
+  <h5>Bringing you fresh and affordable groceries since 1987.</h5>
+</div>
+{% endblock %}
+
+

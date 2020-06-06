@@ -1,0 +1,129 @@
+<!-- Inherits the navbar from base.html. Embeds this template inside base.html-->
+{% extends "base.html" %}
+
+<!-- The block statements define where this template can insert itself-->
+<!-- This block is named 'content'-->
+{% block content %}
+
+<!--Buttons header-->
+<div class="col-md-8 mx-auto" id="inventory-page">
+  <h1>Manage Inventory</h1>
+  <div class="manage-buttons">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNewItem" id="addItem"> 
+        Add an Item
+    </button>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#" id="search">
+        Search
+    </button>
+  </div>
+
+
+  <!--Add Inventory Modal-->
+  <div id="addNewItem" class="modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header mb-3">
+                <h5 class="modal-title">New Item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="mx-3 my-2">
+                <p> Enter Item Information </p>
+                <form>
+                  <div class="form-row mx-1 my-3">
+                    <div class="col">
+                      <input type="text" class="form-control" id="itemName" placeholder="Item Name">
+                    </div>
+                  </div>
+                  <div class="form-row mx-1 my-3">
+                    <div class="col">
+                      <input type="text" class="form-control" id="description" placeholder="Description">
+                    </div>
+                  </div>
+                  <div class="form-row mx-1 my-3">
+                    <div class="col">
+                      <input type="number" class="form-control" id="quantity" placeholder="Quanitity" min="0">
+                    </div>
+                    <div class="col">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">$</span>
+                        <input type="number" class="form-control" min="0.00" max="1000000.00" step="0.01" id="unitCost" placeholder="Unit Cost">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" id = "addInv" class="btn btn-primary px-1" data-dismiss="modal">
+                      Add
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>
+      </div>
+
+            <!--Search Form-->
+      <div id="searchForm" style="display: none">
+        <h2>Search Inventory</h2>
+        <div class="form-group col-md-8">
+          <div class="form-row">
+            <div class="col-10 mb-3">
+              <input type="text" class="form-control" id="searchInput">
+            </div>
+          </div>
+            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#" id="showInventory"> 
+                Search by Name
+            </button>
+        </div>
+      </div>
+
+      <!-- Search Results Table-->
+      <div id="searchResults"></div>
+
+      <!--Inventory Table-->
+      <h2> View Inventory Currently in Stock</h2>
+      <table class="table">
+          <thead> 
+              <th>PLU</th>
+              <th>NAME</th>
+              <th>DESCRIPTION</th>
+              <th>UNIT COST</th>
+              <th>QUANTITY</th>
+              <th></th>
+              <th></th>
+          </thead> 
+          <tbody>
+            {% for item in results %}
+                <tr>
+                     <td> {{ item[0] }} </td>
+                     <td contenteditable="false"> {{ item[1] }} </td>
+                     <td contenteditable="false"> {{ item[2] }} </td>
+                     <td contenteditable="false"> {{ item[3] }} </td>
+                     <td contenteditable="false"> {{ item[4] }} </td>
+                     <td> 
+                      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#" onclick="makeEditable(this)" style="display:block"> 
+                        Update
+                      </button>
+                      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#" onclick="submitEdit(this)" style="display:none">
+                        Submit
+                      </button>
+                    </td>
+                    <td>
+                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#" onclick="deleteInventory(this)" style="display:block">
+                        Delete
+                      </button>
+                      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#" onclick="cancelEdit(this)" style="display:none">
+                        Cancel
+                      </button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody> 
+    </table>
+</div>
+
+    {% endblock %}

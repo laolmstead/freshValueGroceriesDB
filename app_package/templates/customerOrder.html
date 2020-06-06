@@ -1,0 +1,105 @@
+<!-- Inherits the navbar from base.html. Embeds this template inside base.html-->
+{% extends "base.html" %}
+
+<!-- The block statements define where this template can insert itself-->
+<!-- This block is named 'content'-->
+{% block content %}
+
+<!--Place an Order-->
+
+<div class="col-md-8 mx-auto" id="customerOrder-page">
+  <h2>Place an Order</h2>
+  <br/>
+  <h3> New Customer</h3>
+
+  <!--New Customer Form-->
+  <button type="button" class="btn btn-primary mx-1 mt-1 mb-5" data-toggle="modal" data-target="#" id="newButton"> 
+      Sign Up
+  </button>
+
+
+  <!--Place Order Form - Customer/Employee Info-->
+  <div id="startOrderForm" style="display:block">
+    <h3>Existing Customer</h3>
+    <form>
+      <div class="form-row mt-1">
+        <div class="col mx-1">
+          <label for="id">Employee ID</label>
+          <select class="form-control" id="employeeDropdown" name="id">
+          </select>
+        </div>
+        <div class="col mx-1">
+          <label for="name">Customer Name</label>
+          <select class="form-control" id="customerDropdown" name="name">
+          </select>
+        </div>
+      </div>
+
+      <div class="form-inline mb-3">
+        <div class="btn-group" aria-label="...">
+          <div class="manage-buttons">
+            <button type="button" class="btn btn-primary mx-1" data-toggle="modal" data-target="#AddModal" id="startOrder"> 
+                Start Order
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div id="addItems" style="display:none">
+    <h3 id="insertHeader"></h3>
+    <form>
+      <div class="form-row mt-2">
+        <div class="col mx-1">
+          <label for="item">Item Name</label>
+          <select class="form-control" id="inventoryDropdown" name="item">
+          </select>
+        </div>
+        <div class="col mx-1">
+          <label for="quant">Quantity</label>
+          <input type="number" class="form-control" id="quantity" name="quant">
+        </div>
+      </div>
+
+      <!--Edit Order Buttons-->
+
+      <div class="form-inlinemb-2">
+        <div class="btn-group" aria-label="...">
+          <div class="manage-buttons">
+            <button type="button" class="btn btn-primary mx-1" data-toggle="modal" data-target="#AddModal" id="addToOrder"> 
+                Add Item
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!--Order List-->
+
+  <div id="orderList" style="display:none">
+    <h2>Order Items</h2>
+    <table class="table mt-3" id="orderTable">
+      <thead> 
+        <th>PLU</th>
+        <th>NAME</th>
+        <th>DESCRIPTION</th>
+        <th>UNIT COST</th>
+        <th>QUANTITY</th>
+        <th>COST</th>
+        <th></th>
+        <th></th>
+      </thead>
+    </table>
+    <div class="btn-group" aria-label="...">
+      <div class="manage-buttons">
+        <button type="button" class="btn btn-primary mx-1 mb-5" data-toggle="modal" data-target="#AddModal" id="placeOrder"> 
+            Submit Order
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

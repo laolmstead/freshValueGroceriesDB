@@ -1,0 +1,41 @@
+.search-bar {
+    margin-top: 25px;
+}
+
+.customers-table {
+    margin-top: 50px;
+}
+
+.manage-buttons {
+    margin-top: 25px;
+    margin-bottom: 50px;
+}
+
+.add-form-row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#search-results {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+#shifts-table {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+#employees-table {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+#update-form {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.form-cell-style {
+    padding:10px;
+    box-shadow:0 0 15px 4px rgba(0,0,0,0.06);
