@@ -64,6 +64,7 @@ function displaySearch(){
 
     if (!input) {
     	alert('Enter a valid search term.');
+    	return;
 	}
  	document.getElementById('searchInput').value = '';
 

@@ -164,6 +164,11 @@ function searchOrders() {
     var selection = document.getElementById('searchOptions').value;
     console.log("search mode:", selection);
     var input = document.getElementById('searchInput').value;
+    if (!input) {
+        alert('Enter a valid search term.');
+        return;
+    }
+    
     document.getElementById('searchInput').value = '';
 
     if (selection == 'Rewards ID') {
