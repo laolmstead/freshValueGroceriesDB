@@ -78,7 +78,7 @@ function displaySearch(){
             alert('No results found for inventory item named ' + input);
         }
         else {
-            search = 'Inventory items named ' + input
+            search = input
             makeTable(search, response);
         }
     });

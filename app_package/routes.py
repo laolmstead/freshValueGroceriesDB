@@ -151,7 +151,7 @@ def search_orders_by_phone():
                 JOIN Customers on Orders.CustomerID = Customers.CustomerID
                 AND Customers.PhoneNumber = %s
                 ORDER BY Orders.OrderID DESC;"""
-    data = (search_term["phone"],)
+    data = (search_term,)
     result = execute_query(db_connection, query, data).fetchall()
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
@@ -159,7 +159,7 @@ def search_orders_by_phone():
 @app.route('/search-orders-employee', methods=['POST'])
 def search_orders_by_employee():
     db_connection = connect_to_database()
-    search_term = request.get_json(force=True)["name"]
+    search_term = request.get_json(force=True)["employee"]
     query = """SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
                 FROM Inventory
                 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
@@ -579,12 +579,11 @@ def insert_new_inventory():
 def search_inventory_by_name():
     db_connection = connect_to_database()
     search_term = request.get_json(force=True)["name"]
-    query = """SELECT PLU, Name, Description, UnitCost, Quantity FROM Inventory WHERE Name = %s;"""
-    data = (search_term,)
+    query = """SELECT PLU, Name, Description, UnitCost, Quantity FROM Inventory WHERE Name LIKE %s;"""
+    data = (["%" + search_term + "%"])
     result = execute_query(db_connection, query, data).fetchall()
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
-
 
 @app.route('/update-inventory', methods=['POST'])
 def update_inventory():
@@ -640,7 +639,7 @@ def search_inventory_item():
                 FROM Inventory
                 WHERE Name LIKE %s
                 ORDER BY Name;"""
-    data = ("%" + search_term + "%")
+    data = (["%" + search_term + "%"])
     result = execute_query(db_connection, query, data).fetchall()
     print('Query returns:', result, flush=True)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
