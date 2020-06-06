@@ -168,7 +168,6 @@ function searchOrders() {
         alert('Enter a valid search term.');
         return;
     }
-    
     document.getElementById('searchInput').value = '';
 
     if (selection == 'Rewards ID') {
