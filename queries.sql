@@ -243,6 +243,9 @@ WHERE `StartTime` = :StartTime;
 SELECT `ShiftID`, `Day`, `StartTime`, `EndTime` FROM `Shifts`
 WHERE `StartTime` = :StartTime;
 
+/* Select ShiftIDs to populate the Assign Shift dropdown menu */
+SELECT `ShiftID` FROM `Shifts`;
+
 /* Update a row in the Shifts table*/
 -- Variables to be passed to the database from Python/Flask app
 LOCK TABLES `Shifts` WRITE;
