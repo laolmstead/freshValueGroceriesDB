@@ -8,10 +8,7 @@
 <!--Buttons header-->
 <div class="col-md-8 mx-auto" id="inventory-page">
   <h1>Manage Inventory</h1>
-  <div class="manage-buttons mt-3 mb-5">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#" id="orderInventory"> 
-        Order Inventory
-    </button>
+  <div class="manage-buttons">
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addNewItem" id="addItem"> 
         Add an Item
     </button>
@@ -78,7 +75,7 @@
               <input type="text" class="form-control" id="searchInput">
             </div>
           </div>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#" id="showInventory"> 
+            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#" id="showInventory"> 
                 Search by Name
             </button>
         </div>
@@ -86,7 +83,6 @@
 
       <!-- Search Results Table-->
       <div id="searchResults"></div>
-      <br/>
 
       <!--Inventory Table-->
       <h2> View Inventory Currently in Stock</h2>

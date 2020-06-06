@@ -259,8 +259,6 @@ function deleteInventory(button) {
 	});
 }
 
-document.getElementById('orderInventory').addEventListener("click", event => {
-	location.href = "inventoryOrder"});
 document.getElementById('addInv').addEventListener("click", insertNewInventory);
 document.getElementById('search').addEventListener("click", displaySearch);
 document.getElementById('showInventory').addEventListener("click", searchInventory);

@@ -9,7 +9,7 @@ function displaySearch(){
 	}
  }
 
-
+// Make table to display search output.
 function makeTable(input, orderInfo) {
     var searchResultsDiv = document.getElementById('searchResults');
 
