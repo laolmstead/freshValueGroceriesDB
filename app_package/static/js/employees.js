@@ -429,9 +429,10 @@ function submitEdit(button) {
     var name = currentRow.item(1).innerText;
     var duties = currentRow.item(3).innerText;
 
-    // verify wage is a float
+    // verify wage is a float and blank is not interpreted as a number
     var wage = currentRow.item(2).innerText;
-    if (isNaN(wage)) {
+    console.log('wage entered:', wage);
+    if (isNaN(wage) || wage == "") {
         cancelEdit(button);
         alert('Please enter a valid decimal value for hourly wage');
         return;
