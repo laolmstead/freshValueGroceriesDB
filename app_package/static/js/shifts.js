@@ -135,16 +135,10 @@ function viewEmployeesButtonClicked() {
     });
 }
 
-// Clears the fields in the 'Assign Shift' modal
-function clearAssignInputs() {
-    document.getElementById('assign-shift').value = '';
-    document.getElementById('assign-employee').value = '';
-}
-
 // Inserts a new relationship into the EmployeeShifts table
 function assignShift() {
-    shift_id = document.getElementById('assign-shift').value;
-    employee_id = document.getElementById('assign-employee').value;
+    shift_id = Number(document.getElementById('shiftDropdown').value);
+    employee_id = Number(document.getElementById('employeeDropdown').value);
     if (!shift_id || !employee_id) {
         alert('Please provide valid shift and employee IDs');
         return;
@@ -175,10 +169,6 @@ function assignShift() {
         }
         else if (text == 'Employee already works this shift!') {
             alert('Employee already works this shift!');
-        }
-        else {
-            clearAssignInputs();
-            alert('Employee has been assigned to this shift');
         }
     });
 }
@@ -316,16 +306,83 @@ function submitEdit(button) {
     });
 }
 
-// Attach all event listeners
+// Create a dropdown of existing Shifts to assign to Employees
+function shiftDropdown() {
+    // Get all of the Customer IDs and names to populate dropdown.
+    fetch('/assign-shifts-dropdown', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        response = JSON.parse(text);
+        if (response.length == 0) {
+            var select = document.getElementById("shiftDropdown");
+            var option = document.createElement("option");
+            select.appendChild(option);
+            option.text = 'No Shifts exist';
+            select.add(option);
+        }
+        else {
+            for (var i = 0; i < response.length; i++) {
+                var value = response[i][0];
+                if (value) {
+                    var select = document.getElementById("shiftDropdown");
+                    var option = document.createElement("option");
+                    select.appendChild(option);
+                    option.text = value;
+                    select.add(option);
+                }
+            }
+        }
+    })
+}
 
+// Create a dropdown for Employees to assign shifts to
+function employeeDropdown() {
+    // Get all of the Employee IDs and names to populate dropdown.
+    fetch('/employee-order-dropdown', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(function (response) {
+        return response.text();
+    }).then(function (text) {
+        response = JSON.parse(text);
+        if (response.length == 0) {
+            var select = document.getElementById("employeeDropdown");
+            var option = document.createElement("option");
+            select.appendChild(option);
+            option.text = 'No Employees exist';
+            select.add(option);
+        }
+        else {
+            for (var i = 0; i < response.length; i++) {
+                var value = response[i][0];
+                if (value) {
+                    var select = document.getElementById("employeeDropdown");
+                    var option = document.createElement("option");
+                    select.appendChild(option);
+                    option.text = value;
+                    select.add(option);
+                }
+            }
+        }
+    })
+}
+
+// Create the dropdown menus for Assign a Shift
+shiftDropdown();
+employeeDropdown();
+
+// Attach all event listeners
 document.getElementById('insert-shift').addEventListener("click", insertNewShift);
 document.getElementById('clear-inputs').addEventListener("click", clearInputs);
 
 document.getElementById('insert-employee-shift').addEventListener("click", assignShift);
-document.getElementById('clear-assign-inputs').addEventListener("click", clearAssignInputs);
-
-// document.getElementById('save-update').addEventListener("click", updateShift);
-// document.getElementById('clear-update').addEventListener("click", closeUpdateForm);
 
 // add event listeners to all 'view employees' buttons
 var num_buttons = document.getElementsByClassName('view-employees').length;
@@ -341,10 +398,4 @@ for (var i = 0; i < num_buttons; i++) {
     buttons[i].addEventListener("click", deleteShift);
 }
 
-// add event listeners to all 'update' buttons
-// var num_buttons = document.getElementsByClassName('show-update').length;
-// var buttons = document.getElementsByClassName('show-update');
-// for (var i = 0; i < num_buttons; i++) {
-//     buttons[i].addEventListener("click", showUpdateForm);
-// }
 

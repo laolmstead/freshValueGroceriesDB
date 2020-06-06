@@ -481,6 +481,14 @@ def get_employees_for_shift():
 
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
 
+@app.route('/assign-shifts-dropdown', methods=['POST'])
+def assign_shifts_dropdown():
+    print('Fetching List of Shift IDs')
+    db_connection = connect_to_database()
+    query = """SELECT ShiftID FROM `Shifts`;"""
+    result = execute_query(db_connection, query).fetchall()
+    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
+
 @app.route('/assign-shift', methods=['POST'])
 def assign_shift():
     print('Inserting new entry into EmployeeShifts')
