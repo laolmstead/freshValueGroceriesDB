@@ -12,6 +12,11 @@ LOCK TABLES `Inventory` WRITE;
 INSERT INTO `Inventory` (Name, Description, UnitCost, Quantity) VALUES (:Name, :Description, :UnitCost, :Quantity);
 UNLOCK TABLES;
 
+/* Displays Inventory information based on search.*/
+--Variable Name to be passed to the database from Python/Flask app
+SELECT `PLU`, `Name`, `Description`, `UnitCost`, `Quantity` FROM `Inventory` WHERE `Name` LIKE %:Name%;
+
+
 /* Update a row in the Inventory table*/
 --Variables PLU, Name, Description, UnitCost, and Quantity
 --to be passed to the database from Python/Flask app
@@ -27,8 +32,7 @@ WHERE
 UNLOCK TABLES;
 
 /* Delect a row in the Inventory table*/
---Variables PLU, Name, Description, UnitCost, and Quantity
---to be passed to the database from Python/Flask app
+--Variable PLU to be passed to the database from Python/Flask app
 DELETE FROM `Inventory` WHERE `PLU` = :PLU;
 
 
@@ -46,30 +50,13 @@ LOCK TABLES `Orders` WRITE;
 INSERT INTO `Orders` (CustomerID, EmployeeID) VALUES (:CustomerID, :EmployeeID);
 UNLOCK TABLES;
 
-/* Update a row in the Orders table*/
---Variables OrderID, EmployeeID, and CustomerID
---to be passed to the database from Python/Flask app
-LOCK TABLES `Orders` WRITE;
-UPDATE `Orders`
-SET
-	`CustomerID` = :CustomerID,
-	`EmployeeID` = :EmployeeID
-WHERE
-	`OrderID` = :OrderID;
-UNLOCK TABLES;
-
-/* Delect a row in the Orders table*/
--- Variables OrderID, EmployeeID, and CustomerID
--- to be passed to the database from Python/Flask app
-DELETE FROM `Orders` WHERE `OrderID` = :OrderID;
-
 
 /**************************************/
 -- Orders / OrderItems
 /**************************************/
 
 /* Display Order Details table on Manage Orders Page when user searches by CustomerID.*/
---Variable Customers.CustomerID to be passed to the database from Python/Flask app.
+--Variable CustomerID to be passed to the database from Python/Flask app.
 SELECT Orders.OrderID, Inventory.PLU, Inventory.Name, Inventory.UnitCost AS `Unit Cost`, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
 FROM Inventory
 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
@@ -79,51 +66,82 @@ AND Customers.CustomerID = :CustomerID
 ORDER BY Orders.OrderID DESC;
 
 /* Display Order Details table on Manage Orders Page when user searches by Customer Name.*/
---Variable Customers.Name to be passed to the database from Python/Flask app.
+--Variable CustomersName to be passed to the database from Python/Flask app.
 SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
 FROM Inventory
 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
 JOIN Orders on OrderItems.OrderID = Orders.OrderID
 JOIN Customers on Orders.CustomerID = Customers.CustomerID
-AND Customers.Name = %s
+AND Customers.Name = :CustomerName
 ORDER BY Orders.OrderID DESC;
 
 /* Display Order Details table on Manage Orders Page when user searches by Customer Phone Number.*/
--- Variable Customers.PhoneNumber to be passed to the database from Python/Flask app.
+-- Variable :PhoneNumber to be passed to the database from Python/Flask app.
 SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
 FROM Inventory
 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
 JOIN Orders on OrderItems.OrderID = Orders.OrderID
 JOIN Customers on Orders.CustomerID = Customers.CustomerID
-AND Customers.PhoneNumber = %s
+AND Customers.PhoneNumber = :PhoneNumber
 ORDER BY Orders.OrderID DESC;
 
 /* Display Order Details table on Manage Orders Page when user searches by Employee Name.*/
--- Variable Employees.Name to be passed to the database from Python/Flask app.
+-- Variable EmployeeName to be passed to the database from Python/Flask app.
 SELECT Orders.OrderID, Inventory.Name, Inventory.Description, Inventory.UnitCost, OrderItems.Quantity, (Inventory.UnitCost * OrderItems.Quantity) AS `Total`
 FROM Inventory
 JOIN OrderItems on OrderItems.PLU = Inventory.PLU
 JOIN Orders on OrderItems.OrderID = Orders.OrderID
 JOIN Employees on Orders.EmployeeID = Employees.EmployeeID
-AND Employees.Name = %s
+AND Employees.Name = :EmployeeName
 ORDER BY Orders.OrderID DESC;
 
-/* Display Items in Customer Order Form tables*/
+/* Update a row in the OrderItems table*/
+--Variables OrderItemsID, and Quantity
+--to be passed to the database from Python/Flask app
+UPDATE `OrderItems`
+SET
+    `Quantity` = :Quantity
+WHERE
+    `OrderItemID` = :OrderItemID;
+
+/* Delete a row in the OrderItems table*/
+-- Variables OrderItemID
+-- to be passed to the database from Python/Flask app
+DELETE FROM `OrderItems` WHERE `OrderItemID` = :OrderItemID;
+
+-- Pulls the CustomerID from a database given a Customer's name.
+-- :Name to be passed to the database from Python/Flask app
+SELECT `CustomerID` FROM `Customers` WHERE `Name` = :Name;
+
+-- Pulls most recent OrderID from database to use in order to create new OrderItems rows in Customer Order Form.
+SELECT MAX(OrderID) FROM Orders;
+
+/* Display Items in Customer Order Form table*/
 -- Pulls items one at a time from Inventory by searching by PLU or Item Name
--- And stores data in a temporary list on Flask.
--- Variable PLU to be passed to the database from Python/Flask app.
-SELECT `PLU`, `Name`, `Description`, `UnitCost` AS 'Unit Cost' FROM `Inventory`
-WHERE `PLU` = :PLU;
+-- And stores data in a temporary table on Place an Order page.
+-- Variable ItemName to be passed to the database from Python/Flask app.
+SELECT `PLU`, `Name`, `Description`, `UnitCost`
+FROM `Inventory`
+WHERE `Name` LIKE %:ItemName%
+ORDER BY `Name`;
 
-/* Create a new row in Orders and new rows in OrderItems when customer submits the Customer Order Form.*/
--- CustomerID, OrderID, EmployeeID, PLU, Item Name, Description and 
-LOCK TABLES `Orders` WRITE;
-INSERT INTO `Orders` (CustomerID, EmployeeID) VALUES (:CustomerID, :EmployeeID);
-UNLOCK TABLES;
-
+/* Create new rows in OrderItems when customer submits the Customer Order Form.*/
+-- Quantity, OrderID, and PLU to be passed to the database from Python/Flask app.
 LOCK TABLES `OrderItems` WRITE;
-INSERT INTO `OrderItems` (Quantity, OrderID, PLU) VALUES (:Quantity, :OrderID, :PLU);
+INSERT INTO `OrderItems` 
+(`Quantity`, `OrderID`, `PLU`) 
+VALUES (:Quantity, :OrderID, :PLU);UNLOCK TABLES;
 UNLOCK TABLES;
+
+/* Create dropdown menus on Customer Order Form */
+-- Pulls list of Customer names from database if user selects this option from dropdown.
+SELECT Name FROM `Customers` ORDER BY Name;
+
+-- Pulls list of Employee names from database if user selects this option from dropdown.
+SELECT EmployeeID FROM `Employees`;
+
+-- Pulls list of Inventory names from database for user to select from while adding to order.
+SELECT Name FROM `Inventory`;
 
 
 /**************************************/

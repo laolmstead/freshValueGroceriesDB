@@ -231,9 +231,9 @@ def insert_order():
 
 @app.route('/get-order-id', methods=['POST'])
 def get_order_id():
-    print('Get more recent order id from database', flush=True)
+    print('Get most recent order id from database', flush=True)
     db_connection = connect_to_database()
-    query = """ SELECT MAX(OrderID) FROM Orders;"""
+    query = """SELECT MAX(OrderID) FROM Orders;"""
     result = execute_query(db_connection, query).fetchall()
     print("result:",result)
     return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
@@ -624,48 +624,3 @@ def delete_inventory():
     data = (plu,)
     execute_query(db_connection, query, data)
     return make_response('Inventory deleted!', 200)
-
-@app.route('/inventoryOrder')
-def inventoryOrder_page():
-    return render_template('inventoryOrder.html')
-
-@app.route('/orders-inv-dropdown', methods=['POST'])
-def orders_inv_dropdown():
-    print('Fetching List of Inventory names')
-    db_connection = connect_to_database()
-    query = """SELECT Name FROM `Inventory` ORDER BY Name ASC;"""
-    result = execute_query(db_connection, query).fetchall()
-    print('Inventory name results')
-    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
-
-@app.route('/search-inventory-item', methods=['POST'])
-def search_inventory_item():
-    print('Fetching and rendering Inventory page', flush=True)
-    db_connection = connect_to_database()
-    search_term = request.get_json(force=True)["name"]
-    query = """SELECT PLU, Name, Description, UnitCost
-                FROM Inventory
-                WHERE Name LIKE %s
-                ORDER BY Name;"""
-    data = (["%" + search_term + "%"])
-    result = execute_query(db_connection, query, data).fetchall()
-    print('Query returns:', result, flush=True)
-    return make_response(json.dumps(result, indent=4, sort_keys=True, default=str), 200)
-
-@app.route('/new-inventory-order', methods=['POST'])
-def new_inventory_order():
-    print("Ordering new inventory and adding into database", flush=True)
-    db_connection = connect_to_database()
-    info = request.get_json(force=True)
-    for item in info:
-        inv_id = item['id']
-        quantity = item['quantity']
-        print("Updating Inventory Table item", inv_id, "with", quantity, "additional items.")
-        query = """UPDATE `Inventory`
-                    SET
-                        `Quantity` = (SELECT Quantity FROM Inventory WHERE PLU = %s) + %s
-                    WHERE
-                        `PLU` = %s;"""
-        data = (inv_id, quantity, inv_id)
-        execute_query(db_connection, query, data)
-    return make_response('Inventory added!', 200)
